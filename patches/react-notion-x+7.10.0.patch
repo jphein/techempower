@@ -1,0 +1,22 @@
+diff --git a/node_modules/react-notion-x/build/index.js b/node_modules/react-notion-x/build/index.js
+index cbcb3b3..a1bf0cd 100644
+--- a/node_modules/react-notion-x/build/index.js
++++ b/node_modules/react-notion-x/build/index.js
+@@ -2826,7 +2826,7 @@ function Block(props) {
+                         className: cs(
+                           "notion-page",
+                           hasPageCover ? "notion-page-has-cover" : "notion-page-no-cover",
+-                          page_icon ? "notion-page-has-icon" : "notion-page-no-icon",
++                          pageIcon ? "notion-page-has-icon" : "notion-page-no-icon",
+                           isPageIconUrl ? "notion-page-has-image-icon" : "notion-page-has-text-icon",
+                           "notion-full-page",
+                           page_full_width && "notion-full-width",
+@@ -2834,7 +2834,7 @@ function Block(props) {
+                           bodyClassName
+                         ),
+                         children: [
+-                          page_icon && /* @__PURE__ */ jsx32(
++                          pageIcon && /* @__PURE__ */ jsx32(
+                             PageIcon,
+                             {
+                               block,

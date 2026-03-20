@@ -19,7 +19,7 @@ export default async function searchNotion(
 
   res.setHeader(
     'Cache-Control',
-    'public, s-maxage=60, max-age=60, stale-while-revalidate=60'
+    'public, s-maxage=43200, max-age=60, stale-while-revalidate=604800'
   )
   res.status(200).json(results)
 }
