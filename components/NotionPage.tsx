@@ -34,6 +34,7 @@ import { NotionPageHeader } from './NotionPageHeader'
 import { Page404 } from './Page404'
 import { PageAside } from './PageAside'
 import { PageHead } from './PageHead'
+import { StructuredData } from './StructuredData'
 import styles from './styles.module.css'
 
 // -----------------------------------------------------------------------------
@@ -226,8 +227,7 @@ export function NotionPage({
   const keys = Object.keys(recordMap?.block || {})
   const block = getBlockValue(recordMap?.block?.[keys[0]!])
 
-  // const isRootPage =
-  //   parsePageId(block?.id) === parsePageId(site?.rootNotionPageId)
+  const isHomePage = pageId === site?.rootNotionPageId
   const isBlogPost =
     block?.type === 'page' && block?.parent_table === 'collection'
 
@@ -297,6 +297,8 @@ export function NotionPage({
         url={canonicalPageUrl}
         isBlogPost={isBlogPost}
       />
+
+      {isHomePage && <StructuredData />}
 
       {isLiteMode && <BodyClassName className='notion-lite' />}
       {isDarkMode && <BodyClassName className='dark-mode' />}

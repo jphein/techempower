@@ -1,0 +1,83 @@
+.wrapper {
+  width: 100%;
+  max-width: 720px;
+  margin: 0.75em auto 1.25em;
+  padding: 0 2px;
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.4em 0.75em;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--fg-color, #37352f);
+  font-size: 0.9em;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 150ms ease-out;
+}
+
+.toggle:hover {
+  background: var(--fg-color-0, rgba(55, 53, 47, 0.08));
+}
+
+.toggle:focus-visible {
+  outline: 2px solid #7c3aed;
+  outline-offset: 2px;
+}
+
+.toggleIcon {
+  font-size: 0.7em;
+  line-height: 1;
+}
+
+.toggleLabel {
+  font-weight: 500;
+}
+
+.callout {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75em;
+  margin-top: 0.5em;
+  padding: 1em 1.25em;
+  border-radius: 8px;
+  background: #ede9fe; /* purple-100 */
+  border-left: 4px solid #7c3aed; /* purple-600 */
+}
+
+:global(.dark-mode) .callout {
+  background: rgba(124, 58, 237, 0.15);
+  border-left-color: #a78bfa;
+}
+
+.calloutIcon {
+  font-size: 1.5em;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.calloutBody {
+  flex: 1;
+  min-width: 0;
+}
+
+.calloutText {
+  margin: 0;
+  font-size: 0.95em;
+  line-height: 1.6;
+  color: var(--fg-color, #37352f);
+}
+
+@media only screen and (max-width: 566px) {
+  .wrapper {
+    padding: 0 0.75em;
+  }
+
+  .callout {
+    padding: 0.75em 1em;
+  }
+}
