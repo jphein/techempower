@@ -155,7 +155,7 @@ export function isGuidePage(pageId: string | undefined): boolean {
 /**
  * Get related guides for a given page ID (all guides except the current one).
  */
-export function getRelatedGuides(pageId: string): GuideMeta[] {
+export function getRelatedGuides(pageId: string, limit = 4): GuideMeta[] {
   const normalized = normalizeId(pageId)
-  return GUIDE_METADATA.filter((g) => g.id !== normalized)
+  return GUIDE_METADATA.filter((g) => g.id !== normalized).slice(0, limit)
 }

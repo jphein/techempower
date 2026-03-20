@@ -96,7 +96,7 @@ export function Breadcrumb({ items }: BreadcrumbProps) {
 export function buildGuideBreadcrumb(title: string): BreadcrumbItem[] {
   return [
     { label: 'Home', href: '/' },
-    { label: 'Guides', href: '/' },
+    { label: 'Guides' },
     { label: title }
   ]
 }

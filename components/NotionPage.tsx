@@ -17,6 +17,7 @@ import {
   NotionRenderer,
   useNotionContext
 } from 'react-notion-x'
+import { Collection } from 'react-notion-x/third-party/collection'
 import { EmbeddedTweet, TweetNotFound, TweetSkeleton } from 'react-tweet'
 import { useSearchParam } from 'react-use'
 
@@ -28,6 +29,7 @@ import { searchNotion } from '@/lib/search-notion'
 import { useDarkMode } from '@/lib/use-dark-mode'
 
 import { isGuidePage, getRelatedGuides, GUIDE_BY_ID } from '@/lib/page-ids'
+import { findSpanishBlockIds } from '@/lib/extract-spanish-blocks'
 
 import { Breadcrumb, buildGuideBreadcrumb } from './Breadcrumb'
 import { GitHubShareButton } from './GitHubShareButton'
@@ -115,9 +117,6 @@ const Code = dynamic(() =>
   })
 )
 
-const Collection = dynamic(() =>
-  import('react-notion-x/third-party/collection').then((m) => m.Collection)
-)
 const Equation = dynamic(() =>
   import('react-notion-x/third-party/equation').then((m) => m.Equation)
 )
@@ -237,7 +236,12 @@ export function NotionPage({
   const guideMeta = pageId ? GUIDE_BY_ID.get(pageId.replace(/-/g, '')) : undefined
   const relatedGuides = pageId ? getRelatedGuides(pageId) : []
 
-  const showTableOfContents = !!isBlogPost
+  const spanishBlockIds = React.useMemo(
+    () => (isGuide && recordMap ? findSpanishBlockIds(recordMap) : []),
+    [isGuide, recordMap]
+  )
+
+  const showTableOfContents = !!isBlogPost || !!isGuide
   const minTableOfContentsItems = 3
 
   const pageAside = React.useMemo(
@@ -261,13 +265,14 @@ export function NotionPage({
 
   const title = getBlockTitle(block, recordMap) || site.name
 
-  console.log('notion page', {
-    isDev: config.isDev,
-    title,
-    pageId,
-    rootNotionPageId: site.rootNotionPageId,
-    recordMap
-  })
+  if (config.isDev) {
+    console.log('notion page', {
+      title,
+      pageId,
+      rootNotionPageId: site.rootNotionPageId,
+      recordMap
+    })
+  }
 
   if (!config.isServer) {
     // add important objects to the window global for easy debugging
@@ -313,7 +318,13 @@ export function NotionPage({
         <Breadcrumb items={buildGuideBreadcrumb(guideMeta?.title || title)} />
       )}
 
-      {isGuide && <SpanishToggle />}
+      {isGuide && spanishBlockIds.length > 0 && (
+        <SpanishToggle
+          blockIds={spanishBlockIds}
+          recordMap={recordMap!}
+          darkMode={isDarkMode}
+        />
+      )}
 
       <NotionRenderer
         bodyClassName={cs(

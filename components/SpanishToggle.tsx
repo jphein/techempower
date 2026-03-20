@@ -1,20 +1,28 @@
 import * as React from 'react'
+import { type ExtendedRecordMap } from 'notion-types'
+import { NotionRenderer } from 'react-notion-x'
 
 import styles from './SpanishToggle.module.css'
 
 const STORAGE_KEY = 'techempower-show-spanish'
 
+interface SpanishToggleProps {
+  blockIds: string[]
+  recordMap: ExtendedRecordMap
+  darkMode?: boolean
+}
+
 /**
- * Language toggle that shows/hides a Spanish translation callout on guide pages.
+ * Language toggle that shows/hides Spanish translation content on guide pages.
  *
- * Persists the user's preference in localStorage. Renders a purple-background
- * callout with a Mexico flag emoji when expanded.
+ * When Spanish callout blocks are found in the Notion recordMap, this component
+ * renders them inside a collapsible section. When no Spanish content exists,
+ * the component renders nothing.
  */
-export function SpanishToggle() {
+export function SpanishToggle({ blockIds, recordMap, darkMode }: SpanishToggleProps) {
   const [showSpanish, setShowSpanish] = React.useState(false)
   const [hasMounted, setHasMounted] = React.useState(false)
 
-  // Read saved preference from localStorage after mount
   React.useEffect(() => {
     setHasMounted(true)
     try {
@@ -23,7 +31,7 @@ export function SpanishToggle() {
         setShowSpanish(true)
       }
     } catch {
-      // localStorage may be unavailable; ignore
+      // localStorage may be unavailable
     }
   }, [])
 
@@ -33,14 +41,14 @@ export function SpanishToggle() {
       try {
         localStorage.setItem(STORAGE_KEY, String(next))
       } catch {
-        // localStorage may be unavailable; ignore
+        // localStorage may be unavailable
       }
       return next
     })
   }, [])
 
-  // Avoid hydration mismatch — render nothing on the server
-  if (!hasMounted) {
+  // Don't render if there are no Spanish blocks or before hydration
+  if (!hasMounted || !blockIds.length) {
     return null
   }
 
@@ -57,7 +65,7 @@ export function SpanishToggle() {
           {showSpanish ? '\u25BC' : '\u25B6'}
         </span>
         <span className={styles.toggleLabel}>
-          {showSpanish ? 'Ocultar espa\u00F1ol' : 'Ver en espa\u00F1ol'}
+          {showSpanish ? 'Hide Spanish / Ocultar espa\u00F1ol' : 'View in Spanish / Ver en espa\u00F1ol'}
         </span>
       </button>
 
@@ -73,11 +81,16 @@ export function SpanishToggle() {
             {'\uD83C\uDDF2\uD83C\uDDFD'}
           </span>
           <div className={styles.calloutBody}>
-            <p className={styles.calloutText}>
-              Esta gu\u00EDa est\u00E1 disponible en espa\u00F1ol. La
-              traducci\u00F3n aparecer\u00E1 junto al contenido en
-              ingl\u00E9s.
-            </p>
+            {blockIds.map((blockId) => (
+              <NotionRenderer
+                key={blockId}
+                recordMap={recordMap}
+                rootPageId={blockId}
+                darkMode={darkMode}
+                fullPage={false}
+                disableHeader
+              />
+            ))}
           </div>
         </aside>
       )}

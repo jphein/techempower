@@ -1,15 +1,11 @@
 #### Description
 
-<!--
-Please include as detailed of a description as possible, including screenshots if applicable.
--->
+<!-- Describe what this PR changes and why. -->
 
-#### Notion Test Page ID
+#### Test Plan
 
-<!--
-Please include the ID of at least one publicly accessible Notion page related to your PR.
+<!-- How was this tested? Include screenshots for visual changes. -->
 
-This is extremely helpful for us to debug and fix issues.
+#### Related Issues
 
-Thanks!
--->
+<!-- Link any related issues (e.g., Fixes #123). -->

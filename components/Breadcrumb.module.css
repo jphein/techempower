@@ -51,9 +51,9 @@
   font-weight: 500;
 }
 
-@media only screen and (max-width: 566px) {
+@media only screen and (max-width: 720px) {
   .nav {
-    padding-left: 0.75em;
-    padding-right: 0.75em;
+    padding-left: max(4vw, 16px);
+    padding-right: max(4vw, 16px);
   }
 }

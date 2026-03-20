@@ -88,7 +88,7 @@
 
 .cardSummary {
   font-size: 0.9rem;
-  color: var(--te-bark-500);
+  color: var(--te-bark-600);
   margin: 0;
   line-height: 1.5;
 }
@@ -131,4 +131,10 @@
   .card {
     padding: 1.5rem;
   }
+}
+
+:global(.dark-mode) .card:hover {
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.3),
+    0 1px 3px rgba(0, 0, 0, 0.2);
 }

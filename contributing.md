@@ -1,53 +1,62 @@
-# Contributing
+# Contributing to TechEmpower
 
-Suggestions and pull requests are highly encouraged. Have a look at the [open issues](https://github.com/NotionX/react-notion-x/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22+sort%3Areactions-%2B1-desc), especially [the easy ones](https://github.com/NotionX/react-notion-x/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+sort%3Areactions-%2B1-desc).
+Thanks for your interest in contributing to [techempower.org](https://techempower.org)!
 
-## Development
+## Development Setup
 
-To develop the project locally, you'll need a recent version of Node.js and `pnpm` installed globally.
-
-To get started, clone the repo and run `pnpm` from the root directory:
+Requires **Node.js >= 20** and **pnpm**.
 
 ```bash
-git clone https://github.com/transitive-bullshit/nextjs-notion-starter-kit
-cd nextjs-notion-starter-kit
-pnpm
-```
-
-Now that your dependencies are installed, you can run the local Next.js dev server:
-
-```bash
+git clone https://github.com/YOUR_ORG/techempower
+cd techempower
+pnpm install
 pnpm dev
 ```
 
-You should now be able to open `http://localhost:3000` to view the webapp.
+Open [http://localhost:3000](http://localhost:3000) to view the site locally.
 
-## Production
+## Project Structure
 
-To build for production, you can run:
+```
+components/           React components with CSS Modules
+components/homepage/  Custom homepage sections (Hero, GuideGrid, etc.)
+lib/                  Config, utilities, hooks, types
+pages/                Next.js pages (SSR via Notion API)
+styles/               Global CSS and Notion overrides
+site.config.ts        Notion page IDs, URL mappings, site metadata
+```
+
+## Styling
+
+- **Design tokens** are CSS custom properties in `styles/global.css` (`--te-bark-*`, `--te-teal-*`, `--te-amber-*`, etc.)
+- **Notion overrides** go in `styles/notion.css` (targets react-notion-x classes)
+- **Component styles** use CSS Modules (e.g., `Header.module.css`)
+- **Dark mode**: tokens re-map under `.dark-mode` in `global.css`. In CSS Modules, use `:global(.dark-mode) .yourClass` to target dark mode
+
+## Content
+
+All page content is managed in Notion. To add or modify guides, resources, or pages:
+
+1. Edit content directly in the TechEmpower Notion workspace
+2. Map new pages to URL paths in `site.config.ts` under `pageUrlOverrides`
+3. Add navigation entries in `site.config.ts` under `navigationLinks` if needed
+
+## Building for Production
 
 ```bash
 pnpm build
 ```
 
-Which just runs `next build` under the hood.
+## Deploying
 
-### Local-linked react-notion-x
-
-If you are making changes to `react-notion-x` and want to test them out with `nextjs-notion-starter-kit`, you'll first need to [set up and build `react-notion-x` locally](https://github.com/NotionX/react-notion-x/blob/master/contributing.md).
-
-Once you have `react-notion-x` set up and built locally, you can link these local deps into `nextjs-notion-starter-kit`:
+The site auto-deploys to Vercel on push to `master`. For manual deploys:
 
 ```bash
-pnpm deps:link
+npx vercel --prod --yes
 ```
 
-With this setup, in one tab, you can run `pnpm dev` to keep `react-notion-x` up-to-date, and in another tab, you can run `pnpm dev` to keep `nextjs-notion-starter-kit` up-to-date.
+## Debugging Tips
 
-### Gotchas
-
-Whenever you make a change to one of the `react-notion-x` packages, it will automatically be recompiled into its respective `build` folder, and the `pnpm dev` from `nextjs-notion-starter-kit` should hot-reload it in the browser.
-
-Sometimes, this process gets a little out of whack, and if you're not sure what's going on, I usually just quit one or both of the `pnpm dev` commands and restart them.
-
-If you're seeing something unexpected while debugging with Next.js, try running `rm -rf .next` to refresh the Next.js cache before running `pnpm dev` again.
+- Run `rm -rf .next` if you see stale content during development
+- Check the browser console for `pageId`, `recordMap`, and `block` globals (added in dev mode)
+- Notion API fetches can be slow (~5-10s for large databases); the NProgress bar is tuned for this

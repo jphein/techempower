@@ -1,13 +1,13 @@
 # TechEmpower — Personal Workspace Findings
 
-> Pulled from JP's personal Notion workspace on 2026-03-19.
+> Pulled from JP's personal Notion workspace on 2026-03-19. Updated 2026-03-20.
 
 ---
 
 ## Project Overview
 
 - **Project name:** TechEmpower
-- **Status:** Active
+- **Status:** Active — site live at [techempower.org](https://techempower.org)
 - **Goal:** Build TechEmpower nonprofit partnerships and programs
 - **Organization type:** Registered 501(c)(3) nonprofit
 - **Location:** Grass Valley, California
@@ -19,15 +19,22 @@
 
 ## Website Status
 
-The techempower.org website is hosted as a **Notion Site** (published Notion pages) in a separate workspace.
+The techempower.org website is a **custom Next.js application** hosted on **Vercel**, rendering content from Notion via react-notion-x. The site includes a custom homepage, 8 technology guides, a searchable resources database, and a warm earth-tone design system with system-aware dark mode.
 
-### Blockers
+### Resolved Blockers
 
-| Blocker | Status | Due | Depends On |
-|---------|--------|-----|------------|
-| Custom domain (techempower.org → Notion Site) | Waiting | ~2026-04-01 | Notion paid custom domain add-on |
-| Search engine submission (Google, Bing) | Waiting | ~2026-04-01 | Custom domain being live |
-| Google Ad Grants activation ($10K/mo) | Under Review | — | Website with custom domain |
+| Item | Status | Resolution |
+|------|--------|------------|
+| Custom domain (techempower.org) | Done | Configured via Vercel + Cloudflare DNS |
+| Website hosting | Done | Vercel SSR (migrated from Notion Site concept) |
+| Search engine submission | Ready | Custom domain is live; can submit to Google/Bing |
+
+### Pending
+
+| Item | Status | Depends On |
+|------|--------|------------|
+| Google Ad Grants activation ($10K/mo) | Under Review | Website with custom domain (now met) |
+| Search engine submission (Google, Bing) | Ready to execute | — |
 
 ### Domain & DNS Infrastructure
 
@@ -35,6 +42,7 @@ The techempower.org website is hosted as a **Notion Site** (published Notion pag
 |---------|----------|------|-------|
 | Domain registrar | Squarespace | $10/year | Renews June 10 |
 | DNS / CDN | Cloudflare | $10/year | — |
+| Hosting | Vercel | Free (Hobby) | SSR with edge caching |
 | Cloud hosting (jphein.com) | Google Cloud | Varies | Autopay, Blue BofA |
 
 ---
@@ -45,7 +53,7 @@ The techempower.org website is hosted as a **Notion Site** (published Notion pag
 
 | Provider | Program | Value | Status | Review Date |
 |----------|---------|-------|--------|-------------|
-| Google | Maps Platform Credits | $250/mo × 12 ($3K total) | Active | 2027-03-06 |
+| Google | Maps Platform Credits | $250/mo x 12 ($3K total) | Active | 2027-03-06 |
 | Microsoft | Azure Nonprofit Credits | $2,000/year | Active | 2027-03-06 |
 | Google | Ad Grants | Up to $10K/mo ($120K/year) | Under Review | — |
 
@@ -70,14 +78,14 @@ The techempower.org website is hosted as a **Notion Site** (published Notion pag
 
 ## Open Tasks (Website-Related)
 
-### Active / Waiting
+### Ready to Execute
 
-1. **Set custom domain for TechEmpower** — Waiting on Notion custom domain plan (paid add-on). Steps: monitor pricing, purchase add-on, configure DNS CNAME, verify domain, test.
-2. **Submit techempower.org to search engines** — Waiting on custom domain. Steps: Google Search Console, Bing Webmaster Tools, submit sitemaps.
+1. **Submit techempower.org to search engines** — Google Search Console, Bing Webmaster Tools, submit sitemaps. Custom domain is now live.
+2. **Google Ad Grants follow-up** — Website requirement now met. Follow up on review status.
 
 ### Someday
 
-3. **Design and order business cards** — Include name, logo, title, phone, email, website, optional QR code. Budget ~$25–50 for 250–500 cards. Use Canva for design.
+3. **Design and order business cards** — Include name, logo, title, phone, email, website, optional QR code. Budget ~$25-50 for 250-500 cards. Use Canva for design.
 4. **Collect testimonials from 4eee and Chirp** — Written or video testimonials about TechEmpower's impact, for website, grant applications, and outreach.
 5. **Connect with Notion team re: partnership** — Explore nonprofit program pricing and potential co-marketing opportunity.
 6. **List SDP service ideas for TechEmpower** — Compile services under California's Self-Determination Program that TechEmpower could advocate for or provide.
@@ -121,12 +129,7 @@ Detailed list of Self-Determination Program services including:
 
 ## Key Insight: Google Ad Grants
 
-The single highest-leverage item is getting the custom domain live. It unblocks:
-1. **Google Ad Grants** — $10K/month ($120K/year) in free Google Search ads
-2. **Search engine indexing** — organic discoverability
-3. **Professional credibility** — techempower.org vs *.notion.site
-
-The Ad Grants program requires:
-- A live website with a custom domain
-- Maintaining 5% click-through rate
-- Managed at google.com/grants
+The custom domain is now live, which unblocks:
+1. **Google Ad Grants** — $10K/month ($120K/year) in free Google Search ads — under review
+2. **Search engine indexing** — ready to submit sitemaps
+3. **Professional credibility** — techempower.org is live with custom design

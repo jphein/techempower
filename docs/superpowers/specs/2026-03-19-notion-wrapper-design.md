@@ -1,9 +1,26 @@
 # TechEmpower.org Notion Wrapper — Design Spec
 
-> Custom frontend for techempower.org that uses Notion as a CMS, hosted on Cloudflare Pages with a custom domain.
+> Custom frontend for techempower.org that uses Notion as a CMS.
 
 **Date:** 2026-03-19
-**Status:** Approved
+**Status:** Implemented (with deviations noted below)
+
+> **Implementation notes (2026-03-20):** The site is live at techempower.org. Key
+> deviations from this original spec:
+> - **Hosting:** Vercel (SSR) instead of Cloudflare Pages (SSG). Vercel's native
+>   Next.js support eliminated the need for `@cloudflare/next-on-pages` and
+>   static export. SSR with CDN caching (`s-maxage=3600, stale-while-revalidate`)
+>   replaces the planned cron-based rebuild strategy.
+> - **Image handling:** Next.js `next/image` with Vercel's built-in image
+>   optimization replaces the planned Cloudflare Pages Function image proxy.
+> - **Resources page:** Rendered inline via react-notion-x Collection component
+>   (not a redirect to Notion).
+> - **Design system:** Warm earth-tone tokens (`--te-bark-*`, `--te-teal-*`,
+>   `--te-amber-*`) with Fraunces/DM Sans typography. System-aware dark mode
+>   with three-tier strategy (noflash script + React hook + matchMedia listener).
+> - **Package manager:** pnpm (not npm).
+>
+> See the [readme](../../../readme.md) for current architecture documentation.
 
 ---
 

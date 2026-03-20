@@ -1,15 +1,19 @@
 #### Description
 
-<!--
-Please include as detailed of a description as possible, including screenshots if applicable.
--->
+<!-- Describe the issue clearly. Include screenshots if applicable. -->
 
-#### Notion Test Page ID
+#### Steps to Reproduce
 
-<!--
-Please include the ID of at least one publicly accessible Notion page related to your issue.
+<!-- If this is a bug, list the steps to reproduce it. -->
 
-This is extremely helpful for us to debug and fix issues.
+#### Expected Behavior
 
-Thanks!
--->
+<!-- What should happen? -->
+
+#### Actual Behavior
+
+<!-- What happens instead? -->
+
+#### Page URL or Notion Page ID
+
+<!-- If the issue relates to a specific page on techempower.org, include the URL or Notion page ID. -->

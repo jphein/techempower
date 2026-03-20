@@ -12,7 +12,7 @@
   padding: 0.4em 0.75em;
   border: none;
   border-radius: 6px;
-  background: transparent;
+  background: var(--te-bark-100);
   color: var(--te-bark-800);
   font-size: 0.9em;
   font-family: inherit;
@@ -30,7 +30,7 @@
 }
 
 .toggleIcon {
-  font-size: 0.7em;
+  font-size: 0.8em;
   line-height: 1;
 }
 
@@ -72,9 +72,9 @@
   color: var(--te-bark-800);
 }
 
-@media only screen and (max-width: 566px) {
+@media only screen and (max-width: 720px) {
   .wrapper {
-    padding: 0 0.75em;
+    padding: 0 max(4vw, 16px);
   }
 
   .callout {

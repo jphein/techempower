@@ -3,7 +3,19 @@
 > Step-by-step implementation plan derived from the [design spec](./2026-03-19-notion-wrapper-design.md).
 
 **Date:** 2026-03-19
-**Status:** Draft
+**Status:** Complete (site is live at techempower.org)
+
+> **Implementation notes (2026-03-20):** All phases are complete. The site
+> deployed to Vercel (not Cloudflare Pages as originally planned). Key differences:
+> - Vercel SSR replaces Cloudflare Pages SSG + cron rebuilds
+> - pnpm replaces npm
+> - Custom routing uses `pageUrlOverrides` in `site.config.ts` with the starter
+>   kit's catch-all `[[...pageId]].tsx` route (not separate per-page files)
+> - Resources database renders inline via react-notion-x Collection component
+> - Dark mode uses a custom three-tier system (noflash script + React hook +
+>   matchMedia listener) replacing the upstream `@fisch0920/use-dark-mode` library
+>
+> See the [readme](../../../readme.md) for current architecture documentation.
 
 ---
 

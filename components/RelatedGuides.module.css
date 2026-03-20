@@ -1,7 +1,7 @@
 .section {
   width: 100%;
   max-width: 720px;
-  margin: 2em auto 1em;
+  margin: 2em auto 2em;
   padding: 0 2px;
 }
 
@@ -81,12 +81,12 @@
   font-size: 0.85em;
   line-height: 1.5;
   margin: 0;
-  color: var(--te-bark-500);
+  color: var(--te-bark-600);
 }
 
-@media only screen and (max-width: 566px) {
+@media only screen and (max-width: 720px) {
   .section {
-    padding: 0 0.75em;
+    padding: 0 max(4vw, 16px);
   }
 
   .grid {
