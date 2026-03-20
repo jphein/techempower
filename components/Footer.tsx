@@ -2,11 +2,15 @@ import Link from 'next/link'
 import * as React from 'react'
 
 import * as config from '@/lib/config'
+import { MoonIcon } from '@/lib/icons/moon'
+import { SunIcon } from '@/lib/icons/sun'
+import { useDarkMode } from '@/lib/use-dark-mode'
 
 import styles from './Footer.module.css'
 
 export function FooterImpl() {
   const currentYear = new Date().getFullYear()
+  const { isDarkMode, toggleDarkMode } = useDarkMode()
 
   return (
     <footer className={styles.footer}>
@@ -29,6 +33,15 @@ export function FooterImpl() {
             Non-Discrimination Policy
           </Link>
         </nav>
+
+        <button
+          type="button"
+          className={styles.themeToggle}
+          onClick={toggleDarkMode}
+          aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+        >
+          {isDarkMode ? <SunIcon /> : <MoonIcon />}
+        </button>
 
         <div className={styles.copyright}>
           &copy; {currentYear} {config.author}. All rights reserved.
