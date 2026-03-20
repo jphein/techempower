@@ -234,7 +234,7 @@ export function NotionPage({
   const isBlogPost =
     block?.type === 'page' && block?.parent_table === 'collection'
   const isGuide = isGuidePage(pageId)
-  const guideMeta = pageId ? GUIDE_BY_ID.get(pageId) : undefined
+  const guideMeta = pageId ? GUIDE_BY_ID.get(pageId.replace(/-/g, '')) : undefined
   const relatedGuides = pageId ? getRelatedGuides(pageId) : []
 
   const showTableOfContents = !!isBlogPost

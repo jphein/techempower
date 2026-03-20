@@ -140,16 +140,22 @@ export const GUIDE_BY_SLUG: ReadonlyMap<string, GuideMeta> = new Map(
   GUIDE_METADATA.map((g) => [g.slug, g])
 )
 
+/** Strip hyphens from a UUID so it matches our stored page IDs. */
+function normalizeId(id: string): string {
+  return id.replace(/-/g, '')
+}
+
 /**
  * Return whether a given page ID belongs to a guide page.
  */
 export function isGuidePage(pageId: string | undefined): boolean {
-  return !!pageId && ALL_GUIDE_IDS.has(pageId)
+  return !!pageId && ALL_GUIDE_IDS.has(normalizeId(pageId))
 }
 
 /**
  * Get related guides for a given page ID (all guides except the current one).
  */
 export function getRelatedGuides(pageId: string): GuideMeta[] {
-  return GUIDE_METADATA.filter((g) => g.id !== pageId)
+  const normalized = normalizeId(pageId)
+  return GUIDE_METADATA.filter((g) => g.id !== normalized)
 }
