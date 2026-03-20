@@ -1,8 +1,6 @@
 import type { GetServerSideProps } from 'next'
 
-import type { SiteMap } from '@/lib/types'
 import { host, pageUrlOverrides } from '@/lib/config'
-import { getSiteMap } from '@/lib/get-site-map'
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   if (req.method !== 'GET') {
@@ -15,7 +13,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     }
   }
 
-  const siteMap = await getSiteMap()
+  const paths = Object.keys(pageUrlOverrides)
 
   // cache for up to 8 hours
   res.setHeader(
@@ -23,7 +21,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     'public, max-age=28800, stale-while-revalidate=28800'
   )
   res.setHeader('Content-Type', 'text/xml')
-  res.write(createSitemap(siteMap))
+  res.write(createSitemap(paths))
   res.end()
 
   return {
@@ -31,35 +29,14 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   }
 }
 
-const createSitemap = (siteMap: SiteMap) => {
-  // Collect all canonical page paths from the site map
-  const canonicalPaths = new Set(Object.keys(siteMap.canonicalPageMap))
-
-  // Ensure all pageUrlOverrides are included even if the Notion crawl
-  // did not discover them (e.g. pages deeper than maxDepth)
-  for (const overridePath of Object.keys(pageUrlOverrides)) {
-    canonicalPaths.add(overridePath)
-  }
-
-  return `<?xml version="1.0" encoding="UTF-8"?>
-  <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-    <url>
-      <loc>${host}</loc>
-    </url>
-
-    ${Array.from(canonicalPaths)
-      .map(
-        (pagePath) =>
-          `
-          <url>
-            <loc>${host}/${pagePath}</loc>
-          </url>
-        `.trim()
-      )
-      .join('')}
-  </urlset>
-`
-}
+const createSitemap = (paths: string[]) =>
+  `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>${host}</loc>
+  </url>
+${paths.map((p) => `  <url>\n    <loc>${host}/${p}</loc>\n  </url>`).join('\n')}
+</urlset>`
 
 export default function noop() {
   return null
