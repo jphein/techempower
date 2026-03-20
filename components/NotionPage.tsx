@@ -3,7 +3,6 @@ import dynamic from 'next/dynamic'
 import Image from 'next/legacy/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import NProgress from 'nprogress'
 import { type PageBlock } from 'notion-types'
 import {
   formatDate,
@@ -11,6 +10,7 @@ import {
   getBlockValue,
   getPageProperty
 } from 'notion-utils'
+import NProgress from 'nprogress'
 import * as React from 'react'
 import BodyClassName from 'react-body-classname'
 import {

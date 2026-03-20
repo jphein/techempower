@@ -189,7 +189,8 @@ async function fetchResourceContext(query: string): Promise<string> {
     const lines = results
       .map((r) => {
         const path = r.highlight?.pathText ?? ''
-        const snippet = r.highlight?.text?.replaceAll(/<\/?gzkNfoUU>/g, '') ?? ''
+        const snippet =
+          r.highlight?.text?.replaceAll(/<\/?gzkNfoUU>/g, '') ?? ''
         return path || snippet ? `- ${path}: ${snippet}` : null
       })
       .filter(Boolean)

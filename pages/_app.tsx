@@ -46,7 +46,10 @@ const BUILD_VERSION = 'teal-puma-v3'
 
 if (!isServer) {
   bootstrap()
-  console.log(`%c⚡ TechEmpower ${BUILD_VERSION}`, 'color:#0d9488;font-weight:bold')
+  console.log(
+    `%c⚡ TechEmpower ${BUILD_VERSION}`,
+    'color:#0d9488;font-weight:bold'
+  )
 }
 
 export default function App({ Component, pageProps }: AppProps) {

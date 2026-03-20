@@ -6,7 +6,7 @@ import * as acl from './acl'
 import { environment, pageUrlAdditions, pageUrlOverrides, site } from './config'
 import { db } from './db'
 import { getSiteMap } from './get-site-map'
-import { type GetPageOptions, getPage } from './notion'
+import { getPage, type GetPageOptions } from './notion'
 
 export async function resolveNotionPage(
   domain: string,
