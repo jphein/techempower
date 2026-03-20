@@ -44,6 +44,9 @@ export default siteConfig({
     '/guides/password-manager': '99b0ab9c7cce428e8c86e3143752aa1c',
     '/guides/free-cell-service': '7519ef16d7b74519acd9b8262a7beb84',
 
+    // Resources database
+    '/resources': '2a3d706803c649409e74e9ce5ccd4c4b',
+
     // About pages
     '/about': 'dbf0ddece2ce468fb2bf9049e6322e8a',
     '/donate': '59d8a4dab0cc484f8b044d33f240ce1d',
@@ -56,6 +59,10 @@ export default siteConfig({
     {
       title: 'Guides',
       pageId: '0959e44599984143acabc80187305001'
+    },
+    {
+      title: 'Resources',
+      pageId: '2a3d706803c649409e74e9ce5ccd4c4b'
     },
     {
       title: 'About',

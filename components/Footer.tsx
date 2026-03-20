@@ -22,6 +22,7 @@ export function FooterImpl() {
 
         <nav className={styles.links} aria-label="Footer navigation">
           <Link href="/" className={styles.link}>Guides</Link>
+          <Link href="/resources" className={styles.link}>Resources</Link>
           <Link href="/about" className={styles.link}>About</Link>
           <Link href="/donate" className={styles.link}>Donate</Link>
           <Link href="/non-discrimination-policy" className={styles.link}>
