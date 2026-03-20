@@ -26,7 +26,12 @@ import * as config from '@/lib/config'
 import { findSpanishBlockIds } from '@/lib/extract-spanish-blocks'
 import { mapImageUrl } from '@/lib/map-image-url'
 import { getCanonicalPageUrl, mapPageUrl } from '@/lib/map-page-url'
-import { getRelatedGuides, GUIDE_BY_ID, isGuidePage } from '@/lib/page-ids'
+import {
+  getRelatedGuides,
+  GUIDE_BY_ID,
+  isGuidePage,
+  isResourcesPage
+} from '@/lib/page-ids'
 import { searchNotion } from '@/lib/search-notion'
 import { useDarkMode } from '@/lib/use-dark-mode'
 
@@ -232,6 +237,7 @@ export function NotionPage({
   const isBlogPost =
     block?.type === 'page' && block?.parent_table === 'collection'
   const isGuide = isGuidePage(pageId)
+  const isResources = isResourcesPage(pageId)
   const guideMeta = pageId
     ? GUIDE_BY_ID.get(pageId.replaceAll('-', ''))
     : undefined
@@ -330,7 +336,8 @@ export function NotionPage({
       <NotionRenderer
         bodyClassName={cs(
           styles.notion,
-          pageId === site.rootNotionPageId && 'index-page'
+          pageId === site.rootNotionPageId && 'index-page',
+          isResources && 'resources-page'
         )}
         darkMode={isDarkMode}
         components={notionRendererComponents}
@@ -339,7 +346,7 @@ export function NotionPage({
         rootDomain={site.domain}
         fullPage={!isLiteMode}
         previewImages={!!recordMap.preview_images}
-        showCollectionViewDropdown={false}
+        showCollectionViewDropdown={isResources}
         showTableOfContents={showTableOfContents}
         minTableOfContentsItems={minTableOfContentsItems}
         defaultPageIcon={config.defaultPageIcon}

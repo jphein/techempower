@@ -33,6 +33,12 @@ export const NON_DISCRIMINATION_POLICY_PAGE = 'cdbe9906ae2441a1a9bb3aec601a5a6c'
 export const HOME_PAGE = '0959e44599984143acabc80187305001'
 
 // ---------------------------------------------------------------------------
+// Resources database page
+// ---------------------------------------------------------------------------
+
+export const RESOURCES_PAGE = '2a3d706803c649409e74e9ce5ccd4c4b'
+
+// ---------------------------------------------------------------------------
 // All guide IDs as a set for quick membership checks
 // ---------------------------------------------------------------------------
 
@@ -149,6 +155,13 @@ function normalizeId(id: string): string {
  */
 export function isGuidePage(pageId: string | undefined): boolean {
   return !!pageId && ALL_GUIDE_IDS.has(normalizeId(pageId))
+}
+
+/**
+ * Return whether a given page ID is the resources database page.
+ */
+export function isResourcesPage(pageId: string | undefined): boolean {
+  return !!pageId && normalizeId(pageId) === RESOURCES_PAGE
 }
 
 /**
