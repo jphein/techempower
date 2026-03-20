@@ -1,6 +1,6 @@
 .footer {
-  background: #0f172a;
-  color: #94a3b8;
+  background: var(--te-bark-900);
+  color: var(--te-bark-400);
   padding: 2.5rem 1.25rem;
 }
 
@@ -25,21 +25,22 @@
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
+  font-family: var(--te-font-display);
   font-weight: 700;
   font-size: 1.1rem;
-  color: #f1f5f9;
+  color: var(--te-cream-dark);
   text-decoration: none;
   border-radius: 0.25rem;
 }
 
 .logo:focus-visible {
-  outline: 3px solid #60a5fa;
+  outline: 3px solid var(--te-teal-500);
   outline-offset: 2px;
 }
 
 .tagline {
   font-size: 0.875rem;
-  color: #94a3b8;
+  color: var(--te-bark-400);
   margin: 0;
 }
 
@@ -52,17 +53,17 @@
 
 .link {
   font-size: 0.9rem;
-  color: #94a3b8;
+  color: var(--te-bark-400);
   text-decoration: none;
   transition: color 150ms ease;
 }
 
 .link:hover {
-  color: #e2e8f0;
+  color: var(--te-bark-200);
 }
 
 .link:focus-visible {
-  outline: 2px solid #60a5fa;
+  outline: 2px solid var(--te-teal-500);
   outline-offset: 2px;
   border-radius: 0.25rem;
 }
@@ -72,29 +73,29 @@
   align-items: center;
   justify-content: center;
   background: none;
-  border: 1px solid #334155;
+  border: 1px solid var(--te-bark-700);
   border-radius: 50%;
   width: 2.25rem;
   height: 2.25rem;
-  color: #94a3b8;
+  color: var(--te-bark-400);
   font-size: 1.1rem;
   cursor: pointer;
   transition: color 150ms ease, border-color 150ms ease;
 }
 
 .themeToggle:hover {
-  color: #e2e8f0;
-  border-color: #64748b;
+  color: var(--te-bark-200);
+  border-color: var(--te-bark-500);
 }
 
 .themeToggle:focus-visible {
-  outline: 2px solid #60a5fa;
+  outline: 2px solid var(--te-teal-500);
   outline-offset: 2px;
 }
 
 .copyright {
   font-size: 0.8rem;
-  color: #94a3b8;
+  color: var(--te-bark-500);
 }
 
 @media (min-width: 640px) {

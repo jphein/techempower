@@ -75,8 +75,10 @@ export function GuideGrid() {
                 <span className={styles.cardEmoji} aria-hidden="true">
                   {guide.emoji}
                 </span>
-                <h3 className={styles.cardTitle}>{guide.title}</h3>
-                <p className={styles.cardSummary}>{guide.summary}</p>
+                <div className={styles.cardBody}>
+                  <h3 className={styles.cardTitle}>{guide.title}</h3>
+                  <p className={styles.cardSummary}>{guide.summary}</p>
+                </div>
               </Link>
             </li>
           ))}

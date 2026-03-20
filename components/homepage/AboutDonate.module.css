@@ -1,6 +1,7 @@
 .section {
-  padding: 3rem 1.25rem;
-  background: #ffffff;
+  padding: 3.5rem 1.25rem;
+  background: var(--te-teal-50);
+  border-top: 1px solid var(--te-teal-100);
 }
 
 .inner {
@@ -10,16 +11,17 @@
 }
 
 .heading {
-  font-size: 1.625rem;
+  font-family: var(--te-font-display);
+  font-size: 1.75rem;
   font-weight: 700;
-  color: #1e293b;
+  color: var(--te-bark-900);
   margin: 0 0 1rem;
 }
 
 .text {
   font-size: 1.05rem;
-  line-height: 1.65;
-  color: #475569;
+  line-height: 1.7;
+  color: var(--te-bark-600);
   margin: 0 0 2rem;
 }
 
@@ -38,46 +40,50 @@
   gap: 0.5rem;
   font-size: 1.05rem;
   font-weight: 600;
-  padding: 0.8rem 1.75rem;
-  border-radius: 0.625rem;
+  padding: 0.85rem 1.75rem;
+  border-radius: 100px;
   border: none;
   cursor: pointer;
   text-decoration: none;
   transition: background 200ms ease, transform 150ms ease, box-shadow 200ms ease;
-  min-width: 200px;
+  min-width: 180px;
 }
 
 .btnLearn {
-  background: #f1f5f9;
-  color: #1e293b;
-  border: 1px solid #cbd5e1;
+  background: var(--te-white);
+  color: var(--te-bark-800);
+  border: 1px solid var(--te-bark-200);
 }
 
 .btnLearn:hover {
-  background: #e2e8f0;
+  background: var(--te-cream-dark);
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .btnLearn:focus-visible {
-  outline: 3px solid #93c5fd;
+  outline: 3px solid var(--te-teal-500);
   outline-offset: 2px;
 }
 
 .btnDonate {
-  background: #ea580c;
+  background: var(--te-amber-600);
   color: #ffffff;
-  box-shadow: 0 1px 3px rgba(234, 88, 12, 0.2), 0 4px 12px rgba(234, 88, 12, 0.15);
+  box-shadow:
+    0 1px 3px rgba(217, 119, 6, 0.2),
+    0 4px 12px rgba(217, 119, 6, 0.12);
 }
 
 .btnDonate:hover {
-  background: #c2410c;
+  background: var(--te-amber-700);
   transform: translateY(-1px);
-  box-shadow: 0 2px 6px rgba(234, 88, 12, 0.25), 0 8px 20px rgba(234, 88, 12, 0.2);
+  box-shadow:
+    0 2px 6px rgba(217, 119, 6, 0.25),
+    0 8px 20px rgba(217, 119, 6, 0.18);
 }
 
 .btnDonate:focus-visible {
-  outline: 3px solid #fdba74;
+  outline: 3px solid var(--te-amber-500);
   outline-offset: 2px;
 }
 
@@ -95,11 +101,11 @@
 
 @media (min-width: 768px) {
   .section {
-    padding: 4rem 2rem;
+    padding: 5rem 2rem;
   }
 
   .heading {
-    font-size: 1.875rem;
+    font-size: 2rem;
   }
 
   .text {

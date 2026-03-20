@@ -2,13 +2,13 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background: hsla(0, 0%, 100%, 0.92);
+  background: hsla(30, 25%, 97%, 0.92);
   backdrop-filter: saturate(180%) blur(16px);
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid var(--te-bark-200);
 }
 
-.dark .header {
-  background: hsla(203, 12%, 14%, 0.92);
+:global(.dark-mode) .header {
+  background: hsla(20, 20%, 10%, 0.92);
   border-bottom-color: rgba(255, 255, 255, 0.08);
 }
 
@@ -29,7 +29,8 @@
   align-items: center;
   gap: 0.5rem;
   text-decoration: none;
-  color: #1e293b;
+  color: var(--te-bark-900);
+  font-family: var(--te-font-display);
   font-weight: 750;
   font-size: 1.15rem;
   letter-spacing: -0.01em;
@@ -38,12 +39,12 @@
 }
 
 .logo:focus-visible {
-  outline: 3px solid #2563eb;
+  outline: 3px solid var(--te-teal-500);
   outline-offset: 2px;
 }
 
-.dark .logo {
-  color: #f1f5f9;
+:global(.dark-mode) .logo {
+  color: #f0ebe5;
 }
 
 .logoIcon {
@@ -65,58 +66,58 @@
   padding: 0.5rem 0.75rem;
   font-size: 0.95rem;
   font-weight: 500;
-  color: #475569;
+  color: var(--te-bark-600);
   text-decoration: none;
   border-radius: 0.5rem;
   transition: color 150ms ease, background 150ms ease;
 }
 
-.dark .navLink {
-  color: #94a3b8;
+:global(.dark-mode) .navLink {
+  color: var(--te-bark-400);
 }
 
 .navLink:hover {
-  color: #1e293b;
-  background: #f1f5f9;
+  color: var(--te-bark-900);
+  background: var(--te-bark-100);
 }
 
 .navLink:focus-visible {
-  outline: 3px solid #2563eb;
+  outline: 3px solid var(--te-teal-500);
   outline-offset: 2px;
 }
 
-.dark .navLink:hover {
-  color: #f1f5f9;
+:global(.dark-mode) .navLink:hover {
+  color: #f0ebe5;
   background: rgba(255, 255, 255, 0.08);
 }
 
 .navLinkActive {
-  color: #2563eb;
+  color: var(--te-teal-700);
   font-weight: 600;
 }
 
-.dark .navLinkActive {
-  color: #60a5fa;
+:global(.dark-mode) .navLinkActive {
+  color: var(--te-teal-500);
 }
 
 .donateLink {
-  background: #ea580c;
+  background: var(--te-amber-600);
   color: #ffffff !important;
   font-weight: 600;
   padding: 0.45rem 1rem;
-  border-radius: 0.5rem;
+  border-radius: 100px;
   margin-left: 0.25rem;
   transition: background 150ms ease, transform 100ms ease;
 }
 
 .donateLink:hover {
-  background: #c2410c !important;
+  background: var(--te-amber-700) !important;
   color: #ffffff !important;
   transform: translateY(-1px);
 }
 
 .donateLink:focus-visible {
-  outline: 3px solid #fdba74;
+  outline: 3px solid var(--te-amber-500);
   outline-offset: 2px;
 }
 
@@ -132,25 +133,25 @@
   border: none;
   background: none;
   cursor: pointer;
-  color: #475569;
+  color: var(--te-bark-600);
   border-radius: 0.5rem;
   transition: background 150ms ease;
 }
 
-.dark .menuButton {
-  color: #94a3b8;
+:global(.dark-mode) .menuButton {
+  color: var(--te-bark-400);
 }
 
 .menuButton:hover {
-  background: #f1f5f9;
+  background: var(--te-bark-100);
 }
 
-.dark .menuButton:hover {
+:global(.dark-mode) .menuButton:hover {
   background: rgba(255, 255, 255, 0.08);
 }
 
 .menuButton:focus-visible {
-  outline: 3px solid #93c5fd;
+  outline: 3px solid var(--te-teal-500);
   outline-offset: 2px;
 }
 
@@ -164,13 +165,13 @@
 .mobileNav {
   display: flex;
   flex-direction: column;
-  background: #ffffff;
-  border-bottom: 1px solid #e2e8f0;
+  background: var(--te-cream);
+  border-bottom: 1px solid var(--te-bark-200);
   padding: 0.5rem 1rem 1rem;
 }
 
-.dark .mobileNav {
-  background: #1e293b;
+:global(.dark-mode) .mobileNav {
+  background: var(--te-cream);
   border-bottom-color: rgba(255, 255, 255, 0.08);
 }
 
@@ -179,59 +180,59 @@
   padding: 0.75rem 0.5rem;
   font-size: 1.05rem;
   font-weight: 500;
-  color: #475569;
+  color: var(--te-bark-600);
   text-decoration: none;
   border-radius: 0.5rem;
   transition: color 150ms ease, background 150ms ease;
 }
 
-.dark .mobileNavLink {
-  color: #94a3b8;
+:global(.dark-mode) .mobileNavLink {
+  color: var(--te-bark-400);
 }
 
 .mobileNavLink:hover {
-  color: #1e293b;
-  background: #f1f5f9;
+  color: var(--te-bark-900);
+  background: var(--te-bark-100);
 }
 
 .mobileNavLink:focus-visible {
-  outline: 3px solid #2563eb;
+  outline: 3px solid var(--te-teal-500);
   outline-offset: 2px;
 }
 
-.dark .mobileNavLink:hover {
-  color: #f1f5f9;
+:global(.dark-mode) .mobileNavLink:hover {
+  color: #f0ebe5;
   background: rgba(255, 255, 255, 0.08);
 }
 
 .mobileNavLinkActive {
-  color: #2563eb;
+  color: var(--te-teal-700);
   font-weight: 600;
 }
 
-.dark .mobileNavLinkActive {
-  color: #60a5fa;
+:global(.dark-mode) .mobileNavLinkActive {
+  color: var(--te-teal-500);
 }
 
 .mobileDonateLink {
   display: block;
   text-align: center;
-  background: #ea580c;
+  background: var(--te-amber-600);
   color: #ffffff !important;
   font-weight: 600;
   padding: 0.75rem 1rem;
-  border-radius: 0.625rem;
+  border-radius: 100px;
   margin-top: 0.5rem;
   text-decoration: none;
   transition: background 150ms ease;
 }
 
 .mobileDonateLink:hover {
-  background: #c2410c;
+  background: var(--te-amber-700);
 }
 
 .mobileDonateLink:focus-visible {
-  outline: 3px solid #fdba74;
+  outline: 3px solid var(--te-amber-500);
   outline-offset: 2px;
 }
 

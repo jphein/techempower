@@ -80,22 +80,16 @@
 .notion-collection-card {
   border-radius: 16px;
   box-shadow: none;
+  overflow: visible;
 }
 
 .notion-collection-card-cover img {
   border-radius: 16px;
 }
 
-.notion-collection-card {
-  overflow: visible;
-}
-
 .notion-collection-card-cover {
   border-radius: 16px;
   box-shadow: 2px 2px 8px 4px rgba(15, 15, 15, 0.1);
-}
-
-.notion-collection-card-cover {
   border-bottom: 0 none;
   transition: filter 150ms linear;
   filter: none;
@@ -124,13 +118,21 @@
   line-height: 1.5;
   font-style: italic;
   font-size: 1.2em;
-  border-left: 4px solid #67bdfc;
+  border-left: 4px solid var(--te-teal-500, #14b8a6);
 }
 
 .notion-h1,
 .notion-h2,
 .notion-h3 {
   margin-bottom: 0.25em;
+  color: var(--te-bark-900, #1c1210);
+  font-family: var(--te-font-display, Georgia, serif);
+}
+
+.dark-mode .notion-h1,
+.dark-mode .notion-h2,
+.dark-mode .notion-h3 {
+  color: #f0ebe5;
 }
 
 .notion-callout {
@@ -169,14 +171,17 @@
 .notion-title {
   display: block;
   text-align: center;
+  font-family: var(--te-font-display, Georgia, serif);
+}
+
+/* Hide database properties on guide pages — they contain internal
+   metadata (eligibility, Spanish translations) not meant for display */
+.notion-collection-page-properties {
+  display: none;
 }
 
 .notion-collection-row {
   padding-bottom: 1em;
-}
-
-.notion-collection-page-properties .notion-collection-column-title {
-  display: none;
 }
 
 .notion-collection-row-property .notion-property {
@@ -226,8 +231,8 @@
   transition: unset;
   opacity: 1;
   border-bottom-width: 0.1rem;
-  border-bottom-color: var(--te-blue-100, #dbeafe);
-  color: var(--te-blue-600, #2563eb);
+  border-bottom-color: var(--te-teal-100, #ccfbf1);
+  color: var(--te-teal-700, #0f766e);
   background: transparent;
   background-origin: border-box;
   background-repeat: no-repeat;
@@ -239,13 +244,18 @@
 .notion-link:hover {
   border-bottom-color: transparent;
 
-  background-image: linear-gradient(90deg, var(--te-blue-600, #2563eb), var(--te-blue-700, #1d4ed8));
+  background-image: linear-gradient(90deg, var(--te-teal-700, #0f766e), var(--te-teal-600, #0d9488));
   background-repeat: no-repeat;
   background-position: 0 100%;
   background-size: 100% 0.1rem;
 
   transition-property: background-position, background-size;
   transition-duration: 300ms;
+}
+
+.dark-mode .notion-link {
+  color: var(--te-teal-500, #14b8a6);
+  border-bottom-color: rgba(20, 184, 166, 0.3);
 }
 
 .notion-red_background,
@@ -360,7 +370,7 @@
 }
 
 .notion-header {
-  background: hsla(0, 0%, 100%, 0.8);
+  background: hsla(30, 25%, 97%, 0.8);
   backdrop-filter: saturate(180%) blur(16px);
 }
 
@@ -373,12 +383,12 @@
 /* Workaround for Firefox not supporting backdrop-filter yet */
 @-moz-document url-prefix() {
   .dark-mode .notion-header {
-    background: hsla(203, 8%, 20%, 0.8);
+    background: hsla(20, 20%, 10%, 0.8);
   }
 }
 
 .notion-bookmark:hover {
-  border-image: linear-gradient(90.68deg, #b439df 0.26%, #e5337e 102.37%);
+  border-image: linear-gradient(90.68deg, var(--te-teal-600, #0d9488), var(--te-amber-600, #d97706));
   border-image-slice: 1;
 }
 
@@ -428,14 +438,14 @@
 .notion-h1,
 .notion-h2,
 .notion-h3 {
-  color: #1e293b;
+  color: var(--te-bark-900, #1c1210);
 }
 
 /* ── Notion link focus ───────────────────────
    Ensure Notion links show a visible focus ring. */
 
 .notion-link:focus-visible {
-  outline: 3px solid #2563eb;
+  outline: 3px solid var(--te-teal-500, #14b8a6);
   outline-offset: 2px;
   border-radius: 2px;
 }

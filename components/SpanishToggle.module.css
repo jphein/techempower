@@ -13,7 +13,7 @@
   border: none;
   border-radius: 6px;
   background: transparent;
-  color: var(--fg-color, #37352f);
+  color: var(--te-bark-800);
   font-size: 0.9em;
   font-family: inherit;
   cursor: pointer;
@@ -21,11 +21,11 @@
 }
 
 .toggle:hover {
-  background: var(--fg-color-0, rgba(55, 53, 47, 0.08));
+  background: var(--te-bark-100);
 }
 
 .toggle:focus-visible {
-  outline: 2px solid #7c3aed;
+  outline: 2px solid var(--te-teal-500);
   outline-offset: 2px;
 }
 
@@ -44,14 +44,14 @@
   gap: 0.75em;
   margin-top: 0.5em;
   padding: 1em 1.25em;
-  border-radius: 8px;
-  background: #ede9fe; /* purple-100 */
-  border-left: 4px solid #7c3aed; /* purple-600 */
+  border-radius: 0.75rem;
+  background: var(--te-teal-50);
+  border-left: 4px solid var(--te-teal-600);
 }
 
 :global(.dark-mode) .callout {
-  background: rgba(124, 58, 237, 0.15);
-  border-left-color: #a78bfa;
+  background: rgba(13, 148, 136, 0.12);
+  border-left-color: var(--te-teal-500);
 }
 
 .calloutIcon {
@@ -69,7 +69,7 @@
   margin: 0;
   font-size: 0.95em;
   line-height: 1.6;
-  color: var(--fg-color, #37352f);
+  color: var(--te-bark-800);
 }
 
 @media only screen and (max-width: 566px) {

@@ -6,10 +6,11 @@
 }
 
 .heading {
+  font-family: var(--te-font-display);
   font-size: 1.25em;
   font-weight: 600;
   margin: 0 0 0.75em;
-  color: var(--fg-color, #37352f);
+  color: var(--te-bark-800);
 }
 
 .grid {
@@ -23,23 +24,27 @@
   align-items: flex-start;
   gap: 0.75em;
   padding: 1em;
-  border-radius: 8px;
-  border: 1px solid var(--fg-color-0, rgba(55, 53, 47, 0.09));
-  background: var(--bg-color-0, rgba(255, 255, 255, 0.7));
+  border-radius: 0.75rem;
+  border: 1px solid var(--te-bark-200);
+  background: var(--te-cream);
   text-decoration: none;
   color: inherit;
   transition:
-    background 150ms ease-out,
-    box-shadow 150ms ease-out;
+    border-color 200ms ease,
+    box-shadow 200ms ease,
+    transform 200ms ease;
 }
 
 .card:hover {
-  background: var(--fg-color-0, rgba(55, 53, 47, 0.04));
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border-color: var(--te-teal-500);
+  box-shadow:
+    0 4px 12px rgba(13, 148, 136, 0.08),
+    0 1px 3px rgba(0, 0, 0, 0.04);
+  transform: translateY(-2px);
 }
 
 .card:focus-visible {
-  outline: 2px solid #7c3aed;
+  outline: 2px solid var(--te-teal-500);
   outline-offset: 2px;
 }
 
@@ -49,6 +54,7 @@
 }
 
 :global(.dark-mode) .card:hover {
+  border-color: var(--te-teal-600);
   background: rgba(255, 255, 255, 0.08);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
@@ -68,14 +74,14 @@
   font-size: 0.95em;
   font-weight: 600;
   margin: 0 0 0.25em;
-  color: var(--fg-color, #37352f);
+  color: var(--te-bark-800);
 }
 
 .summary {
   font-size: 0.85em;
   line-height: 1.5;
   margin: 0;
-  color: var(--fg-color-2, rgba(55, 53, 47, 0.65));
+  color: var(--te-bark-500);
 }
 
 @media only screen and (max-width: 566px) {

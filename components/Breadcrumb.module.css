@@ -24,30 +24,30 @@
 
 .separator {
   margin: 0 0.4em;
-  color: var(--fg-color-3, rgba(55, 53, 47, 0.4));
+  color: var(--te-bark-300);
   font-size: 1.1em;
   user-select: none;
 }
 
 .link {
-  color: var(--fg-color-3, rgba(55, 53, 47, 0.4));
+  color: var(--te-bark-500);
   text-decoration: none;
   transition: color 150ms ease-out;
 }
 
 .link:hover {
-  color: var(--fg-color, #37352f);
+  color: var(--te-teal-700);
   text-decoration: underline;
 }
 
 .link:focus-visible {
-  outline: 2px solid #7c3aed;
+  outline: 2px solid var(--te-teal-500);
   outline-offset: 2px;
   border-radius: 3px;
 }
 
 .current {
-  color: var(--fg-color, #37352f);
+  color: var(--te-bark-800);
   font-weight: 500;
 }
 
