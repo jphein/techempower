@@ -1,6 +1,6 @@
 .footer {
-  background: var(--te-bark-900);
-  color: var(--te-bark-400);
+  background: #1c1210;
+  color: #a08979;
   padding: 2.5rem 1.25rem;
 }
 
@@ -28,19 +28,19 @@
   font-family: var(--te-font-display);
   font-weight: 700;
   font-size: 1.1rem;
-  color: var(--te-cream-dark);
+  color: #f3efe9;
   text-decoration: none;
   border-radius: 0.25rem;
 }
 
 .logo:focus-visible {
-  outline: 3px solid var(--te-teal-500);
+  outline: 3px solid #14b8a6;
   outline-offset: 2px;
 }
 
 .tagline {
   font-size: 0.875rem;
-  color: var(--te-bark-400);
+  color: #a08979;
   margin: 0;
 }
 
@@ -53,17 +53,17 @@
 
 .link {
   font-size: 0.9rem;
-  color: var(--te-bark-400);
+  color: #a08979;
   text-decoration: none;
   transition: color 150ms ease;
 }
 
 .link:hover {
-  color: var(--te-bark-200);
+  color: #e0d6cc;
 }
 
 .link:focus-visible {
-  outline: 2px solid var(--te-teal-500);
+  outline: 2px solid #14b8a6;
   outline-offset: 2px;
   border-radius: 0.25rem;
 }
@@ -73,29 +73,29 @@
   align-items: center;
   justify-content: center;
   background: none;
-  border: 1px solid var(--te-bark-700);
+  border: 1px solid #44302a;
   border-radius: 50%;
   width: 2.25rem;
   height: 2.25rem;
-  color: var(--te-bark-400);
+  color: #a08979;
   font-size: 1.1rem;
   cursor: pointer;
   transition: color 150ms ease, border-color 150ms ease;
 }
 
 .themeToggle:hover {
-  color: var(--te-bark-200);
-  border-color: var(--te-bark-500);
+  color: #e0d6cc;
+  border-color: #78614f;
 }
 
 .themeToggle:focus-visible {
-  outline: 2px solid var(--te-teal-500);
+  outline: 2px solid #14b8a6;
   outline-offset: 2px;
 }
 
 .copyright {
   font-size: 0.8rem;
-  color: var(--te-bark-500);
+  color: #78614f;
 }
 
 @media (min-width: 640px) {

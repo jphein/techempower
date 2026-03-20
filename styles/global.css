@@ -86,14 +86,30 @@ body {
 }
 
 .dark-mode {
+  /* Backgrounds */
   --te-cream: #1a1412;
   --te-cream-dark: #231c17;
+  --te-white: #231c17;
+
+  /* Text: flip light ↔ dark */
+  --te-bark-900: #f0ebe5;
   --te-bark-800: #e8ddd4;
   --te-bark-700: #c4b5a8;
+  --te-bark-600: #b8a899;
   --te-bark-500: #a08979;
+  --te-bark-400: #8a7565;
   --te-bark-300: #5c4236;
   --te-bark-200: #3d2e26;
   --te-bark-100: #2c1f1a;
+
+  /* Teal: lighten for dark backgrounds */
+  --te-teal-700: #14b8a6;
+  --te-teal-50: rgba(13, 148, 136, 0.08);
+  --te-teal-100: rgba(13, 148, 136, 0.15);
+
+  /* Amber: lighten slightly */
+  --te-amber-600: #f59e0b;
+  --te-amber-700: #d97706;
 }
 
 /* ── NProgress loading bar ──────────────────── */

@@ -21,7 +21,7 @@ export default class MyDocument extends Document {
           <script
             dangerouslySetInnerHTML={{
               __html: `
-/** Inlined version of noflash.js from use-dark-mode */
+/** Dark mode: follow system preference, allow manual override */
 ;(function () {
   var storageKey = 'darkMode'
   var classNameDark = 'dark-mode'
@@ -32,28 +32,25 @@ export default class MyDocument extends Document {
   }
   var preferDarkQuery = '(prefers-color-scheme: dark)'
   var mql = window.matchMedia(preferDarkQuery)
-  var supportsColorSchemeQuery = mql.media === preferDarkQuery
   var localStorageTheme = null
   try {
     localStorageTheme = localStorage.getItem(storageKey)
   } catch (err) {}
-  var localStorageExists = localStorageTheme !== null
-  if (localStorageExists) {
-    localStorageTheme = JSON.parse(localStorageTheme)
-  }
-  // Determine the source of truth
-  if (localStorageExists) {
-    // source of truth from localStorage
-    setClassOnDocumentBody(localStorageTheme)
-  } else if (supportsColorSchemeQuery) {
-    // source of truth from system
-    setClassOnDocumentBody(mql.matches)
-    localStorage.setItem(storageKey, mql.matches)
+  // Use localStorage only if user has explicitly toggled;
+  // otherwise follow system preference
+  if (localStorageTheme !== null) {
+    setClassOnDocumentBody(JSON.parse(localStorageTheme))
   } else {
-    // source of truth from document.body
-    var isDarkMode = document.body.classList.contains(classNameDark)
-    localStorage.setItem(storageKey, JSON.stringify(isDarkMode))
+    setClassOnDocumentBody(mql.matches)
   }
+  // Listen for system preference changes (when no manual override)
+  mql.addEventListener('change', function (e) {
+    try {
+      if (localStorage.getItem(storageKey) === null) {
+        setClassOnDocumentBody(e.matches)
+      }
+    } catch (err) {}
+  })
 })();
 `
             }}
