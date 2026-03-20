@@ -223,16 +223,7 @@ export function NotionPage({
 
   const { isDarkMode } = useDarkMode()
 
-  // Resources page manages recordMap as state so we can swap in the
-  // full dataset after the initial 50-row SSR load.
-  const [recordMap, setRecordMap] = React.useState(initialRecordMap)
-  const [hasLoadedAll, setHasLoadedAll] = React.useState(false)
-
-  // Reset state when navigating to a new page
-  React.useEffect(() => {
-    setRecordMap(initialRecordMap)
-    setHasLoadedAll(false)
-  }, [initialRecordMap])
+  const recordMap = initialRecordMap
 
   const siteMapPageUrl = React.useMemo(() => {
     const params: any = {}
@@ -260,25 +251,8 @@ export function NotionPage({
     [isGuide, recordMap]
   )
 
-  // Fetch full resources when "Load all" is clicked
-  const loadAllResources = React.useCallback(async () => {
-    if (hasLoadedAll) return
-    NProgress.start()
-    try {
-      const res = await fetch('/api/resources-more')
-      if (!res.ok) throw new Error('fetch failed')
-      const data = (await res.json()) as { recordMap: typeof initialRecordMap }
-      setRecordMap(data.recordMap)
-      setHasLoadedAll(true)
-    } catch {
-      // Silently fail — user still has the initial 50 rows
-    } finally {
-      NProgress.done()
-    }
-  }, [hasLoadedAll])
-
-  // Bind NProgress to built-in Load More buttons + inject "Load all"
-  // button after the built-in ones are exhausted.
+  // Bind NProgress to built-in Load More buttons so users get
+  // visual feedback when paginating through collection views.
   React.useEffect(() => {
     if (!isResources) return
 
@@ -433,18 +407,6 @@ export function NotionPage({
         searchNotion={config.isSearchEnabled ? searchNotion : undefined}
         pageAside={pageAside}
       />
-
-      {isResources && !hasLoadedAll && (
-        <div className={styles.loadAllResources}>
-          <button
-            type='button'
-            onClick={loadAllResources}
-            className={styles.loadAllButton}
-          >
-            Load all resources
-          </button>
-        </div>
-      )}
 
       {isGuide && relatedGuides.length > 0 && (
         <RelatedGuides guides={relatedGuides} />

@@ -25,11 +25,7 @@ export const getServerSideProps: GetServerSideProps<PageProps, Params> = async (
       domain,
       rawPageId,
       isResources
-        ? {
-            collectionReducerLimit: 50,
-            collectionLoadLimit: 20,
-            enableGalleryCovers: true
-          }
+        ? { collectionLoadLimit: 20, enableGalleryCovers: true }
         : undefined
     )
 
