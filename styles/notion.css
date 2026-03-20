@@ -131,32 +131,46 @@
 /* ── Resources page: Gallery view ──────────── */
 
 .resources-page .notion-gallery-grid {
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.125rem;
   padding: 0 !important;
 }
 
+/* Card titles: allow wrapping up to 2 lines, then clamp */
 .resources-page .notion-gallery-grid .notion-page-title-text {
   font-size: 0.95rem;
   font-weight: 600;
-  line-height: 1.35;
+  line-height: 1.4;
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .resources-page .notion-collection-card {
-  border-radius: 10px;
+  border-radius: 12px;
   border: 1px solid var(--te-bark-200, #e0d6cc);
   background: var(--te-cream, #faf8f5);
   transition:
-    border-color 180ms ease,
-    box-shadow 180ms ease,
-    transform 180ms ease;
+    border-color 200ms ease,
+    box-shadow 200ms ease,
+    transform 200ms ease;
   overflow: hidden;
 }
 
 .resources-page .notion-collection-card:hover {
   border-color: var(--te-teal-500, #14b8a6);
-  box-shadow: 0 4px 12px rgba(13, 148, 136, 0.1);
-  transform: translateY(-2px);
+  box-shadow:
+    0 4px 16px rgba(13, 148, 136, 0.12),
+    0 1px 4px rgba(13, 148, 136, 0.06);
+  transform: translateY(-3px);
+}
+
+/* Focus-visible ring for keyboard navigation */
+.resources-page .notion-collection-card:focus-visible {
+  outline: 3px solid var(--te-teal-500, #14b8a6);
+  outline-offset: 2px;
 }
 
 .dark-mode .resources-page .notion-collection-card {
@@ -166,7 +180,9 @@
 
 .dark-mode .resources-page .notion-collection-card:hover {
   border-color: var(--te-teal-600, #0d9488);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.35),
+    0 1px 4px rgba(0, 0, 0, 0.15);
 }
 
 /* Remove oversized cover images — resources rarely have useful covers */
@@ -175,7 +191,10 @@
 }
 
 .resources-page .notion-collection-card-body {
-  padding: 0.75rem 0.875rem;
+  padding: 0.875rem 1rem;
+  gap: 0.25rem;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Prevent cards from stretching to row height */
@@ -183,19 +202,59 @@
   align-self: start;
 }
 
-/* Keep card properties compact */
+/* Title property (first child) */
+.resources-page .notion-collection-card-property:first-child {
+  padding-bottom: 0.375rem;
+  margin-bottom: 0.25rem;
+  border-bottom: 1px solid var(--te-bark-200, #e0d6cc);
+}
+
+.dark-mode .resources-page .notion-collection-card-property:first-child {
+  border-bottom-color: var(--te-bark-200, #3d2e26);
+}
+
+/* Non-title card properties: compact, readable */
 .resources-page .notion-collection-card-property {
   font-size: 0.8rem;
   padding: 2px 0;
-  white-space: nowrap;
+  white-space: normal;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: var(--te-bark-600, #5c4236);
+  line-height: 1.4;
 }
 
-/* Gallery property tags (multi-select) */
-.resources-page .notion-collection-card .notion-property-multi_select-item {
+.dark-mode .resources-page .notion-collection-card-property {
+  color: var(--te-bark-500, #78614f);
+}
+
+/* Limit non-title text properties to 2 lines */
+.resources-page
+  .notion-collection-card-property:not(:first-child)
+  .notion-property-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Gallery property tags (multi-select / select) */
+.resources-page .notion-collection-card .notion-property-multi_select-item,
+.resources-page .notion-collection-card .notion-property-select-item {
   font-size: 0.7rem;
-  padding: 1px 6px;
+  padding: 2px 8px;
+  border-radius: 100px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+/* Wrap tags instead of clipping them */
+.resources-page .notion-collection-card-property:not(:first-child) {
+  white-space: normal;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
 }
 
 .notion-quote {
@@ -286,16 +345,32 @@
     padding-right: max(4vw, 16px);
   }
 
-  /* Gallery: 2 columns on tablet, 1 on small */
+  /* Gallery: 2 columns on tablet */
   .resources-page .notion-gallery-grid {
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 0.75rem;
+    gap: 0.875rem;
+  }
+
+  /* Slightly smaller card padding on tablet */
+  .resources-page .notion-collection-card-body {
+    padding: 0.75rem 0.875rem;
   }
 
   /* Tabs: smaller text, tighter padding on mobile */
   .resources-page .notion-collection-view-tabs-content-item {
     font-size: 0.8rem;
     padding: 0.4rem 0.625rem;
+  }
+
+  /* Table: tighter cell padding on tablet/mobile */
+  .resources-page .notion-table-cell {
+    padding: 0.5em 0.5em;
+    font-size: 0.85rem;
+  }
+
+  .resources-page .notion-table-header-inner {
+    font-size: 0.75rem;
+    padding: 0.5em 0.5em;
   }
 }
 
@@ -304,9 +379,28 @@
     display: none !important;
   }
 
-  /* Single column gallery on small phones */
+  /* Single column gallery on small phones — cards go full width */
   .resources-page .notion-gallery-grid {
     grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  /* On small screens, hide the Category column to give more room
+     to Name and Eligibility which are the most useful. */
+  .resources-page .notion-table-cell:nth-child(2),
+  .resources-page .notion-table-th:nth-child(2) {
+    display: none !important;
+  }
+
+  /* Re-distribute remaining space: Name 55%, Eligibility 45% */
+  .resources-page .notion-table-cell:nth-child(1),
+  .resources-page .notion-table-th:nth-child(1) {
+    flex: 55 1 0 !important;
+  }
+
+  .resources-page .notion-table-cell:nth-child(4),
+  .resources-page .notion-table-th:nth-child(4) {
+    flex: 45 1 0 !important;
   }
 }
 
@@ -793,10 +887,12 @@
   padding: 0.875em 0;
 }
 
-/* Resources page: override react-notion-x inline table sizing.
-   The library renders tables as div+flexbox (not <table>), setting
-   inline style="width: Xpx;" on cells and min-width on containers.
-   We reset every layer so columns fill our --notion-max-width. */
+/* ── Resources page: Table view ─────────────
+   react-notion-x renders tables as div+flexbox (not <table>),
+   setting inline style="width: Xpx;" on cells and min-width on
+   containers.  We reset every layer so columns fill the available
+   --notion-max-width instead of using Notion's pixel widths. */
+
 .resources-page .notion-table,
 .resources-page .notion-table-view,
 .resources-page .notion-table-body,
@@ -808,7 +904,7 @@
   max-width: 100% !important;
 }
 
-/* Remove the 96px side padding that react-notion-x adds to center
+/* Remove the side padding that react-notion-x adds to center
    the table — we want the full container width for data density. */
 .resources-page .notion-table-view {
   padding-left: 0 !important;
@@ -816,18 +912,39 @@
 }
 
 /* All cells (header + body): use flex-grow ratios with basis 0
-   so they divide available space proportionally regardless of
-   which container they're in. */
+   so they divide available space proportionally.  Also override the
+   inline style.width on notion-table-view-header-cell wrappers
+   which have flex-shrink:0 by default and would resist resizing. */
 .resources-page .notion-table-cell,
-.resources-page .notion-table-th {
+.resources-page .notion-table-th,
+.resources-page .notion-table-view-header-cell {
   width: 0 !important;
   min-width: 0 !important;
+  flex-shrink: 1 !important;
   overflow: hidden;
 }
 
 .resources-page .notion-table-cell {
   white-space: normal;
   word-break: break-word;
+}
+
+/* Header cell inner: use warm design-system border color and
+   prevent long column titles from breaking the layout. */
+.resources-page .notion-table-view-header-cell-inner {
+  border-right-color: var(--te-bark-200, #e0d6cc);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dark-mode .resources-page .notion-table-view-header-cell-inner {
+  border-right-color: var(--te-bark-200, #3d2e26);
+}
+
+/* Dark mode: readable cell text */
+.dark-mode .resources-page .notion-table-cell {
+  color: #ddd5cc;
 }
 
 /* Hide columns: Value (3), Phone (5), URL (6) */
@@ -840,22 +957,26 @@
   display: none !important;
 }
 
-/* Column 1 — Name: widest column, shows resource title */
+/* Column 1 — Name (flex:50): widest column, shows resource title */
 .resources-page .notion-table-cell:nth-child(1),
 .resources-page .notion-table-th:nth-child(1) {
   flex: 50 1 0 !important;
 }
 .resources-page .notion-table-cell:nth-child(1) {
   font-weight: 500;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-/* Column 2 — Category: short tag, keep compact */
+/* Column 2 — Category (flex:15): short tag, keep compact */
 .resources-page .notion-table-cell:nth-child(2),
 .resources-page .notion-table-th:nth-child(2) {
   flex: 15 1 0 !important;
 }
 
-/* Column 4 — Eligibility: who qualifies */
+/* Column 4 — Eligibility (flex:35): who qualifies */
 .resources-page .notion-table-cell:nth-child(4),
 .resources-page .notion-table-th:nth-child(4) {
   flex: 35 1 0 !important;
@@ -865,6 +986,24 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+/* Warm hover accent: teal left border highlights the active row */
+.resources-page .notion-table-row {
+  border-left: 3px solid transparent;
+  transition:
+    background 120ms ease,
+    border-color 120ms ease;
+}
+
+.resources-page .notion-table-row:hover {
+  background: var(--te-teal-50, #f0fdfa);
+  border-left-color: var(--te-teal-500, #14b8a6);
+}
+
+.dark-mode .resources-page .notion-table-row:hover {
+  background: rgba(13, 148, 136, 0.06);
+  border-left-color: var(--te-teal-600, #0d9488);
 }
 
 /* Hide the page icon hero and the redundant collection title */
@@ -880,7 +1019,9 @@
 
 .resources-page .notion-collection-view-tabs-row {
   display: flex;
+  flex-wrap: nowrap;
   gap: 0;
+  width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
@@ -895,6 +1036,7 @@
 
 .resources-page .notion-collection-view-tabs-content-item {
   flex-shrink: 0;
+  height: auto;
   padding: 0.5rem 0.875rem;
   font-size: 0.85rem;
   font-weight: 500;
@@ -903,7 +1045,8 @@
   margin-bottom: -2px;
   transition:
     color 150ms ease,
-    border-color 150ms ease;
+    border-color 150ms ease,
+    background 150ms ease;
   white-space: nowrap;
   cursor: pointer;
   border-radius: 0;
@@ -912,6 +1055,18 @@
 
 .resources-page .notion-collection-view-tabs-content-item:hover {
   color: var(--te-bark-900, #1c1210);
+  background: none;
+  border-bottom-color: var(--te-bark-300, #cec3b8);
+}
+
+.dark-mode .resources-page .notion-collection-view-tabs-content-item {
+  color: var(--te-bark-500, #78614f);
+}
+
+.dark-mode .resources-page .notion-collection-view-tabs-content-item:hover {
+  color: var(--te-cream, #f0ebe5);
+  background: none;
+  border-bottom-color: var(--te-bark-500, #78614f);
 }
 
 .resources-page .notion-collection-view-tabs-content-item-active {
@@ -920,9 +1075,25 @@
   font-weight: 600;
 }
 
-.dark-mode .resources-page .notion-collection-view-tabs-content-item-active {
+/* Active tab keeps teal on hover — don't revert to bark */
+.resources-page .notion-collection-view-tabs-content-item-active:hover {
+  color: var(--te-teal-700, #0f766e);
+  border-bottom-color: var(--te-teal-600, #0d9488);
+}
+
+.dark-mode .resources-page .notion-collection-view-tabs-content-item-active,
+.dark-mode
+  .resources-page
+  .notion-collection-view-tabs-content-item-active:hover {
   color: var(--te-teal-500, #14b8a6);
   border-bottom-color: var(--te-teal-500, #14b8a6);
+}
+
+/* Keyboard focus ring for tab accessibility */
+.resources-page .notion-collection-view-tabs-content-item:focus-visible {
+  outline: 2px solid var(--te-teal-500, #14b8a6);
+  outline-offset: -2px;
+  border-radius: 2px;
 }
 
 /* Hide view-type icons in tabs — they add noise */
@@ -953,12 +1124,26 @@
   cursor: pointer;
   transition:
     background 150ms ease,
-    color 150ms ease;
+    color 150ms ease,
+    border-color 150ms ease;
+}
+
+.resources-page .notion-collection-load-more svg {
+  width: 16px;
+  height: 16px;
+  margin-right: 6px;
+  fill: currentColor;
 }
 
 .resources-page .notion-collection-load-more:hover {
   background: var(--te-teal-50, #f0fdfa);
   color: var(--te-teal-800, #115e59);
+  border-color: var(--te-teal-600, #0d9488);
+}
+
+.resources-page .notion-collection-load-more:focus-visible {
+  outline: 2px solid var(--te-teal-500, #14b8a6);
+  outline-offset: 2px;
 }
 
 .dark-mode .resources-page .notion-collection-load-more {
@@ -969,6 +1154,7 @@
 .dark-mode .resources-page .notion-collection-load-more:hover {
   background: rgba(13, 148, 136, 0.1);
   color: var(--te-teal-400);
+  border-color: var(--te-teal-500, #14b8a6);
 }
 
 /* ── Board/Kanban view ────────────────────── */
