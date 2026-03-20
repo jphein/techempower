@@ -27,11 +27,16 @@ import { getCanonicalPageUrl, mapPageUrl } from '@/lib/map-page-url'
 import { searchNotion } from '@/lib/search-notion'
 import { useDarkMode } from '@/lib/use-dark-mode'
 
+import { isGuidePage, getRelatedGuides, GUIDE_BY_ID } from '@/lib/page-ids'
+
+import { Breadcrumb, buildGuideBreadcrumb } from './Breadcrumb'
 import { GitHubShareButton } from './GitHubShareButton'
 import { Loading } from './Loading'
 import { Page404 } from './Page404'
 import { PageAside } from './PageAside'
 import { PageHead } from './PageHead'
+import { RelatedGuides } from './RelatedGuides'
+import { SpanishToggle } from './SpanishToggle'
 import { StructuredData } from './StructuredData'
 import styles from './styles.module.css'
 
@@ -228,6 +233,9 @@ export function NotionPage({
   const isHomePage = pageId === site?.rootNotionPageId
   const isBlogPost =
     block?.type === 'page' && block?.parent_table === 'collection'
+  const isGuide = isGuidePage(pageId)
+  const guideMeta = pageId ? GUIDE_BY_ID.get(pageId) : undefined
+  const relatedGuides = pageId ? getRelatedGuides(pageId) : []
 
   const showTableOfContents = !!isBlogPost
   const minTableOfContentsItems = 3
@@ -301,6 +309,12 @@ export function NotionPage({
       {isLiteMode && <BodyClassName className='notion-lite' />}
       {isDarkMode && <BodyClassName className='dark-mode' />}
 
+      {isGuide && (
+        <Breadcrumb items={buildGuideBreadcrumb(guideMeta?.title || title)} />
+      )}
+
+      {isGuide && <SpanishToggle />}
+
       <NotionRenderer
         bodyClassName={cs(
           styles.notion,
@@ -324,6 +338,10 @@ export function NotionPage({
         searchNotion={config.isSearchEnabled ? searchNotion : undefined}
         pageAside={pageAside}
       />
+
+      {isGuide && relatedGuides.length > 0 && (
+        <RelatedGuides guides={relatedGuides} />
+      )}
 
       <GitHubShareButton />
     </>
