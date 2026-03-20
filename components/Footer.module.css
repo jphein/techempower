@@ -29,11 +29,17 @@
   font-size: 1.1rem;
   color: #f1f5f9;
   text-decoration: none;
+  border-radius: 0.25rem;
+}
+
+.logo:focus-visible {
+  outline: 3px solid #60a5fa;
+  outline-offset: 2px;
 }
 
 .tagline {
   font-size: 0.875rem;
-  color: #64748b;
+  color: #94a3b8;
   margin: 0;
 }
 
@@ -63,7 +69,7 @@
 
 .copyright {
   font-size: 0.8rem;
-  color: #475569;
+  color: #94a3b8;
 }
 
 @media (min-width: 640px) {

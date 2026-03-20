@@ -405,3 +405,37 @@
 .notion-equation.notion-equation-block{
   align-items: center;
 }
+
+/* ── Accessible table scrolling ──────────────
+   Wrap Notion tables in a scrollable container on
+   mobile so they don't overflow the viewport.    */
+
+.notion-table,
+.notion-collection-view-body {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Provide a subtle visual cue that the table scrolls */
+.notion-table {
+  max-width: 100%;
+}
+
+/* ── Notion heading contrast ─────────────────
+   Ensure all Notion headings meet WCAG AA 3:1
+   contrast ratio for large text.                */
+
+.notion-h1,
+.notion-h2,
+.notion-h3 {
+  color: #1e293b;
+}
+
+/* ── Notion link focus ───────────────────────
+   Ensure Notion links show a visible focus ring. */
+
+.notion-link:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
+  border-radius: 2px;
+}

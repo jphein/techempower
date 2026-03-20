@@ -60,6 +60,35 @@ body {
   caret-color: var(--fg-color);
 }
 
+/* ── Global focus-visible styles ──────────────
+   Ensures all interactive elements show a visible
+   focus ring for keyboard users (WCAG 2.1 AA). */
+
+*:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
+}
+
+/* Remove the default outline for mouse/touch users */
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ── Reduced-motion preference ───────────────
+   Disables transitions and animations for users
+   who have enabled "reduce motion" in their OS. */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 ::-webkit-scrollbar
 {
   width: 5px;

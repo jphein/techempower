@@ -30,10 +30,11 @@ export function SupportChannels() {
               className={styles.cardLink}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="Open Discord (opens in a new tab)"
             >
               Open Discord
-              <span className={styles.cardLinkArrow} aria-hidden="true">
-                &rarr;
+              <span className={styles.externalIcon} aria-hidden="true">
+                {' '}&#8599;
               </span>
             </a>
           </div>

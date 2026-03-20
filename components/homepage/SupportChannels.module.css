@@ -87,11 +87,23 @@
   line-height: 1;
 }
 
+.externalIcon {
+  font-size: 0.85em;
+  line-height: 1;
+  display: inline;
+}
+
 .phoneHighlight {
   font-weight: 700;
   color: #1e293b;
   font-size: 1.375rem;
   letter-spacing: 0.02em;
+  border-radius: 0.25rem;
+}
+
+.phoneHighlight:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
 }
 
 @media (min-width: 540px) {
