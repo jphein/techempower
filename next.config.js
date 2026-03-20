@@ -4,8 +4,6 @@
 export default {
   staticPageGenerationTimeout: 300,
 
-  // 'standalone' bundles the server + dependencies for self-hosted / Cloudflare deployment
-  output: 'standalone',
 
   images: {
     // Cloudflare Pages does not support the Next.js image optimization API,
