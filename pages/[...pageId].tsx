@@ -14,10 +14,10 @@ export const getServerSideProps: GetServerSideProps<PageProps, Params> = async (
   try {
     const props = await resolveNotionPage(domain, rawPageId)
 
-    // Cache at the CDN edge for 5 minutes, serve stale while revalidating
+    // Cache at the CDN edge for 1 hour, serve stale for up to 24 hours
     context.res.setHeader(
       'Cache-Control',
-      'public, s-maxage=300, stale-while-revalidate=600'
+      'public, s-maxage=3600, stale-while-revalidate=86400'
     )
 
     return { props }

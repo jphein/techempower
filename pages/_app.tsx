@@ -16,6 +16,7 @@ import 'styles/prism-theme.css'
 import type { AppProps } from 'next/app'
 import * as Fathom from 'fathom-client'
 import { useRouter } from 'next/router'
+import NProgress from 'nprogress'
 import { posthog } from 'posthog-js'
 import * as React from 'react'
 
@@ -30,6 +31,8 @@ import {
   posthogId
 } from '@/lib/config'
 
+NProgress.configure({ showSpinner: false, trickleSpeed: 100 })
+
 if (!isServer) {
   bootstrap()
 }
@@ -39,6 +42,8 @@ export default function App({ Component, pageProps }: AppProps) {
 
   React.useEffect(() => {
     function onRouteChangeComplete() {
+      NProgress.done()
+
       if (fathomId) {
         Fathom.trackPageview()
       }
@@ -56,10 +61,14 @@ export default function App({ Component, pageProps }: AppProps) {
       posthog.init(posthogId, posthogConfig)
     }
 
+    router.events.on('routeChangeStart', NProgress.start)
     router.events.on('routeChangeComplete', onRouteChangeComplete)
+    router.events.on('routeChangeError', NProgress.done)
 
     return () => {
+      router.events.off('routeChangeStart', NProgress.start)
       router.events.off('routeChangeComplete', onRouteChangeComplete)
+      router.events.off('routeChangeError', NProgress.done)
     }
   }, [router.events])
 
