@@ -1,4 +1,5 @@
 import { type ExtendedRecordMap } from 'notion-types'
+import { getBlockValue } from 'notion-utils'
 
 /**
  * Find block IDs of Spanish-language callout blocks in a Notion recordMap.
@@ -11,8 +12,8 @@ import { type ExtendedRecordMap } from 'notion-types'
 export function findSpanishBlockIds(recordMap: ExtendedRecordMap): string[] {
   const ids: string[] = []
 
-  for (const [blockId, blockValue] of Object.entries(recordMap.block)) {
-    const block = blockValue?.value
+  for (const [blockId, recordValue] of Object.entries(recordMap.block)) {
+    const block = getBlockValue(recordValue)
     if (!block) continue
 
     // Look for callout blocks
