@@ -5,7 +5,7 @@ export default siteConfig({
   rootNotionPageId: '0959e44599984143acabc80187305001',
 
   // restrict to TechEmpower workspace
-  rootNotionSpaceId: null,
+  rootNotionSpaceId: undefined,
 
   // basic site info (required)
   name: 'TechEmpower',
@@ -17,9 +17,9 @@ export default siteConfig({
     'Technology for All: Access Made Easy. Free technology resources for individuals with low income, their families, and nonprofit organizations.',
 
   // social usernames
-  twitter: null,
-  github: null,
-  linkedin: null,
+  twitter: undefined,
+  github: undefined,
+  linkedin: undefined,
 
   // default notion icon and cover images
   defaultPageIcon: null,

@@ -1,7 +1,7 @@
 import type { GetServerSideProps } from 'next'
 
 import type { SiteMap } from '@/lib/types'
-import { host } from '@/lib/config'
+import { host, pageUrlOverrides } from '@/lib/config'
 import { getSiteMap } from '@/lib/get-site-map'
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
@@ -31,28 +31,35 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   }
 }
 
-const createSitemap = (siteMap: SiteMap) =>
-  `<?xml version="1.0" encoding="UTF-8"?>
+const createSitemap = (siteMap: SiteMap) => {
+  // Collect all canonical page paths from the site map
+  const canonicalPaths = new Set(Object.keys(siteMap.canonicalPageMap))
+
+  // Ensure all pageUrlOverrides are included even if the Notion crawl
+  // did not discover them (e.g. pages deeper than maxDepth)
+  for (const overridePath of Object.keys(pageUrlOverrides)) {
+    canonicalPaths.add(overridePath)
+  }
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
   <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
       <loc>${host}</loc>
     </url>
 
-    <url>
-      <loc>${host}/</loc>
-    </url>
-
-    ${Object.keys(siteMap.canonicalPageMap)
-      .map((canonicalPagePath) =>
-        `
+    ${Array.from(canonicalPaths)
+      .map(
+        (pagePath) =>
+          `
           <url>
-            <loc>${host}/${canonicalPagePath}</loc>
+            <loc>${host}/${pagePath}</loc>
           </url>
         `.trim()
       )
       .join('')}
   </urlset>
 `
+}
 
 export default function noop() {
   return null

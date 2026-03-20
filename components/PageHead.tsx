@@ -21,7 +21,13 @@ export function PageHead({
 }) {
   const rssFeedUrl = `${config.host}/feed`
 
-  title = title ?? site?.name
+  const rawTitle = title ?? site?.name
+  const isHomePage = pageId === site?.rootNotionPageId
+  const formattedTitle =
+    isHomePage || !rawTitle || rawTitle === site?.name
+      ? `${site?.name ?? 'TechEmpower'}`
+      : `${rawTitle} | ${site?.name ?? 'TechEmpower'}`
+
   description = description ?? site?.description
 
   const socialImageUrl = getSocialImageUrl(pageId) || image
@@ -52,7 +58,7 @@ export function PageHead({
       />
 
       <meta name='robots' content='index,follow' />
-      <meta property='og:type' content='website' />
+      <meta property='og:type' content={isBlogPost ? 'article' : 'website'} />
 
       {site && (
         <>
@@ -98,9 +104,9 @@ export function PageHead({
         title={site?.name}
       />
 
-      <meta property='og:title' content={title} />
-      <meta name='twitter:title' content={title} />
-      <title>{title}</title>
+      <meta property='og:title' content={formattedTitle} />
+      <meta name='twitter:title' content={formattedTitle} />
+      <title>{formattedTitle}</title>
 
       {/* Better SEO for the blog posts */}
       {isBlogPost && (
@@ -111,8 +117,8 @@ export function PageHead({
             '@id': `${url}#BlogPosting`,
             mainEntityOfPage: url,
             url,
-            headline: title,
-            name: title,
+            headline: rawTitle,
+            name: rawTitle,
             description,
             author: {
               '@type': 'Person',
