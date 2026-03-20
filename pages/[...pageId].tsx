@@ -24,7 +24,9 @@ export const getServerSideProps: GetServerSideProps<PageProps, Params> = async (
     const props = await resolveNotionPage(
       domain,
       rawPageId,
-      isResources ? { collectionLoadLimit: 20 } : undefined
+      isResources
+        ? { collectionReducerLimit: 50, collectionLoadLimit: 20 }
+        : undefined
     )
 
     const cachePolicy = isResourcesPage(props.pageId)

@@ -211,7 +211,7 @@ const notionRendererComponents: Partial<NotionComponents> = {
 
 export function NotionPage({
   site,
-  recordMap,
+  recordMap: initialRecordMap,
   error,
   pageId
 }: types.PageProps) {
@@ -222,6 +222,17 @@ export function NotionPage({
   const isLiteMode = lite === 'true'
 
   const { isDarkMode } = useDarkMode()
+
+  // Resources page manages recordMap as state so we can swap in the
+  // full dataset after the initial 50-row SSR load.
+  const [recordMap, setRecordMap] = React.useState(initialRecordMap)
+  const [hasLoadedAll, setHasLoadedAll] = React.useState(false)
+
+  // Reset state when navigating to a new page
+  React.useEffect(() => {
+    setRecordMap(initialRecordMap)
+    setHasLoadedAll(false)
+  }, [initialRecordMap])
 
   const siteMapPageUrl = React.useMemo(() => {
     const params: any = {}
@@ -249,13 +260,30 @@ export function NotionPage({
     [isGuide, recordMap]
   )
 
-  // Animate NProgress bar when Load More is clicked on resources page
+  // Fetch full resources when "Load all" is clicked
+  const loadAllResources = React.useCallback(async () => {
+    if (hasLoadedAll) return
+    NProgress.start()
+    try {
+      const res = await fetch('/api/resources-more')
+      if (!res.ok) throw new Error('fetch failed')
+      const data = (await res.json()) as { recordMap: typeof initialRecordMap }
+      setRecordMap(data.recordMap)
+      setHasLoadedAll(true)
+    } catch {
+      // Silently fail — user still has the initial 50 rows
+    } finally {
+      NProgress.done()
+    }
+  }, [hasLoadedAll])
+
+  // Bind NProgress to built-in Load More buttons + inject "Load all"
+  // button after the built-in ones are exhausted.
   React.useEffect(() => {
     if (!isResources) return
 
     function handleLoadMoreClick() {
       NProgress.start()
-      // Let the DOM update with new items, then complete the bar
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           NProgress.done()
@@ -263,7 +291,6 @@ export function NotionPage({
       })
     }
 
-    // Observe for Load More buttons appearing/disappearing as tabs change
     const observer = new MutationObserver(() => {
       const buttons = document.querySelectorAll(
         '.resources-page .notion-collection-load-more'
@@ -278,7 +305,6 @@ export function NotionPage({
 
     observer.observe(document.body, { childList: true, subtree: true })
 
-    // Also bind to any already-rendered buttons
     const buttons = document.querySelectorAll(
       '.resources-page .notion-collection-load-more'
     )
@@ -391,11 +417,11 @@ export function NotionPage({
         )}
         darkMode={isDarkMode}
         components={notionRendererComponents}
-        recordMap={recordMap}
+        recordMap={recordMap!}
         rootPageId={site.rootNotionPageId}
         rootDomain={site.domain}
         fullPage={!isLiteMode}
-        previewImages={!!recordMap.preview_images}
+        previewImages={!!recordMap!.preview_images}
         showCollectionViewDropdown={isResources}
         showTableOfContents={showTableOfContents}
         minTableOfContentsItems={minTableOfContentsItems}
@@ -407,6 +433,18 @@ export function NotionPage({
         searchNotion={config.isSearchEnabled ? searchNotion : undefined}
         pageAside={pageAside}
       />
+
+      {isResources && !hasLoadedAll && (
+        <div className={styles.loadAllResources}>
+          <button
+            type='button'
+            onClick={loadAllResources}
+            className={styles.loadAllButton}
+          >
+            Load all resources
+          </button>
+        </div>
+      )}
 
       {isGuide && relatedGuides.length > 0 && (
         <RelatedGuides guides={relatedGuides} />

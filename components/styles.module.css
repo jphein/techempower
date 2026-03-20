@@ -221,3 +221,40 @@
 .hidden {
   visibility: hidden;
 }
+
+/* ── Resources: Load All button ──────────── */
+
+.loadAllResources {
+  display: flex;
+  justify-content: center;
+  padding: 1.5rem 1rem 2rem;
+  max-width: var(--notion-max-width, 1100px);
+  margin: 0 auto;
+}
+
+.loadAllButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 2rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, var(--te-teal-600, #0d9488), var(--te-teal-700, #0f766e));
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition:
+    transform 150ms ease,
+    box-shadow 150ms ease;
+  box-shadow: 0 2px 8px rgba(13, 148, 136, 0.2);
+}
+
+.loadAllButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(13, 148, 136, 0.3);
+}
+
+.loadAllButton:active {
+  transform: translateY(0);
+}
