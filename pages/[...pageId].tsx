@@ -1,4 +1,4 @@
-import { type GetServerSideProps } from 'next'
+import { type GetStaticPaths, type GetStaticProps } from 'next'
 
 import { NotionPage } from '@/components/NotionPage'
 import { domain } from '@/lib/config'
@@ -6,14 +6,16 @@ import { isResourcesPage } from '@/lib/page-ids'
 import { resolveNotionPage } from '@/lib/resolve-notion-page'
 import { type PageProps, type Params } from '@/lib/types'
 
-// Resources page is a heavy database fetch that rarely changes —
-// cache it aggressively (12 hours fresh, 7 days stale).
-const RESOURCES_CACHE = 'public, s-maxage=43200, stale-while-revalidate=604800'
+// Resources page is heavy — revalidate every 12 hours.
+// Other pages revalidate every hour.
+const RESOURCES_REVALIDATE = 43200
+const DEFAULT_REVALIDATE = 3600
 
-// Default: 1 hour fresh, 24 hours stale-while-revalidate.
-const DEFAULT_CACHE = 'public, s-maxage=3600, stale-while-revalidate=86400'
+export const getStaticPaths: GetStaticPaths = async () => {
+  return { paths: [], fallback: 'blocking' }
+}
 
-export const getServerSideProps: GetServerSideProps<PageProps, Params> = async (
+export const getStaticProps: GetStaticProps<PageProps, Params> = async (
   context
 ) => {
   const segments = context.params?.pageId as string[] | undefined
@@ -29,16 +31,14 @@ export const getServerSideProps: GetServerSideProps<PageProps, Params> = async (
         : undefined
     )
 
-    const cachePolicy = isResourcesPage(props.pageId)
-      ? RESOURCES_CACHE
-      : DEFAULT_CACHE
+    const revalidate = isResourcesPage(props.pageId)
+      ? RESOURCES_REVALIDATE
+      : DEFAULT_REVALIDATE
 
-    context.res.setHeader('Cache-Control', cachePolicy)
-
-    return { props }
+    return { props, revalidate }
   } catch (err) {
     console.error('page error', domain, rawPageId, err)
-    return { notFound: true }
+    return { notFound: true, revalidate: 60 }
   }
 }
 
