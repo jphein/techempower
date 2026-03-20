@@ -2,64 +2,68 @@ import { siteConfig } from './lib/site-config'
 
 export default siteConfig({
   // the site's root Notion page (required)
-  rootNotionPageId: '7875426197cf461698809def95960ebf',
+  rootNotionPageId: '0959e44599984143acabc80187305001',
 
-  // if you want to restrict pages to a single notion workspace (optional)
-  // (this should be a Notion ID; see the docs for how to extract this)
+  // restrict to TechEmpower workspace
   rootNotionSpaceId: null,
 
   // basic site info (required)
-  name: 'Next.js Notion Starter Kit',
-  domain: 'nextjs-notion-starter-kit.transitivebullsh.it',
-  author: 'Travis Fischer',
+  name: 'TechEmpower',
+  domain: 'techempower.org',
+  author: 'TechEmpower',
 
-  // open graph metadata (optional)
-  description: 'Example Next.js Notion Starter Kit Site',
+  // open graph metadata
+  description:
+    'Technology for All: Access Made Easy. Free technology resources for individuals with low income, their families, and nonprofit organizations.',
 
-  // social usernames (optional)
-  twitter: 'transitive_bs',
-  github: 'transitive-bullshit',
-  linkedin: 'fisch2',
-  // mastodon: '#', // optional mastodon profile URL, provides link verification
-  // newsletter: '#', // optional newsletter URL
-  // youtube: '#', // optional youtube channel name or `channel/UCGbXXXXXXXXXXXXXXXXXXXXXX`
+  // social usernames
+  twitter: null,
+  github: null,
+  linkedin: null,
 
-  // default notion icon and cover images for site-wide consistency (optional)
-  // page-specific values will override these site-wide defaults
+  // default notion icon and cover images
   defaultPageIcon: null,
   defaultPageCover: null,
   defaultPageCoverPosition: 0.5,
 
-  // whether or not to enable support for LQIP preview images (optional)
+  // LQIP preview images
   isPreviewImageSupportEnabled: true,
 
-  // whether or not redis is enabled for caching generated preview images (optional)
-  // NOTE: if you enable redis, you need to set the `REDIS_HOST` and `REDIS_PASSWORD`
-  // environment variables. see the readme for more info
+  // no Redis on Cloudflare Pages
   isRedisEnabled: false,
 
-  // map of notion page IDs to URL paths (optional)
-  // any pages defined here will override their default URL paths
-  // example:
-  //
-  // pageUrlOverrides: {
-  //   '/foo': '067dd719a912471ea9a3ac10710e7fdf',
-  //   '/bar': '0be6efce9daf42688f65c76b89f8eb27'
-  // }
-  pageUrlOverrides: null,
+  // map of notion page IDs to URL paths
+  pageUrlOverrides: {
+    // Guide pages
+    '/guides/how-to-use-techempower': '6c979ba4e43f48d7a4836e0027ea4178',
+    '/guides/free-internet': 'bb5e537b083a417eb90ed9e984128c71',
+    '/guides/ev-incentives': '758054e1a2ec4c1aa077202ffedec710',
+    '/guides/ebt-balance': '272a4ee69520804fa68ad8c110af49f6',
+    '/guides/ebt-spending': '16f7018ad93542652b2b16c44464b1c3',
+    '/guides/findhelp': '992742a61e2e472b9b4a149f7aa74539',
+    '/guides/password-manager': '99b0ab9c7cce428e8c86e3143752aa1c',
+    '/guides/free-cell-service': '7519ef16d7b74519acd9b8262a7beb84',
 
-  // whether to use the default notion navigation style or a custom one with links to
-  // important pages. To use `navigationLinks`, set `navigationStyle` to `custom`.
-  navigationStyle: 'default'
-  // navigationStyle: 'custom',
-  // navigationLinks: [
-  //   {
-  //     title: 'About',
-  //     pageId: 'f1199d37579b41cbabfc0b5174f4256a'
-  //   },
-  //   {
-  //     title: 'Contact',
-  //     pageId: '6a29ebcb935a4f0689fe661ab5f3b8d1'
-  //   }
-  // ]
+    // About pages
+    '/about': 'dbf0ddece2ce468fb2bf9049e6322e8a',
+    '/donate': '59d8a4dab0cc484f8b044d33f240ce1d',
+    '/non-discrimination-policy': 'cdbe9906ae2441a1a9bb3aec601a5a6c'
+  },
+
+  // custom navigation
+  navigationStyle: 'custom',
+  navigationLinks: [
+    {
+      title: 'Guides',
+      pageId: '0959e44599984143acabc80187305001'
+    },
+    {
+      title: 'About',
+      pageId: 'dbf0ddece2ce468fb2bf9049e6322e8a'
+    },
+    {
+      title: 'Donate',
+      pageId: '59d8a4dab0cc484f8b044d33f240ce1d'
+    }
+  ]
 })
