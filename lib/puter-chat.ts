@@ -153,6 +153,70 @@ TIPS:
 - For the full list of resources, point people to /resources.`
 
 // ---------------------------------------------------------------------------
+// Context: Resource Search
+// ---------------------------------------------------------------------------
+
+const SEARCH_API = '/api/search-notion'
+const ROOT_PAGE_ID = '0959e44599984143acabc80187305001'
+
+/**
+ * Searches the TechEmpower Notion database for resources matching a query.
+ * Returns a compact text summary suitable for injecting into chat context.
+ * Fails silently — returns empty string if search is unavailable.
+ */
+async function fetchResourceContext(query: string): Promise<string> {
+  try {
+    const res = await fetch(SEARCH_API, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        ancestorId: ROOT_PAGE_ID,
+        query,
+        filters: { excludeTemplates: true, isNavigableOnly: true },
+        limit: 6
+      })
+    })
+
+    if (!res.ok) return ''
+
+    const data = (await res.json()) as {
+      results?: Array<{ highlight?: { text?: string; pathText?: string } }>
+    }
+    const results = data?.results ?? []
+
+    if (results.length === 0) return ''
+
+    const lines = results
+      .map((r) => {
+        const path = r.highlight?.pathText ?? ''
+        const snippet = r.highlight?.text?.replaceAll(/<\/?gzkNfoUU>/g, '') ?? ''
+        return path || snippet ? `- ${path}: ${snippet}` : null
+      })
+      .filter(Boolean)
+
+    if (lines.length === 0) return ''
+
+    return `\n\nRELEVANT RESOURCES FROM THE DATABASE (use these to help answer):\n${lines.join('\n')}`
+  } catch {
+    return ''
+  }
+}
+
+/**
+ * Returns a string describing which page the visitor is currently viewing.
+ */
+function getPageContext(): string {
+  if (typeof window === 'undefined') return ''
+
+  const path = window.location.pathname
+  const title = document.title
+
+  if (path === '/') return '\n\nThe visitor is currently on the homepage.'
+
+  return `\n\nThe visitor is currently viewing: "${title}" (${path})`
+}
+
+// ---------------------------------------------------------------------------
 // Chat Function (Streaming)
 // ---------------------------------------------------------------------------
 
@@ -195,10 +259,17 @@ export async function* streamChat(
     return
   }
 
+  // ---- Gather dynamic context (page + resource search in parallel) --------
+
+  const pageContext = getPageContext()
+  const resourceContext = await fetchResourceContext(message)
+
   // ---- Build messages array -----------------------------------------------
 
+  const systemPrompt = SYSTEM_PROMPT + pageContext + resourceContext
+
   const messages: Array<{ role: string; content: string }> = [
-    { role: 'system', content: SYSTEM_PROMPT },
+    { role: 'system', content: systemPrompt },
     ...history.map((m) => ({ role: m.role, content: m.content })),
     { role: 'user', content: message }
   ]
