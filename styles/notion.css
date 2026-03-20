@@ -708,10 +708,36 @@
   padding: 0.875em 0;
 }
 
-/* Resources page: table uses full available width */
-.resources-page .notion-table {
-  width: 100%;
-  table-layout: auto;
+/* Resources page: override react-notion-x inline table sizing.
+   The library renders tables as div+flexbox (not <table>), setting
+   inline style="width: Xpx;" on cells and min-width on containers.
+   We reset every layer so columns fill our --notion-max-width. */
+.resources-page .notion-table,
+.resources-page .notion-table-view,
+.resources-page .notion-table-body,
+.resources-page .notion-table-header,
+.resources-page .notion-table-header-inner,
+.resources-page .notion-table-row {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+
+/* Remove the 96px side padding that react-notion-x adds to center
+   the table — we want the full container width for data density. */
+.resources-page .notion-table-view {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* All cells (header + body): use flex-grow ratios with basis 0
+   so they divide available space proportionally regardless of
+   which container they're in. */
+.resources-page .notion-table-cell,
+.resources-page .notion-table-th {
+  width: 0 !important;
+  min-width: 0 !important;
+  overflow: hidden;
 }
 
 .resources-page .notion-table-cell {
@@ -719,20 +745,54 @@
   word-break: break-word;
 }
 
-/* First column (Name) gets more breathing room */
-.resources-page .notion-table-cell:first-child {
-  min-width: 180px;
+/* Hide low-value columns: Eligibility (3), Phone (5), Value (6) */
+.resources-page .notion-table-cell:nth-child(3),
+.resources-page .notion-table-cell:nth-child(5),
+.resources-page .notion-table-cell:nth-child(6),
+.resources-page .notion-table-th:nth-child(3),
+.resources-page .notion-table-th:nth-child(5),
+.resources-page .notion-table-th:nth-child(6) {
+  display: none !important;
+}
+
+/* Column 1 — Name */
+.resources-page .notion-table-cell:nth-child(1),
+.resources-page .notion-table-th:nth-child(1) {
+  flex: 28 1 0 !important;
+}
+.resources-page .notion-table-cell:nth-child(1) {
   font-weight: 500;
 }
 
-/* Hide the collection page icon on resources — the emoji is redundant */
+/* Column 2 — Auto Summary: clamp to 4 lines to keep rows compact */
+.resources-page .notion-table-cell:nth-child(2),
+.resources-page .notion-table-th:nth-child(2) {
+  flex: 50 1 0 !important;
+}
+.resources-page .notion-table-cell:nth-child(2) {
+  display: -webkit-box !important;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Column 4 — URL: truncate long links */
+.resources-page .notion-table-cell:nth-child(4),
+.resources-page .notion-table-th:nth-child(4) {
+  flex: 22 1 0 !important;
+}
+.resources-page .notion-table-cell:nth-child(4) {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Hide the page icon hero and the redundant collection title */
 .resources-page .notion-page-icon-hero {
   display: none;
 }
 
-/* Tighten the collection header spacing on resources */
 .resources-page .notion-collection-header {
-  padding: 0.5em 0;
+  display: none;
 }
 
 /* Board/Kanban view */
