@@ -16,29 +16,37 @@ export function FooterImpl() {
     <footer className={styles.footer}>
       <div className={styles.inner}>
         <div className={styles.brand}>
-          <Link href="/" className={styles.logo}>
-            <span aria-hidden="true">⚡</span> TechEmpower
+          <Link href='/' className={styles.logo}>
+            <span aria-hidden='true'>⚡</span> TechEmpower
           </Link>
-          <p className={styles.tagline}>
-            Technology for All: Access Made Easy
-          </p>
+          <p className={styles.tagline}>Technology for All: Access Made Easy</p>
         </div>
 
-        <nav className={styles.links} aria-label="Footer navigation">
-          <Link href="/" className={styles.link}>Guides</Link>
-          <Link href="/resources" className={styles.link}>Resources</Link>
-          <Link href="/about" className={styles.link}>About</Link>
-          <Link href="/donate" className={styles.link}>Donate</Link>
-          <Link href="/non-discrimination-policy" className={styles.link}>
+        <nav className={styles.links} aria-label='Footer navigation'>
+          <Link href='/' className={styles.link}>
+            Guides
+          </Link>
+          <Link href='/resources' className={styles.link}>
+            Resources
+          </Link>
+          <Link href='/about' className={styles.link}>
+            About
+          </Link>
+          <Link href='/donate' className={styles.link}>
+            Donate
+          </Link>
+          <Link href='/non-discrimination-policy' className={styles.link}>
             Non-Discrimination Policy
           </Link>
         </nav>
 
         <button
-          type="button"
+          type='button'
           className={styles.themeToggle}
           onClick={toggleDarkMode}
-          aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+          aria-label={
+            isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'
+          }
         >
           {isDarkMode ? <SunIcon /> : <MoonIcon />}
         </button>

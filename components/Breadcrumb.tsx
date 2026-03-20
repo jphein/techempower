@@ -36,18 +36,14 @@ export function Breadcrumb({ items }: BreadcrumbProps) {
       '@type': 'ListItem',
       position: index + 1,
       name: item.label,
-      ...(item.href
-        ? { item: `${config.host}${item.href}` }
-        : {})
+      ...(item.href ? { item: `${config.host}${item.href}` } : {})
     }))
   }
 
   return (
     <>
       <Head>
-        <script type='application/ld+json'>
-          {JSON.stringify(jsonLd)}
-        </script>
+        <script type='application/ld+json'>{JSON.stringify(jsonLd)}</script>
       </Head>
 
       <nav aria-label='Breadcrumb' className={styles.nav}>
@@ -94,9 +90,5 @@ export function Breadcrumb({ items }: BreadcrumbProps) {
  * Returns: [Home (/), Guides (/), Current Title (no link)]
  */
 export function buildGuideBreadcrumb(title: string): BreadcrumbItem[] {
-  return [
-    { label: 'Home', href: '/' },
-    { label: 'Guides' },
-    { label: title }
-  ]
+  return [{ label: 'Home', href: '/' }, { label: 'Guides' }, { label: title }]
 }

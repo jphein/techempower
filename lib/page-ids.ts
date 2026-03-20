@@ -24,8 +24,7 @@ export const GUIDE_FREE_CELL_SERVICE = '7519ef16d7b74519acd9b8262a7beb84'
 
 export const ABOUT_PAGE = 'dbf0ddece2ce468fb2bf9049e6322e8a'
 export const DONATE_PAGE = '59d8a4dab0cc484f8b044d33f240ce1d'
-export const NON_DISCRIMINATION_POLICY_PAGE =
-  'cdbe9906ae2441a1a9bb3aec601a5a6c'
+export const NON_DISCRIMINATION_POLICY_PAGE = 'cdbe9906ae2441a1a9bb3aec601a5a6c'
 
 // ---------------------------------------------------------------------------
 // Root / home page
@@ -142,7 +141,7 @@ export const GUIDE_BY_SLUG: ReadonlyMap<string, GuideMeta> = new Map(
 
 /** Strip hyphens from a UUID so it matches our stored page IDs. */
 function normalizeId(id: string): string {
-  return id.replace(/-/g, '')
+  return id.replaceAll('-', '')
 }
 
 /**

@@ -34,21 +34,22 @@ export function Header() {
   return (
     <header className={styles.header}>
       <div className={styles.inner}>
-        <Link href="/" className={styles.logo} aria-label="TechEmpower home">
-          <span className={styles.logoIcon} aria-hidden="true">
+        <Link href='/' className={styles.logo} aria-label='TechEmpower home'>
+          <span className={styles.logoIcon} aria-hidden='true'>
             ⚡
           </span>
           TechEmpower
         </Link>
 
         {/* Desktop nav */}
-        <nav className={styles.desktopNav} aria-label="Main navigation">
+        <nav className={styles.desktopNav} aria-label='Main navigation'>
           {NAV_LINKS.map(({ href, label }) => (
             <Link
               key={href}
               href={href}
               className={`${styles.navLink} ${
-                router.pathname === href || (href !== '/' && router.asPath.startsWith(href))
+                router.pathname === href ||
+                (href !== '/' && router.asPath.startsWith(href))
                   ? styles.navLinkActive
                   : ''
               }`}
@@ -56,32 +57,43 @@ export function Header() {
               {label}
             </Link>
           ))}
-          <Link href="/donate" className={`${styles.navLink} ${styles.donateLink}`}>
+          <Link
+            href='/donate'
+            className={`${styles.navLink} ${styles.donateLink}`}
+          >
             Donate
           </Link>
         </nav>
 
         {/* Mobile hamburger */}
         <button
-          type="button"
+          type='button'
           className={styles.menuButton}
           onClick={() => setMenuOpen((prev) => !prev)}
           aria-expanded={menuOpen}
-          aria-controls="mobile-nav"
+          aria-controls='mobile-nav'
           aria-label={menuOpen ? 'Close menu' : 'Open menu'}
         >
           <svg
             className={styles.menuIcon}
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
+            fill='none'
+            viewBox='0 0 24 24'
+            stroke='currentColor'
             strokeWidth={2}
-            aria-hidden="true"
+            aria-hidden='true'
           >
             {menuOpen ? (
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              <path
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                d='M6 18L18 6M6 6l12 12'
+              />
             ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+              <path
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                d='M4 6h16M4 12h16M4 18h16'
+              />
             )}
           </svg>
         </button>
@@ -89,13 +101,18 @@ export function Header() {
 
       {/* Mobile nav */}
       {menuOpen && (
-        <nav id="mobile-nav" className={styles.mobileNav} aria-label="Mobile navigation">
+        <nav
+          id='mobile-nav'
+          className={styles.mobileNav}
+          aria-label='Mobile navigation'
+        >
           {NAV_LINKS.map(({ href, label }) => (
             <Link
               key={href}
               href={href}
               className={`${styles.mobileNavLink} ${
-                router.pathname === href || (href !== '/' && router.asPath.startsWith(href))
+                router.pathname === href ||
+                (href !== '/' && router.asPath.startsWith(href))
                   ? styles.mobileNavLinkActive
                   : ''
               }`}
@@ -103,7 +120,7 @@ export function Header() {
               {label}
             </Link>
           ))}
-          <Link href="/donate" className={styles.mobileDonateLink}>
+          <Link href='/donate' className={styles.mobileDonateLink}>
             Donate
           </Link>
         </nav>

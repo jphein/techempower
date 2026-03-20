@@ -11,13 +11,13 @@ interface LayoutProps {
 export function Layout({ children }: LayoutProps) {
   return (
     <div className={styles.page}>
-      <a href="#main-content" className={styles.skipLink}>
+      <a href='#main-content' className={styles.skipLink}>
         Skip to main content
       </a>
 
       <Header />
 
-      <div id="main-content" className={styles.main}>
+      <div id='main-content' className={styles.main}>
         {children}
       </div>
 

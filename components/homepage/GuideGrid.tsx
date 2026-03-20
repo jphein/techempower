@@ -55,16 +55,21 @@ const guides = [
 
 export function GuideGrid() {
   return (
-    <section id="guides" className={styles.section} aria-labelledby="guides-heading">
+    <section
+      id='guides'
+      className={styles.section}
+      aria-labelledby='guides-heading'
+    >
       <div className={styles.inner}>
-        <h2 id="guides-heading" className={styles.heading}>
+        <h2 id='guides-heading' className={styles.heading}>
           Free Guides &amp; Resources
         </h2>
         <p className={styles.subtitle}>
-          Pick a topic below to get started. Every guide is free and easy to follow.
+          Pick a topic below to get started. Every guide is free and easy to
+          follow.
         </p>
 
-        <ul className={styles.grid} role="list">
+        <ul className={styles.grid}>
           {guides.map((guide) => (
             <li key={guide.slug}>
               <Link
@@ -72,7 +77,7 @@ export function GuideGrid() {
                 className={styles.card}
                 aria-label={`${guide.title} — ${guide.summary}`}
               >
-                <span className={styles.cardEmoji} aria-hidden="true">
+                <span className={styles.cardEmoji} aria-hidden='true'>
                   {guide.emoji}
                 </span>
                 <div className={styles.cardBody}>

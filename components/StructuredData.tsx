@@ -15,17 +15,13 @@ export function StructuredData() {
       config.linkedin
         ? `https://www.linkedin.com/company/${config.linkedin}`
         : null,
-      config.youtube
-        ? `https://www.youtube.com/@${config.youtube}`
-        : null
+      config.youtube ? `https://www.youtube.com/@${config.youtube}` : null
     ].filter(Boolean)
   }
 
   return (
     <Head>
-      <script type='application/ld+json'>
-        {JSON.stringify(jsonLd)}
-      </script>
+      <script type='application/ld+json'>{JSON.stringify(jsonLd)}</script>
     </Head>
   )
 }

@@ -4,7 +4,6 @@
 export default {
   staticPageGenerationTimeout: 300,
 
-
   images: {
     // Cloudflare Pages does not support the Next.js image optimization API,
     // so we serve images unoptimized and rely on Cloudflare's built-in Polish

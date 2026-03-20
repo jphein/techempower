@@ -1,5 +1,5 @@
-import * as React from 'react'
 import { type ExtendedRecordMap } from 'notion-types'
+import * as React from 'react'
 import { NotionRenderer } from 'react-notion-x'
 
 import styles from './SpanishToggle.module.css'
@@ -19,7 +19,11 @@ interface SpanishToggleProps {
  * renders them inside a collapsible section. When no Spanish content exists,
  * the component renders nothing.
  */
-export function SpanishToggle({ blockIds, recordMap, darkMode }: SpanishToggleProps) {
+export function SpanishToggle({
+  blockIds,
+  recordMap,
+  darkMode
+}: SpanishToggleProps) {
   const [showSpanish, setShowSpanish] = React.useState(false)
   const [hasMounted, setHasMounted] = React.useState(false)
 
@@ -65,7 +69,9 @@ export function SpanishToggle({ blockIds, recordMap, darkMode }: SpanishTogglePr
           {showSpanish ? '\u25BC' : '\u25B6'}
         </span>
         <span className={styles.toggleLabel}>
-          {showSpanish ? 'Hide Spanish / Ocultar espa\u00F1ol' : 'View in Spanish / Ver en espa\u00F1ol'}
+          {showSpanish
+            ? 'Hide Spanish / Ocultar espa\u00F1ol'
+            : 'View in Spanish / Ver en espa\u00F1ol'}
         </span>
       </button>
 
