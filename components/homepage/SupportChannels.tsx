@@ -1,0 +1,65 @@
+import styles from './SupportChannels.module.css'
+
+export function SupportChannels() {
+  return (
+    <section
+      className={styles.section}
+      aria-labelledby="support-heading"
+    >
+      <div className={styles.inner}>
+        <h2 id="support-heading" className={styles.heading}>
+          Need Help?
+        </h2>
+        <p className={styles.subtitle}>
+          Our community and phone support are here for you, at no cost.
+        </p>
+
+        <div className={styles.cards}>
+          {/* Discord card */}
+          <div className={styles.card}>
+            <span className={styles.cardIcon} aria-hidden="true">
+              💬
+            </span>
+            <h3 className={styles.cardTitle}>Join Our Discord</h3>
+            <p className={styles.cardText}>
+              Ask questions, share tips, and connect with others in our
+              friendly community chat.
+            </p>
+            <a
+              href="https://discord.gg/7wDhAG3vYS"
+              className={styles.cardLink}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Open Discord
+              <span className={styles.cardLinkArrow} aria-hidden="true">
+                &rarr;
+              </span>
+            </a>
+          </div>
+
+          {/* 211 card */}
+          <div className={styles.card}>
+            <span className={styles.cardIcon} aria-hidden="true">
+              📞
+            </span>
+            <h3 className={styles.cardTitle}>Call 2-1-1</h3>
+            <p className={styles.cardText}>
+              Dial{' '}
+              <a
+                href="tel:211"
+                className={styles.phoneHighlight}
+                aria-label="Call 2 1 1"
+              >
+                2-1-1
+              </a>{' '}
+              from any phone to reach a trained specialist who can connect
+              you to local services &mdash; housing, food, utilities, and
+              more.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
