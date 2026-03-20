@@ -1,6 +1,5 @@
 import Head from 'next/head'
 
-import { Footer } from '@/components/Footer'
 import { AboutDonate } from '@/components/homepage/AboutDonate'
 import { GuideGrid } from '@/components/homepage/GuideGrid'
 import { Hero } from '@/components/homepage/Hero'
@@ -46,8 +45,6 @@ export default function HomePage() {
         <SupportChannels />
         <AboutDonate />
       </main>
-
-      <Footer />
     </>
   )
 }

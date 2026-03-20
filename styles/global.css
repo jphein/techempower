@@ -13,10 +13,31 @@ html {
   margin: 0;
 }
 
-body {
-  --notion-font: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+/* ── TechEmpower brand tokens ────────────────── */
+
+:root {
+  --te-blue-600: #2563eb;
+  --te-blue-700: #1d4ed8;
+  --te-blue-100: #dbeafe;
+  --te-blue-50: #eff6ff;
+  --te-orange-600: #ea580c;
+  --te-orange-700: #c2410c;
+  --te-slate-900: #0f172a;
+  --te-slate-800: #1e293b;
+  --te-slate-700: #334155;
+  --te-slate-500: #64748b;
+  --te-slate-300: #cbd5e1;
+  --te-slate-200: #e2e8f0;
+  --te-slate-100: #f1f5f9;
+  --te-slate-50: #f8fafc;
+  --te-white: #ffffff;
+  --te-font: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
     'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
     'Droid Sans', 'Helvetica Neue', 'Noto Sans', sans-serif;
+}
+
+body {
+  --notion-font: var(--te-font);
   font-family: var(--notion-font);
   overflow-x: hidden;
 }

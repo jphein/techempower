@@ -20,6 +20,7 @@ import { posthog } from 'posthog-js'
 import * as React from 'react'
 
 import { GoogleAnalytics } from '@/components/GoogleAnalytics'
+import { Layout } from '@/components/Layout'
 import { bootstrap } from '@/lib/bootstrap-client'
 import {
   fathomConfig,
@@ -65,7 +66,9 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <GoogleAnalytics />
-      <Component {...pageProps} />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </>
   )
 }

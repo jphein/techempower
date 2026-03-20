@@ -1,0 +1,226 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: hsla(0, 0%, 100%, 0.92);
+  backdrop-filter: saturate(180%) blur(16px);
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.dark .header {
+  background: hsla(203, 12%, 14%, 0.92);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+.inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  height: 56px;
+}
+
+/* ── Logo / Wordmark ─────────────────────────── */
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: #1e293b;
+  font-weight: 750;
+  font-size: 1.15rem;
+  letter-spacing: -0.01em;
+  flex-shrink: 0;
+}
+
+.dark .logo {
+  color: #f1f5f9;
+}
+
+.logoIcon {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+/* ── Desktop Nav ─────────────────────────────── */
+
+.desktopNav {
+  display: none;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.navLink {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #475569;
+  text-decoration: none;
+  border-radius: 0.5rem;
+  transition: color 150ms ease, background 150ms ease;
+}
+
+.dark .navLink {
+  color: #94a3b8;
+}
+
+.navLink:hover {
+  color: #1e293b;
+  background: #f1f5f9;
+}
+
+.dark .navLink:hover {
+  color: #f1f5f9;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.navLinkActive {
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.dark .navLinkActive {
+  color: #60a5fa;
+}
+
+.donateLink {
+  background: #ea580c;
+  color: #ffffff !important;
+  font-weight: 600;
+  padding: 0.45rem 1rem;
+  border-radius: 0.5rem;
+  margin-left: 0.25rem;
+  transition: background 150ms ease, transform 100ms ease;
+}
+
+.donateLink:hover {
+  background: #c2410c !important;
+  color: #ffffff !important;
+  transform: translateY(-1px);
+}
+
+/* ── Mobile hamburger ────────────────────────── */
+
+.menuButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #475569;
+  border-radius: 0.5rem;
+  transition: background 150ms ease;
+}
+
+.dark .menuButton {
+  color: #94a3b8;
+}
+
+.menuButton:hover {
+  background: #f1f5f9;
+}
+
+.dark .menuButton:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.menuButton:focus-visible {
+  outline: 3px solid #93c5fd;
+  outline-offset: 2px;
+}
+
+.menuIcon {
+  width: 22px;
+  height: 22px;
+}
+
+/* ── Mobile overlay nav ──────────────────────── */
+
+.mobileNav {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 0.5rem 1rem 1rem;
+}
+
+.dark .mobileNav {
+  background: #1e293b;
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+.mobileNavLink {
+  display: block;
+  padding: 0.75rem 0.5rem;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: #475569;
+  text-decoration: none;
+  border-radius: 0.5rem;
+  transition: color 150ms ease, background 150ms ease;
+}
+
+.dark .mobileNavLink {
+  color: #94a3b8;
+}
+
+.mobileNavLink:hover {
+  color: #1e293b;
+  background: #f1f5f9;
+}
+
+.dark .mobileNavLink:hover {
+  color: #f1f5f9;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.mobileNavLinkActive {
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.dark .mobileNavLinkActive {
+  color: #60a5fa;
+}
+
+.mobileDonateLink {
+  display: block;
+  text-align: center;
+  background: #ea580c;
+  color: #ffffff !important;
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+  border-radius: 0.625rem;
+  margin-top: 0.5rem;
+  text-decoration: none;
+  transition: background 150ms ease;
+}
+
+.mobileDonateLink:hover {
+  background: #c2410c;
+}
+
+/* ── Responsive breakpoint ───────────────────── */
+
+@media (min-width: 640px) {
+  .desktopNav {
+    display: flex;
+  }
+
+  .menuButton {
+    display: none;
+  }
+
+  .mobileNav {
+    display: none !important;
+  }
+}
