@@ -10,7 +10,7 @@ function getIsDark(): boolean {
 }
 
 export function useDarkMode() {
-  const [isDarkMode, setIsDarkMode] = useState(getIsDark)
+  const [isDarkMode, setIsDarkMode] = useState(false)
 
   // Sync state with body class on mount (set by noflash script)
   useEffect(() => {
