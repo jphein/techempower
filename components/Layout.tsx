@@ -1,8 +1,16 @@
+import dynamic from 'next/dynamic'
 import * as React from 'react'
+
+import { ensurePuterAuth, streamChat } from '@/lib/puter-chat'
 
 import { Footer } from './Footer'
 import { Header } from './Header'
 import styles from './Layout.module.css'
+
+const ChatAgent = dynamic(
+  () => import('./ChatAgent').then((mod) => ({ default: mod.ChatAgent })),
+  { ssr: false }
+)
 
 interface LayoutProps {
   children: React.ReactNode
@@ -22,6 +30,11 @@ export function Layout({ children }: LayoutProps) {
       </div>
 
       <Footer />
+
+      <ChatAgent
+        onSendMessage={streamChat}
+        onAuthRequired={async () => void (await ensurePuterAuth())}
+      />
     </div>
   )
 }
