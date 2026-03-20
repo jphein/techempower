@@ -3,7 +3,15 @@
 
 export default {
   staticPageGenerationTimeout: 300,
+
+  // 'standalone' bundles the server + dependencies for self-hosted / Cloudflare deployment
+  output: 'standalone',
+
   images: {
+    // Cloudflare Pages does not support the Next.js image optimization API,
+    // so we serve images unoptimized and rely on Cloudflare's built-in Polish
+    // / image resizing at the CDN layer instead.
+    unoptimized: true,
     remotePatterns: [
       { protocol: 'https', hostname: 'www.notion.so' },
       { protocol: 'https', hostname: 'notion.so' },
