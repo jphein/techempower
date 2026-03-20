@@ -46,6 +46,8 @@ export interface GetPageOptions {
   collectionReducerLimit?: number
   /** Inject a client-side load-more limit into every collection view. */
   collectionLoadLimit?: number
+  /** Force gallery views to show page covers (or empty placeholders). */
+  enableGalleryCovers?: boolean
 }
 
 export async function getPage(
@@ -82,14 +84,25 @@ export async function getPage(
 
   // Inject client-side load-more limit into collection views so
   // react-notion-x renders a "Load More" button instead of all rows.
-  if (options?.collectionLoadLimit) {
-    const limit = options.collectionLoadLimit
+  if (options?.collectionLoadLimit || options?.enableGalleryCovers) {
     for (const viewData of Object.values(recordMap.collection_view)) {
       const view = (viewData as any)?.value
-      if (view?.format) {
-        view.format.inline_collection_first_load_limit = { limit }
-      } else if (view) {
-        view.format = { inline_collection_first_load_limit: { limit } }
+      if (!view) continue
+
+      if (!view.format) view.format = {}
+
+      if (options.collectionLoadLimit) {
+        view.format.inline_collection_first_load_limit = {
+          limit: options.collectionLoadLimit
+        }
+      }
+
+      // Force gallery covers to use page_cover so every card shows
+      // an image or the styled empty placeholder.
+      if (options.enableGalleryCovers && view.type === 'gallery') {
+        view.format.gallery_cover = { type: 'page_cover' }
+        view.format.gallery_cover_size = 'medium'
+        view.format.gallery_cover_aspect = 'cover'
       }
     }
   }

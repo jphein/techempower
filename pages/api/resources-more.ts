@@ -13,7 +13,9 @@ export default async function resourcesMore(
   res: NextApiResponse
 ) {
   try {
-    const recordMap = await getPage(RESOURCES_PAGE)
+    const recordMap = await getPage(RESOURCES_PAGE, {
+      enableGalleryCovers: true
+    })
 
     // Cache aggressively — same policy as the resources page itself
     res.setHeader(

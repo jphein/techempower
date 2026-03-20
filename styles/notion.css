@@ -185,9 +185,140 @@
     0 1px 4px rgba(0, 0, 0, 0.15);
 }
 
-/* Remove oversized cover images — resources rarely have useful covers */
+/* ── Card covers: show images or beautiful placeholders ── */
 .resources-page .notion-collection-card-cover {
-  display: none;
+  position: relative;
+  height: 140px;
+  overflow: hidden;
+  border-bottom: 1px solid var(--te-bark-200, #e0d6cc);
+}
+
+.dark-mode .resources-page .notion-collection-card-cover {
+  border-bottom-color: var(--te-bark-200, #3d2e26);
+}
+
+.resources-page .notion-collection-card-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Placeholder for cards without a cover image — react-notion-x
+   renders .notion-collection-card-cover-empty when page_cover is
+   unset. We show a warm gradient with a camera hint. Gradients
+   rotate by card position (nth-child) for visual variety. */
+.resources-page .notion-collection-card-cover-empty {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    135deg,
+    var(--te-teal-50, #f0fdfa) 0%,
+    var(--te-bark-100, #f5f0eb) 50%,
+    var(--te-teal-100, #ccfbf1) 100%
+  );
+}
+
+/* Camera icon + reminder text on empty covers */
+.resources-page .notion-collection-card-cover-empty::after {
+  content: '\01F4F7\00a0\00a0 Add cover';
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--te-bark-400, #8c7a6e);
+  opacity: 0.7;
+  letter-spacing: 0.02em;
+}
+
+/* Gradient variations for visual variety — rotate by card index */
+.resources-page
+  .notion-gallery-grid
+  > :nth-child(4n + 2)
+  .notion-collection-card-cover-empty {
+  background: linear-gradient(
+    150deg,
+    #fef3c7 0%,
+    var(--te-bark-100, #f5f0eb) 50%,
+    #d1fae5 100%
+  );
+}
+
+.resources-page
+  .notion-gallery-grid
+  > :nth-child(4n + 3)
+  .notion-collection-card-cover-empty {
+  background: linear-gradient(
+    120deg,
+    #e0f2fe 0%,
+    var(--te-cream, #faf8f5) 50%,
+    #fce7f3 100%
+  );
+}
+
+.resources-page
+  .notion-gallery-grid
+  > :nth-child(4n + 4)
+  .notion-collection-card-cover-empty {
+  background: linear-gradient(
+    160deg,
+    #ccfbf1 0%,
+    #fef9c3 50%,
+    var(--te-bark-100, #f5f0eb) 100%
+  );
+}
+
+/* Dark mode placeholders: muted versions */
+.dark-mode .resources-page .notion-collection-card-cover-empty {
+  background: linear-gradient(
+    135deg,
+    rgba(13, 148, 136, 0.1) 0%,
+    var(--te-cream-dark, #1c1510) 50%,
+    rgba(13, 148, 136, 0.08) 100%
+  );
+}
+
+.dark-mode .resources-page .notion-collection-card-cover-empty::after {
+  color: var(--te-bark-500, #78614f);
+}
+
+.dark-mode
+  .resources-page
+  .notion-gallery-grid
+  > :nth-child(4n + 2)
+  .notion-collection-card-cover-empty {
+  background: linear-gradient(
+    150deg,
+    rgba(253, 224, 71, 0.06) 0%,
+    var(--te-cream-dark, #1c1510) 50%,
+    rgba(52, 211, 153, 0.06) 100%
+  );
+}
+
+.dark-mode
+  .resources-page
+  .notion-gallery-grid
+  > :nth-child(4n + 3)
+  .notion-collection-card-cover-empty {
+  background: linear-gradient(
+    120deg,
+    rgba(96, 165, 250, 0.06) 0%,
+    var(--te-cream-dark, #1c1510) 50%,
+    rgba(244, 114, 182, 0.06) 100%
+  );
+}
+
+.dark-mode
+  .resources-page
+  .notion-gallery-grid
+  > :nth-child(4n + 4)
+  .notion-collection-card-cover-empty {
+  background: linear-gradient(
+    160deg,
+    rgba(13, 148, 136, 0.08) 0%,
+    rgba(250, 204, 21, 0.05) 50%,
+    var(--te-cream-dark, #1c1510) 100%
+  );
 }
 
 .resources-page .notion-collection-card-body {
@@ -351,6 +482,11 @@
     gap: 0.875rem;
   }
 
+  /* Smaller cover on tablet */
+  .resources-page .notion-collection-card-cover {
+    height: 110px;
+  }
+
   /* Slightly smaller card padding on tablet */
   .resources-page .notion-collection-card-body {
     padding: 0.75rem 0.875rem;
@@ -383,6 +519,11 @@
   .resources-page .notion-gallery-grid {
     grid-template-columns: 1fr;
     gap: 0.75rem;
+  }
+
+  /* Taller cover on full-width cards */
+  .resources-page .notion-collection-card-cover {
+    height: 160px;
   }
 
   /* On small screens, hide the Category column to give more room
