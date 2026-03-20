@@ -936,6 +936,41 @@
   display: none;
 }
 
+/* ── Resources page: Load More button ─────── */
+
+.resources-page .notion-collection-load-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1.5rem auto 0.5rem;
+  padding: 0.6rem 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--te-teal-700, #0f766e);
+  background: transparent;
+  border: 1px solid var(--te-teal-500, #14b8a6);
+  border-radius: 8px;
+  cursor: pointer;
+  transition:
+    background 150ms ease,
+    color 150ms ease;
+}
+
+.resources-page .notion-collection-load-more:hover {
+  background: var(--te-teal-50, #f0fdfa);
+  color: var(--te-teal-800, #115e59);
+}
+
+.dark-mode .resources-page .notion-collection-load-more {
+  color: var(--te-teal-500, #14b8a6);
+  border-color: var(--te-teal-600, #0d9488);
+}
+
+.dark-mode .resources-page .notion-collection-load-more:hover {
+  background: rgba(13, 148, 136, 0.1);
+  color: var(--te-teal-400);
+}
+
 /* ── Board/Kanban view ────────────────────── */
 
 .notion-board-view {

@@ -42,8 +42,21 @@ const getNavigationLinkPages = pMemoize(
   }
 )
 
-export async function getPage(pageId: string): Promise<ExtendedRecordMap> {
-  let recordMap = await notion.getPage(pageId)
+export interface GetPageOptions {
+  collectionReducerLimit?: number
+  /** Inject a client-side load-more limit into every collection view. */
+  collectionLoadLimit?: number
+}
+
+export async function getPage(
+  pageId: string,
+  options?: GetPageOptions
+): Promise<ExtendedRecordMap> {
+  let recordMap = await notion.getPage(pageId, {
+    ...(options?.collectionReducerLimit && {
+      collectionReducerLimit: options.collectionReducerLimit
+    })
+  })
 
   if (navigationStyle !== 'default') {
     // ensure that any pages linked to in the custom navigation header have
@@ -66,6 +79,20 @@ export async function getPage(pageId: string): Promise<ExtendedRecordMap> {
   }
 
   await getTweetsMap(recordMap)
+
+  // Inject client-side load-more limit into collection views so
+  // react-notion-x renders a "Load More" button instead of all rows.
+  if (options?.collectionLoadLimit) {
+    const limit = options.collectionLoadLimit
+    for (const viewData of Object.values(recordMap.collection_view)) {
+      const view = (viewData as any)?.value
+      if (view?.format) {
+        view.format.inline_collection_first_load_limit = { limit }
+      } else if (view) {
+        view.format = { inline_collection_first_load_limit: { limit } }
+      }
+    }
+  }
 
   return recordMap
 }

@@ -2,7 +2,7 @@ import { type GetServerSideProps } from 'next'
 
 import { NotionPage } from '@/components/NotionPage'
 import { domain } from '@/lib/config'
-import { isResourcesPage } from '@/lib/page-ids'
+import { isResourcesPage, RESOURCES_PAGE } from '@/lib/page-ids'
 import { resolveNotionPage } from '@/lib/resolve-notion-page'
 import { type PageProps, type Params } from '@/lib/types'
 
@@ -19,8 +19,18 @@ export const getServerSideProps: GetServerSideProps<PageProps, Params> = async (
   const segments = context.params?.pageId as string[] | undefined
   const rawPageId = segments ? segments.join('/') : undefined
 
+  // Detect resources page early so we can optimize the fetch
+  const isResources =
+    rawPageId === 'resources' || rawPageId === RESOURCES_PAGE
+
   try {
-    const props = await resolveNotionPage(domain, rawPageId)
+    const props = await resolveNotionPage(
+      domain,
+      rawPageId,
+      isResources
+        ? { collectionReducerLimit: 50, collectionLoadLimit: 20 }
+        : undefined
+    )
 
     const cachePolicy = isResourcesPage(props.pageId)
       ? RESOURCES_CACHE

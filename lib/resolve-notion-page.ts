@@ -6,11 +6,12 @@ import * as acl from './acl'
 import { environment, pageUrlAdditions, pageUrlOverrides, site } from './config'
 import { db } from './db'
 import { getSiteMap } from './get-site-map'
-import { getPage } from './notion'
+import { type GetPageOptions, getPage } from './notion'
 
 export async function resolveNotionPage(
   domain: string,
-  rawPageId?: string
+  rawPageId?: string,
+  pageOptions?: GetPageOptions
 ): Promise<PageProps> {
   let pageId: string | undefined
   let recordMap: ExtendedRecordMap
@@ -48,7 +49,7 @@ export async function resolveNotionPage(
     }
 
     if (pageId) {
-      recordMap = await getPage(pageId)
+      recordMap = await getPage(pageId, pageOptions)
     } else {
       // handle mapping of user-friendly canonical page paths to Notion page IDs
       // e.g., /developer-x-entrepreneur versus /71201624b204481f862630ea25ce62fe
@@ -60,7 +61,7 @@ export async function resolveNotionPage(
         // cached aggressively
         // recordMap = siteMap.pageMap[pageId]
 
-        recordMap = await getPage(pageId)
+        recordMap = await getPage(pageId, pageOptions)
 
         if (useUriToPageIdCache) {
           try {
@@ -87,7 +88,7 @@ export async function resolveNotionPage(
     pageId = site.rootNotionPageId
 
     console.log(site)
-    recordMap = await getPage(pageId)
+    recordMap = await getPage(pageId, pageOptions)
   }
 
   const props: PageProps = { site, recordMap, pageId }
