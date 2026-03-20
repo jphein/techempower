@@ -1,4 +1,5 @@
 import ExpiryMap from 'expiry-map'
+import NProgress from 'nprogress'
 import pMemoize from 'p-memoize'
 
 import type * as types from './types'
@@ -12,28 +13,24 @@ export const searchNotion = pMemoize(searchNotionImpl, {
 async function searchNotionImpl(
   params: types.SearchParams
 ): Promise<types.SearchResults> {
-  return fetch(api.searchNotion, {
-    method: 'POST',
-    body: JSON.stringify(params),
-    headers: {
-      'content-type': 'application/json'
-    }
-  })
-    .then((res) => {
-      if (res.ok) {
-        return res
+  NProgress.start()
+  try {
+    const res = await fetch(api.searchNotion, {
+      method: 'POST',
+      body: JSON.stringify(params),
+      headers: {
+        'content-type': 'application/json'
       }
+    })
 
-      // convert non-2xx HTTP responses into errors
+    if (!res.ok) {
       const error: any = new Error(res.statusText)
       error.response = res
       throw error
-    })
-    .then((res) => res.json() as Promise<types.SearchResults>)
+    }
 
-  // return ky
-  //   .post(api.searchNotion, {
-  //     json: params
-  //   })
-  //   .json()
+    return (await res.json()) as types.SearchResults
+  } finally {
+    NProgress.done()
+  }
 }

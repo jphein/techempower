@@ -68,6 +68,23 @@ export default function App({ Component, pageProps }: AppProps) {
       }
     }
 
+    // Start NProgress on ANY internal link click — catches both
+    // Next.js SPA navigations and full page loads (e.g. react-notion-x
+    // collection cards that render plain <a> tags).
+    function onLinkClick(e: MouseEvent) {
+      const anchor = (e.target as HTMLElement).closest('a')
+      if (!anchor) return
+      const href = anchor.getAttribute('href')
+      if (!href || href.startsWith('#')) return
+      // Skip external links, new-tab clicks, and modifier keys
+      if (anchor.target === '_blank') return
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
+      if (anchor.origin && anchor.origin !== window.location.origin) return
+      NProgress.start()
+    }
+
+    document.addEventListener('click', onLinkClick, { capture: true })
+
     if (fathomId) {
       Fathom.load(fathomId, fathomConfig)
     }
@@ -81,6 +98,7 @@ export default function App({ Component, pageProps }: AppProps) {
     router.events.on('routeChangeError', NProgress.done)
 
     return () => {
+      document.removeEventListener('click', onLinkClick, { capture: true })
       router.events.off('routeChangeStart', NProgress.start)
       router.events.off('routeChangeComplete', onRouteChangeComplete)
       router.events.off('routeChangeError', NProgress.done)
