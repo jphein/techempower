@@ -745,7 +745,7 @@
   word-break: break-word;
 }
 
-/* Hide low-value columns: Eligibility (3), Phone (5), Value (6) */
+/* Hide columns: Value (3), Phone (5), URL (6) */
 .resources-page .notion-table-cell:nth-child(3),
 .resources-page .notion-table-cell:nth-child(5),
 .resources-page .notion-table-cell:nth-child(6),
@@ -755,35 +755,31 @@
   display: none !important;
 }
 
-/* Column 1 — Name */
+/* Column 1 — Name: widest column, shows resource title */
 .resources-page .notion-table-cell:nth-child(1),
 .resources-page .notion-table-th:nth-child(1) {
-  flex: 28 1 0 !important;
+  flex: 50 1 0 !important;
 }
 .resources-page .notion-table-cell:nth-child(1) {
   font-weight: 500;
 }
 
-/* Column 2 — Auto Summary: clamp to 4 lines to keep rows compact */
+/* Column 2 — Category: short tag, keep compact */
 .resources-page .notion-table-cell:nth-child(2),
 .resources-page .notion-table-th:nth-child(2) {
-  flex: 50 1 0 !important;
-}
-.resources-page .notion-table-cell:nth-child(2) {
-  display: -webkit-box !important;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  flex: 15 1 0 !important;
 }
 
-/* Column 4 — URL: truncate long links */
+/* Column 4 — Eligibility: who qualifies */
 .resources-page .notion-table-cell:nth-child(4),
 .resources-page .notion-table-th:nth-child(4) {
-  flex: 22 1 0 !important;
+  flex: 35 1 0 !important;
 }
 .resources-page .notion-table-cell:nth-child(4) {
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 /* Hide the page icon hero and the redundant collection title */
