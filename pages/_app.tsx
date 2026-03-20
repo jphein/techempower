@@ -31,11 +31,16 @@ import {
   posthogId
 } from '@/lib/config'
 
-// Slow trickle so the bar reaches ~40% during a 7-second server fetch,
-// not 99%. This prevents the bar from appearing "stuck" near the end.
-NProgress.configure({ showSpinner: false, trickleSpeed: 800 })
-// @ts-expect-error trickleRate exists at runtime but not in types
-NProgress.settings.trickleRate = 0.01
+// Trickle fast enough to reach ~60-70% during a typical 3-5s server
+// fetch, giving steady visual progress. NProgress.inc() has built-in
+// diminishing returns so the bar naturally slows as it approaches 100%.
+NProgress.configure({
+  showSpinner: false,
+  trickleSpeed: 200,
+  minimum: 0.1,
+  easing: 'ease',
+  speed: 300
+})
 
 if (!isServer) {
   bootstrap()

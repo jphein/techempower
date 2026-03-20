@@ -2,8 +2,16 @@ import { type GetServerSideProps } from 'next'
 
 import { NotionPage } from '@/components/NotionPage'
 import { domain } from '@/lib/config'
+import { isResourcesPage } from '@/lib/page-ids'
 import { resolveNotionPage } from '@/lib/resolve-notion-page'
 import { type PageProps, type Params } from '@/lib/types'
+
+// Resources page is a heavy database fetch that rarely changes —
+// cache it aggressively (12 hours fresh, 7 days stale).
+const RESOURCES_CACHE = 'public, s-maxage=43200, stale-while-revalidate=604800'
+
+// Default: 1 hour fresh, 24 hours stale-while-revalidate.
+const DEFAULT_CACHE = 'public, s-maxage=3600, stale-while-revalidate=86400'
 
 export const getServerSideProps: GetServerSideProps<PageProps, Params> = async (
   context
@@ -14,11 +22,11 @@ export const getServerSideProps: GetServerSideProps<PageProps, Params> = async (
   try {
     const props = await resolveNotionPage(domain, rawPageId)
 
-    // Cache at the CDN edge for 1 hour, serve stale for up to 24 hours
-    context.res.setHeader(
-      'Cache-Control',
-      'public, s-maxage=3600, stale-while-revalidate=86400'
-    )
+    const cachePolicy = isResourcesPage(props.pageId)
+      ? RESOURCES_CACHE
+      : DEFAULT_CACHE
+
+    context.res.setHeader('Cache-Control', cachePolicy)
 
     return { props }
   } catch (err) {
