@@ -42,7 +42,7 @@ NProgress.configure({
   speed: 300
 })
 
-const BUILD_VERSION = 'teal-puma-v1'
+const BUILD_VERSION = 'teal-puma-v2'
 
 if (!isServer) {
   bootstrap()

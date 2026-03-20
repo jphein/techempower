@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic'
 import Image from 'next/legacy/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import NProgress from 'nprogress'
 import { type PageBlock } from 'notion-types'
 import {
   formatDate,
@@ -247,6 +248,55 @@ export function NotionPage({
     () => (isGuide && recordMap ? findSpanishBlockIds(recordMap) : []),
     [isGuide, recordMap]
   )
+
+  // Animate NProgress bar when Load More is clicked on resources page
+  React.useEffect(() => {
+    if (!isResources) return
+
+    function handleLoadMoreClick() {
+      NProgress.start()
+      // Let the DOM update with new items, then complete the bar
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          NProgress.done()
+        })
+      })
+    }
+
+    // Observe for Load More buttons appearing/disappearing as tabs change
+    const observer = new MutationObserver(() => {
+      const buttons = document.querySelectorAll(
+        '.resources-page .notion-collection-load-more'
+      )
+      for (const btn of buttons) {
+        if (!(btn as any).__nprogress) {
+          btn.addEventListener('click', handleLoadMoreClick)
+          ;(btn as any).__nprogress = true
+        }
+      }
+    })
+
+    observer.observe(document.body, { childList: true, subtree: true })
+
+    // Also bind to any already-rendered buttons
+    const buttons = document.querySelectorAll(
+      '.resources-page .notion-collection-load-more'
+    )
+    for (const btn of buttons) {
+      btn.addEventListener('click', handleLoadMoreClick)
+      ;(btn as any).__nprogress = true
+    }
+
+    return () => {
+      observer.disconnect()
+      const btns = document.querySelectorAll(
+        '.resources-page .notion-collection-load-more'
+      )
+      for (const btn of btns) {
+        btn.removeEventListener('click', handleLoadMoreClick)
+      }
+    }
+  }, [isResources])
 
   const showTableOfContents = !!isBlogPost || !!isGuide
   const minTableOfContentsItems = 3
