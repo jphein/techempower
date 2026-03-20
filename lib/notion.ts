@@ -116,7 +116,8 @@ export async function getPage(
       for (const [collectionId, collectionData] of Object.entries(
         recordMap.collection as Record<string, any>
       )) {
-        const schema = collectionData?.value?.value?.schema
+        const schema =
+          collectionData?.value?.value?.schema ?? collectionData?.value?.schema
         if (!schema) continue
 
         // Find the Category property ID from the schema
