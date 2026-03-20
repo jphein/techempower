@@ -107,6 +107,195 @@ export async function getPage(
     }
   }
 
+  // --- Fix stale collection view filters for Category (enum_contains) ---
+  // Notion's collection query index can be stale, so we re-run filters
+  // client-side against the actual block data and patch collection_query.
+  if (options?.enableGalleryCovers) {
+    const collectionQuery = (recordMap as any).collection_query
+    if (collectionQuery) {
+      for (const [collectionId, collectionData] of Object.entries(
+        recordMap.collection as Record<string, any>
+      )) {
+        const schema = collectionData?.value?.value?.schema
+        if (!schema) continue
+
+        // Find the Category property ID from the schema
+        let categoryPropId: string | null = null
+        for (const [propId, propDef] of Object.entries(
+          schema as Record<string, any>
+        )) {
+          if (propDef?.name === 'Category' && propDef?.type === 'multi_select') {
+            categoryPropId = propId
+            break
+          }
+        }
+        if (!categoryPropId) continue
+
+        // Gather all blocks from the recordMap
+        const allBlocks: Record<string, any> = {}
+        for (const [blockId, blockData] of Object.entries(
+          recordMap.block as Record<string, any>
+        )) {
+          const block = (blockData as any)?.value?.value ?? (blockData as any)?.value
+          if (block) allBlocks[blockId] = block
+        }
+
+        for (const [viewId, viewData] of Object.entries(
+          recordMap.collection_view as Record<string, any>
+        )) {
+          const view = (viewData as any)?.value?.value ?? (viewData as any)?.value
+          if (!view) continue
+
+          const query2 = view.query2
+          if (!query2?.filter) continue
+
+          const topFilter = query2.filter
+          const outerFilters: any[] = topFilter.filters
+          if (!outerFilters?.length) continue
+
+          // Check if this view has enum_contains or is_not_empty filters on Category
+          const hasCategoryFilter = outerFilters.some((group: any) => {
+            const inner: any[] = group.filters
+            if (!inner) return false
+            return inner.some(
+              (f: any) =>
+                f.property === categoryPropId &&
+                (f.filter?.operator === 'enum_contains' ||
+                  f.filter?.operator === 'is_not_empty')
+            )
+          })
+          if (!hasCategoryFilter) continue
+
+          // Get the block IDs that were in the original query result for this view
+          const queryResult =
+            collectionQuery?.[collectionId]?.[viewId]
+          if (!queryResult) continue
+
+          // Collect all known block IDs from the collection query
+          // (from the top-level blockIds plus all group blockIds)
+          const candidateIds = new Set<string>()
+          const groupResults =
+            queryResult.collection_group_results ??
+            queryResult
+          if (groupResults?.blockIds) {
+            for (const id of groupResults.blockIds) candidateIds.add(id)
+          }
+          // Also gather from any group results
+          if (groupResults?.groupResults) {
+            for (const group of groupResults.groupResults) {
+              if (group?.blockIds) {
+                for (const id of group.blockIds) candidateIds.add(id)
+              }
+            }
+          }
+          // Also include all blocks from recordMap.block as candidates
+          // since stale filters may have excluded valid blocks
+          for (const blockId of Object.keys(allBlocks)) {
+            candidateIds.add(blockId)
+          }
+
+          // Parse category values from a block
+          const getBlockCategories = (blockId: string): string[] => {
+            const block = allBlocks[blockId]
+            if (!block?.properties?.[categoryPropId!]) return []
+            const raw = block.properties[categoryPropId!]
+            // Format: [["Food,Senior"]] — comma-separated multi_select
+            if (
+              Array.isArray(raw) &&
+              raw.length > 0 &&
+              Array.isArray(raw[0]) &&
+              raw[0].length > 0
+            ) {
+              return (raw[0][0] as string).split(',').map((s: string) => s.trim())
+            }
+            return []
+          }
+
+          // Evaluate whether a block matches the filter
+          const blockMatchesFilter = (blockId: string): boolean => {
+            const categories = getBlockCategories(blockId)
+            const outerOp = topFilter.operator || 'or'
+
+            const groupResults = outerFilters.map((group: any) => {
+              const inner: any[] = group.filters || []
+              const innerOp = group.operator || 'and'
+
+              const innerResults = inner.map((f: any) => {
+                if (f.property !== categoryPropId) return true // ignore non-category filters
+                const op = f.filter?.operator
+                if (op === 'enum_contains') {
+                  const target = f.filter?.value?.value
+                  return categories.includes(target)
+                }
+                if (op === 'is_not_empty') {
+                  return categories.length > 0
+                }
+                return true // unknown operator — don't exclude
+              })
+
+              return innerOp === 'and'
+                ? innerResults.every(Boolean)
+                : innerResults.some(Boolean)
+            })
+
+            return outerOp === 'and'
+              ? groupResults.every(Boolean)
+              : groupResults.some(Boolean)
+          }
+
+          // Filter candidate blocks
+          let matchedIds = [...candidateIds].filter((id) => {
+            // Only consider blocks that are actual page entries (have a parent)
+            const block = allBlocks[id]
+            if (!block) return false
+            // Must be a page block that belongs to this collection
+            if (block.parent_id !== collectionId && block.parent_table !== 'collection')
+              return false
+            return blockMatchesFilter(id)
+          })
+
+          // Apply sort if defined
+          const sorts: any[] = query2.sort || []
+          if (sorts.length > 0) {
+            matchedIds.sort((a, b) => {
+              for (const sortDef of sorts) {
+                const prop = sortDef.property
+                const direction = sortDef.direction === 'descending' ? -1 : 1
+                const aBlock = allBlocks[a]
+                const bBlock = allBlocks[b]
+
+                let aVal: string = ''
+                let bVal: string = ''
+
+                if (prop === 'title' || schema[prop]?.type === 'title') {
+                  aVal = aBlock?.properties?.title?.[0]?.[0] ?? ''
+                  bVal = bBlock?.properties?.title?.[0]?.[0] ?? ''
+                } else {
+                  aVal = aBlock?.properties?.[prop]?.[0]?.[0] ?? ''
+                  bVal = bBlock?.properties?.[prop]?.[0]?.[0] ?? ''
+                }
+
+                const cmp = aVal.localeCompare(bVal)
+                if (cmp !== 0) return cmp * direction
+              }
+              return 0
+            })
+          }
+
+          // Patch the collection_query results
+          if (collectionQuery[collectionId]?.[viewId]) {
+            const target = collectionQuery[collectionId][viewId]
+            if (target.collection_group_results) {
+              target.collection_group_results.blockIds = matchedIds
+            } else {
+              target.blockIds = matchedIds
+            }
+          }
+        }
+      }
+    }
+  }
+
   return recordMap
 }
 
