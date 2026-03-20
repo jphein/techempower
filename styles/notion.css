@@ -204,10 +204,10 @@
 }
 
 /* Placeholder for cards without a cover image — react-notion-x
-   renders .notion-collection-card-cover-empty when page_cover is
+   renders .notion-collection-card-cover:empty when page_cover is
    unset. We show a warm gradient with a camera hint. Gradients
    rotate by card position (nth-child) for visual variety. */
-.resources-page .notion-collection-card-cover-empty {
+.resources-page .notion-collection-card-cover:empty {
   width: 100%;
   height: 100%;
   display: flex;
@@ -222,7 +222,7 @@
 }
 
 /* Camera icon + reminder text on empty covers */
-.resources-page .notion-collection-card-cover-empty::after {
+.resources-page .notion-collection-card-cover:empty::after {
   content: '\01F4F7\00a0\00a0 Add cover';
   font-size: 0.8rem;
   font-weight: 500;
@@ -235,7 +235,7 @@
 .resources-page
   .notion-gallery-grid
   > :nth-child(4n + 2)
-  .notion-collection-card-cover-empty {
+  .notion-collection-card-cover:empty {
   background: linear-gradient(
     150deg,
     #fef3c7 0%,
@@ -247,7 +247,7 @@
 .resources-page
   .notion-gallery-grid
   > :nth-child(4n + 3)
-  .notion-collection-card-cover-empty {
+  .notion-collection-card-cover:empty {
   background: linear-gradient(
     120deg,
     #e0f2fe 0%,
@@ -259,7 +259,7 @@
 .resources-page
   .notion-gallery-grid
   > :nth-child(4n + 4)
-  .notion-collection-card-cover-empty {
+  .notion-collection-card-cover:empty {
   background: linear-gradient(
     160deg,
     #ccfbf1 0%,
@@ -269,7 +269,7 @@
 }
 
 /* Dark mode placeholders: muted versions */
-.dark-mode .resources-page .notion-collection-card-cover-empty {
+.dark-mode .resources-page .notion-collection-card-cover:empty {
   background: linear-gradient(
     135deg,
     rgba(13, 148, 136, 0.1) 0%,
@@ -278,7 +278,7 @@
   );
 }
 
-.dark-mode .resources-page .notion-collection-card-cover-empty::after {
+.dark-mode .resources-page .notion-collection-card-cover:empty::after {
   color: var(--te-bark-500, #78614f);
 }
 
@@ -286,7 +286,7 @@
   .resources-page
   .notion-gallery-grid
   > :nth-child(4n + 2)
-  .notion-collection-card-cover-empty {
+  .notion-collection-card-cover:empty {
   background: linear-gradient(
     150deg,
     rgba(253, 224, 71, 0.06) 0%,
@@ -299,7 +299,7 @@
   .resources-page
   .notion-gallery-grid
   > :nth-child(4n + 3)
-  .notion-collection-card-cover-empty {
+  .notion-collection-card-cover:empty {
   background: linear-gradient(
     120deg,
     rgba(96, 165, 250, 0.06) 0%,
@@ -312,7 +312,7 @@
   .resources-page
   .notion-gallery-grid
   > :nth-child(4n + 4)
-  .notion-collection-card-cover-empty {
+  .notion-collection-card-cover:empty {
   background: linear-gradient(
     160deg,
     rgba(13, 148, 136, 0.08) 0%,
