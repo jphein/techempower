@@ -1,0 +1,13 @@
+{
+  "extends": "@fisch0920/config/tsconfig-react",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/components/*": ["components/*"],
+      "@/lib/*": ["lib/*"],
+      "@/styles/*": ["styles/*"]
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "*.config.ts"],
+  "exclude": ["node_modules"]
+}
