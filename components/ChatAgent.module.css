@@ -181,7 +181,41 @@
   font-size: 0.9rem;
   line-height: 1.5;
   word-break: break-word;
-  white-space: pre-wrap;
+}
+
+/* ---- Markdown rendering inside assistant bubbles ---- */
+.bubbleAssistant .bubbleContent a {
+  color: var(--te-teal-600);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  transition: color 150ms ease;
+}
+
+.bubbleAssistant .bubbleContent a:hover {
+  color: var(--te-teal-800);
+}
+
+.bubbleAssistant .bubbleContent strong {
+  font-weight: 600;
+}
+
+.bubbleAssistant .bubbleContent ul {
+  margin: 0.35rem 0;
+  padding-left: 1.25rem;
+  list-style: disc;
+}
+
+.bubbleAssistant .bubbleContent li {
+  margin: 0.15rem 0;
+}
+
+:global(.dark-mode) .bubbleAssistant .bubbleContent a {
+  color: var(--te-teal-400);
+}
+
+:global(.dark-mode) .bubbleAssistant .bubbleContent a:hover {
+  color: var(--te-teal-300);
 }
 
 /* ---- Typing indicator ---- */

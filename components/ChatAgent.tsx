@@ -7,6 +7,127 @@ export interface ChatMessage {
   content: string
 }
 
+// ---------------------------------------------------------------------------
+// Lightweight markdown to React elements for assistant messages.
+// No dangerouslySetInnerHTML — builds React nodes directly.
+// Supports: **bold**, *italic*, [links](url), bare URLs, bullet lists.
+// ---------------------------------------------------------------------------
+
+type InlineToken =
+  | { type: 'text'; value: string }
+  | { type: 'bold'; value: string }
+  | { type: 'italic'; value: string }
+  | { type: 'link'; text: string; url: string }
+  | { type: 'bare-url'; url: string }
+
+function tokenizeInline(line: string): InlineToken[] {
+  const tokens: InlineToken[] = []
+  const re =
+    /(\*\*(.+?)\*\*)|(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)|\[([^\]]+)\]\(([^)]+)\)|(https?:\/\/[^\s)]+)/g
+  let lastIndex = 0
+  let m: RegExpExecArray | null
+
+  while ((m = re.exec(line)) !== null) {
+    if (m.index > lastIndex) {
+      tokens.push({ type: 'text', value: line.slice(lastIndex, m.index) })
+    }
+    if (m[2] != null) {
+      tokens.push({ type: 'bold', value: m[2] })
+    } else if (m[3] != null) {
+      tokens.push({ type: 'italic', value: m[3] })
+    } else if (m[4] != null && m[5] != null) {
+      tokens.push({ type: 'link', text: m[4], url: m[5] })
+    } else if (m[6] != null) {
+      tokens.push({ type: 'bare-url', url: m[6] })
+    }
+    lastIndex = m.index + m[0].length
+  }
+
+  if (lastIndex < line.length) {
+    tokens.push({ type: 'text', value: line.slice(lastIndex) })
+  }
+  return tokens
+}
+
+function renderInline(tokens: InlineToken[], keyPrefix: string) {
+  return tokens.map((tok, i) => {
+    const key = `${keyPrefix}-${i}`
+    switch (tok.type) {
+      case 'bold':
+        return <strong key={key}>{tok.value}</strong>
+      case 'italic':
+        return <em key={key}>{tok.value}</em>
+      case 'link': {
+        const ext = /^https?:\/\//.test(tok.url)
+        return ext ? (
+          <a key={key} href={tok.url} target='_blank' rel='noopener noreferrer'>
+            {tok.text}
+          </a>
+        ) : (
+          <a key={key} href={tok.url}>{tok.text}</a>
+        )
+      }
+      case 'bare-url':
+        return (
+          <a key={key} href={tok.url} target='_blank' rel='noopener noreferrer'>
+            {tok.url}
+          </a>
+        )
+      default:
+        return <React.Fragment key={key}>{tok.value}</React.Fragment>
+    }
+  })
+}
+
+function renderMarkdown(md: string): React.ReactNode {
+  const lines = md.split('\n')
+  const elements: React.ReactNode[] = []
+  let listItems: React.ReactNode[] = []
+  let blockKey = 0
+
+  const flushList = () => {
+    if (listItems.length > 0) {
+      elements.push(
+        <ul key={`bl-${blockKey++}`}>
+          {listItems.map((item, j) => (
+            <li key={j}>{item}</li>
+          ))}
+        </ul>
+      )
+      listItems = []
+    }
+  }
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i]!
+    if (line.startsWith('- ')) {
+      listItems.push(renderInline(tokenizeInline(line.slice(2)), `li-${i}`))
+    } else {
+      flushList()
+      if (line.trim() === '') {
+        elements.push(<br key={`br-${blockKey++}`} />)
+      } else {
+        const prev = lines[i - 1]
+        if (
+          elements.length > 0 &&
+          prev !== undefined &&
+          prev.trim() !== '' &&
+          !prev.startsWith('- ')
+        ) {
+          elements.push(<br key={`br-${blockKey++}`} />)
+        }
+        elements.push(
+          <React.Fragment key={`ln-${blockKey++}`}>
+            {renderInline(tokenizeInline(line), `in-${i}`)}
+          </React.Fragment>
+        )
+      }
+    }
+  }
+  flushList()
+  return elements
+}
+
 export interface ChatAgentProps {
   onSendMessage: (
     message: string,
@@ -247,7 +368,11 @@ export function ChatAgent({ onSendMessage, onAuthRequired }: ChatAgentProps) {
                 msg.role === 'user' ? styles.bubbleUser : styles.bubbleAssistant
               }`}
             >
-              <div className={styles.bubbleContent}>{msg.content}</div>
+              <div className={styles.bubbleContent}>
+                {msg.role === 'assistant'
+                  ? renderMarkdown(msg.content)
+                  : msg.content}
+              </div>
             </div>
           ))}
 
