@@ -43,6 +43,7 @@ import { Page404 } from './Page404'
 import { PageAside } from './PageAside'
 import { PageHead } from './PageHead'
 import { RelatedGuides } from './RelatedGuides'
+import { ResourcesToolbar } from './ResourcesToolbar'
 import { SpanishToggle } from './SpanishToggle'
 import { StructuredData } from './StructuredData'
 import styles from './styles.module.css'
@@ -382,6 +383,8 @@ export function NotionPage({
           darkMode={isDarkMode}
         />
       )}
+
+      {isResources && <ResourcesToolbar />}
 
       <NotionRenderer
         bodyClassName={cs(
