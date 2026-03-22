@@ -1,4 +1,41 @@
+# Dependencies
 node_modules/
+.pnp
+.pnp.js
+
+# Lock files (8K+ and 5K+ lines)
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# Build output
 .next/
+/out/
+/build
+/coverage
+
+# Images / screenshots (binary)
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.ico
+
+# Tooling
 .vercel/
 .playwright-mcp/
+.claude/
+
+# Secrets
+.env
+.env.local
+.env.build
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE
+.idea
+
+# Debug logs
+*.log
