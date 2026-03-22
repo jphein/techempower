@@ -1,3 +1,4 @@
+<!-- claude-md-version: d69cae3 | updated: 2026-03-22 -->
 # CLAUDE.md — techempower
 
 Nonprofit website for TechEmpower (techempower.org) — free technology resources for low-income individuals and families.
