@@ -9,9 +9,7 @@ import { createPortal } from 'react-dom'
  */
 export function ResourcesToolbar() {
   const [query, setQuery] = React.useState('')
-  const [sortBy, setSortBy] = React.useState<'default' | 'az' | 'za'>(
-    'default'
-  )
+  const [sortBy, setSortBy] = React.useState<'default' | 'az' | 'za'>('default')
   const [activeCategory, setActiveCategory] = React.useState<string | null>(
     null
   )
@@ -66,7 +64,7 @@ export function ResourcesToolbar() {
         if (text) cats.add(text)
       }
     }
-    setCategories([...cats].sort())
+    setCategories([...cats].toSorted())
   }, [])
 
   // Apply search + filter + sort whenever inputs change
@@ -119,7 +117,7 @@ export function ResourcesToolbar() {
           : bText.localeCompare(aText)
       })
       for (const card of visible) {
-        container.appendChild(card)
+        container.append(card)
       }
     }
   }, [query, sortBy, activeCategory])
@@ -140,9 +138,9 @@ export function ResourcesToolbar() {
           if (text) cats.add(text)
         }
       }
-      const sorted = [...cats].sort()
+      const sorted = [...cats].toSorted()
       setCategories((prev) =>
-        prev.join() === sorted.join() ? prev : sorted
+        prev.join(',') === sorted.join(',') ? prev : sorted
       )
     })
 
@@ -213,9 +211,7 @@ export function ResourcesToolbar() {
         <select
           className='resources-sort-select'
           value={sortBy}
-          onChange={(e) =>
-            setSortBy(e.target.value as 'default' | 'az' | 'za')
-          }
+          onChange={(e) => setSortBy(e.target.value as 'default' | 'az' | 'za')}
         >
           <option value='default'>Sort: Default</option>
           <option value='az'>Sort: A &rarr; Z</option>

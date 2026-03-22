@@ -64,7 +64,9 @@ function renderInline(tokens: InlineToken[], keyPrefix: string) {
             {tok.text}
           </a>
         ) : (
-          <a key={key} href={tok.url}>{tok.text}</a>
+          <a key={key} href={tok.url}>
+            {tok.text}
+          </a>
         )
       }
       case 'bare-url':

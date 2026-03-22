@@ -8,7 +8,7 @@ import { type PageProps, type Params } from '@/lib/types'
 
 // Resources page is heavy — revalidate every 12 hours.
 // Other pages revalidate every hour.
-const RESOURCES_REVALIDATE = 43200
+const RESOURCES_REVALIDATE = 43_200
 const DEFAULT_REVALIDATE = 3600
 
 export const getStaticPaths: GetStaticPaths = async () => {

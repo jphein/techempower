@@ -16,6 +16,65 @@ import { getTweetsMap } from './get-tweets'
 import { notion } from './notion-api'
 import { getPreviewImageMap } from './preview-images'
 
+/** Parse category values from a Notion block's properties */
+const getBlockCategories = (
+  allBlocks: Record<string, any>,
+  categoryPropId: string,
+  blockId: string
+): string[] => {
+  const block = allBlocks[blockId]
+  if (!block?.properties?.[categoryPropId]) return []
+  const raw = block.properties[categoryPropId]
+  // Format: [["Food,Senior"]] — comma-separated multi_select
+  if (
+    Array.isArray(raw) &&
+    raw.length > 0 &&
+    Array.isArray(raw[0]) &&
+    raw[0].length > 0
+  ) {
+    return (raw[0][0] as string).split(',').map((s: string) => s.trim())
+  }
+  return []
+}
+
+/** Evaluate whether a block matches the collection view filter */
+const blockMatchesFilter = (
+  allBlocks: Record<string, any>,
+  categoryPropId: string,
+  topFilter: any,
+  outerFilters: any[],
+  blockId: string
+): boolean => {
+  const categories = getBlockCategories(allBlocks, categoryPropId, blockId)
+  const outerOp = topFilter.operator || 'or'
+
+  const groupResults = outerFilters.map((group: any) => {
+    const inner: any[] = group.filters || []
+    const innerOp = group.operator || 'and'
+
+    const innerResults = inner.map((f: any) => {
+      if (f.property !== categoryPropId) return true // ignore non-category filters
+      const op = f.filter?.operator
+      if (op === 'enum_contains') {
+        const target = f.filter?.value?.value
+        return categories.includes(target)
+      }
+      if (op === 'is_not_empty') {
+        return categories.length > 0
+      }
+      return true // unknown operator — don't exclude
+    })
+
+    return innerOp === 'and'
+      ? innerResults.every(Boolean)
+      : innerResults.some(Boolean)
+  })
+
+  return outerOp === 'and'
+    ? groupResults.every(Boolean)
+    : groupResults.some(Boolean)
+}
+
 const getNavigationLinkPages = pMemoize(
   async (): Promise<ExtendedRecordMap[]> => {
     const navigationLinkPageIds = (navigationLinks || [])
@@ -125,7 +184,10 @@ export async function getPage(
         for (const [propId, propDef] of Object.entries(
           schema as Record<string, any>
         )) {
-          if (propDef?.name === 'Category' && propDef?.type === 'multi_select') {
+          if (
+            propDef?.name === 'Category' &&
+            propDef?.type === 'multi_select'
+          ) {
             categoryPropId = propId
             break
           }
@@ -137,14 +199,16 @@ export async function getPage(
         for (const [blockId, blockData] of Object.entries(
           recordMap.block as Record<string, any>
         )) {
-          const block = (blockData as any)?.value?.value ?? (blockData as any)?.value
+          const block =
+            (blockData as any)?.value?.value ?? (blockData as any)?.value
           if (block) allBlocks[blockId] = block
         }
 
         for (const [viewId, viewData] of Object.entries(
           recordMap.collection_view as Record<string, any>
         )) {
-          const view = (viewData as any)?.value?.value ?? (viewData as any)?.value
+          const view =
+            (viewData as any)?.value?.value ?? (viewData as any)?.value
           if (!view) continue
 
           const query2 = view.query2
@@ -168,16 +232,14 @@ export async function getPage(
           if (!hasCategoryFilter) continue
 
           // Get the block IDs that were in the original query result for this view
-          const queryResult =
-            collectionQuery?.[collectionId]?.[viewId]
+          const queryResult = collectionQuery?.[collectionId]?.[viewId]
           if (!queryResult) continue
 
           // Collect all known block IDs from the collection query
           // (from the top-level blockIds plus all group blockIds)
           const candidateIds = new Set<string>()
           const groupResults =
-            queryResult.collection_group_results ??
-            queryResult
+            queryResult.collection_group_results ?? queryResult
           if (groupResults?.blockIds) {
             for (const id of groupResults.blockIds) candidateIds.add(id)
           }
@@ -195,64 +257,24 @@ export async function getPage(
             candidateIds.add(blockId)
           }
 
-          // Parse category values from a block
-          const getBlockCategories = (blockId: string): string[] => {
-            const block = allBlocks[blockId]
-            if (!block?.properties?.[categoryPropId!]) return []
-            const raw = block.properties[categoryPropId!]
-            // Format: [["Food,Senior"]] — comma-separated multi_select
-            if (
-              Array.isArray(raw) &&
-              raw.length > 0 &&
-              Array.isArray(raw[0]) &&
-              raw[0].length > 0
-            ) {
-              return (raw[0][0] as string).split(',').map((s: string) => s.trim())
-            }
-            return []
-          }
-
-          // Evaluate whether a block matches the filter
-          const blockMatchesFilter = (blockId: string): boolean => {
-            const categories = getBlockCategories(blockId)
-            const outerOp = topFilter.operator || 'or'
-
-            const groupResults = outerFilters.map((group: any) => {
-              const inner: any[] = group.filters || []
-              const innerOp = group.operator || 'and'
-
-              const innerResults = inner.map((f: any) => {
-                if (f.property !== categoryPropId) return true // ignore non-category filters
-                const op = f.filter?.operator
-                if (op === 'enum_contains') {
-                  const target = f.filter?.value?.value
-                  return categories.includes(target)
-                }
-                if (op === 'is_not_empty') {
-                  return categories.length > 0
-                }
-                return true // unknown operator — don't exclude
-              })
-
-              return innerOp === 'and'
-                ? innerResults.every(Boolean)
-                : innerResults.some(Boolean)
-            })
-
-            return outerOp === 'and'
-              ? groupResults.every(Boolean)
-              : groupResults.some(Boolean)
-          }
-
           // Filter candidate blocks
-          let matchedIds = [...candidateIds].filter((id) => {
+          const matchedIds = [...candidateIds].filter((id) => {
             // Only consider blocks that are actual page entries (have a parent)
             const block = allBlocks[id]
             if (!block) return false
             // Must be a page block that belongs to this collection
-            if (block.parent_id !== collectionId && block.parent_table !== 'collection')
+            if (
+              block.parent_id !== collectionId &&
+              block.parent_table !== 'collection'
+            )
               return false
-            return blockMatchesFilter(id)
+            return blockMatchesFilter(
+              allBlocks,
+              categoryPropId!,
+              topFilter,
+              outerFilters,
+              id
+            )
           })
 
           // Apply sort if defined
@@ -265,8 +287,8 @@ export async function getPage(
                 const aBlock = allBlocks[a]
                 const bBlock = allBlocks[b]
 
-                let aVal: string = ''
-                let bVal: string = ''
+                let aVal = ''
+                let bVal = ''
 
                 if (prop === 'title' || schema[prop]?.type === 'title') {
                   aVal = aBlock?.properties?.title?.[0]?.[0] ?? ''
