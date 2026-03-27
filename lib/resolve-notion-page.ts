@@ -1,12 +1,21 @@
 import { type ExtendedRecordMap } from 'notion-types'
-import { parsePageId } from 'notion-utils'
+import { parsePageId, uuidToId } from 'notion-utils'
 
 import type { PageProps } from './types'
 import * as acl from './acl'
-import { environment, pageUrlAdditions, pageUrlOverrides, site } from './config'
+import {
+  environment,
+  includeNotionIdInUrls,
+  pageUrlAdditions,
+  pageUrlOverrides,
+  site
+} from './config'
 import { db } from './db'
+import { getCanonicalPageId } from './get-canonical-page-id'
 import { getSiteMap } from './get-site-map'
 import { getPage, type GetPageOptions } from './notion'
+import { notion } from './notion-api'
+import { RESOURCES_PAGE } from './page-ids'
 
 export async function resolveNotionPage(
   domain: string,
@@ -48,39 +57,35 @@ export async function resolveNotionPage(
       }
     }
 
-    if (pageId) {
-      recordMap = await getPage(pageId, pageOptions)
-    } else {
+    if (!pageId) {
       // handle mapping of user-friendly canonical page paths to Notion page IDs
       // e.g., /developer-x-entrepreneur versus /71201624b204481f862630ea25ce62fe
       const siteMap = await getSiteMap()
       pageId = siteMap?.canonicalPageMap[rawPageId]
+    }
 
-      if (pageId) {
-        // TODO: we're not re-using the page recordMap from siteMaps because it is
-        // cached aggressively
-        // recordMap = siteMap.pageMap[pageId]
+    if (!pageId) {
+      // Fallback: resolve slugs for collection items (e.g. resources database
+      // entries) by fetching the collection page and matching slugs against
+      // the block data it already contains — avoids crawling every item.
+      pageId = await resolveCollectionSlug(rawPageId)
+    }
 
-        recordMap = await getPage(pageId, pageOptions)
+    if (pageId) {
+      recordMap = await getPage(pageId, pageOptions)
 
-        if (useUriToPageIdCache) {
-          try {
-            // update the database mapping of URI to pageId
-            await db.set(cacheKey, pageId, cacheTTL)
-
-            // console.log(`redis set "${cacheKey}"`, pageId, { cacheTTL })
-          } catch (err: any) {
-            // ignore redis errors
-            console.warn(`redis error set "${cacheKey}"`, err.message)
-          }
+      if (useUriToPageIdCache) {
+        try {
+          await db.set(cacheKey, pageId, cacheTTL)
+        } catch (err: any) {
+          console.warn(`redis error set "${cacheKey}"`, err.message)
         }
-      } else {
-        // note: we're purposefully not caching URI to pageId mappings for 404s
-        return {
-          error: {
-            message: `Not found "${rawPageId}"`,
-            statusCode: 404
-          }
+      }
+    } else {
+      return {
+        error: {
+          message: `Not found "${rawPageId}"`,
+          statusCode: 404
         }
       }
     }
@@ -93,4 +98,36 @@ export async function resolveNotionPage(
 
   const props: PageProps = { site, recordMap, pageId }
   return { ...props, ...(await acl.pageAcl(props)) }
+}
+
+/**
+ * Resolve a clean URL slug to a Notion page ID by searching through
+ * collection items. Fetches the resources collection page (1 API call)
+ * and generates canonical slugs for each item to find a match.
+ */
+async function resolveCollectionSlug(
+  slug: string
+): Promise<string | undefined> {
+  try {
+    const collectionRecordMap = await notion.getPage(RESOURCES_PAGE)
+    const uuid = !!includeNotionIdInUrls
+
+    for (const [blockId, blockData] of Object.entries(
+      collectionRecordMap.block
+    )) {
+      const block = (blockData as any)?.value
+      if (!block || block.type !== 'page') continue
+
+      const canonicalId = getCanonicalPageId(blockId, collectionRecordMap, {
+        uuid
+      })
+      if (canonicalId === slug) {
+        return uuidToId(blockId)
+      }
+    }
+  } catch (err) {
+    console.warn('resolveCollectionSlug failed', err)
+  }
+
+  return undefined
 }

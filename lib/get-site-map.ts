@@ -1,3 +1,4 @@
+import { type ExtendedRecordMap } from 'notion-types'
 import {
   getAllPagesInSpace,
   getBlockValue,
@@ -30,8 +31,23 @@ const getAllPages = pMemoize(getAllPagesImpl, {
   cacheKey: (...args) => JSON.stringify(args)
 })
 
+// Pages we need to individually fetch for the sitemap.
+// Collection items are resolved from parent recordMaps instead.
+const sitemapPageIds = new Set([
+  config.rootNotionPageId,
+  ...Object.values(config.pageUrlOverrides),
+  ...Object.values(config.pageUrlAdditions)
+])
+
 const getPage = async (pageId: string, opts?: any) => {
-  console.log('\nnotion getPage', uuidToId(pageId))
+  const cleanId = uuidToId(pageId)
+  if (!sitemapPageIds.has(cleanId)) {
+    // Skip individual fetches for collection items — their data is
+    // already embedded in the parent collection page's recordMap.
+    return null as any
+  }
+
+  console.log('\nnotion getPage', cleanId)
   return notion.getPage(pageId, {
     kyOptions: {
       timeout: 30_000
@@ -54,20 +70,54 @@ async function getAllPagesImpl(
     rootNotionSpaceId,
     getPage,
     {
-      maxDepth
+      maxDepth,
+      // Don't individually fetch every collection item — the parent
+      // collection page's recordMap already contains their block data.
+      // This avoids 60+ API calls that exhaust Notion's rate limit.
+      traverseCollections: false
     }
   )
 
-  const canonicalPageMap = Object.keys(pageMap).reduce(
+  // Collect all page block IDs to index, including collection items
+  // discovered from parent recordMaps (not individually fetched).
+  const allRecordMaps: ExtendedRecordMap[] = Object.values(pageMap).filter(
+    (rm): rm is ExtendedRecordMap => !!rm
+  )
+
+  // Discover all page-type blocks across all loaded recordMaps.
+  // This picks up collection items from parent pages without needing
+  // individual fetches.
+  const allPageIds = new Set<string>(Object.keys(pageMap))
+  for (const rm of allRecordMaps) {
+    for (const blockId of Object.keys(rm.block)) {
+      const block = getBlockValue(rm.block[blockId])
+      if (block?.type === 'page' && block?.alive !== false) {
+        allPageIds.add(blockId)
+      }
+    }
+  }
+
+  function findRecordMapForBlock(blockId: string): ExtendedRecordMap | null {
+    const own = pageMap[blockId]
+    if (own) return own
+    for (const rm of allRecordMaps) {
+      if (rm.block[blockId]) return rm
+    }
+    return null
+  }
+
+  const canonicalPageMap = [...allPageIds].reduce(
     (map: Record<string, string>, pageId: string) => {
-      const recordMap = pageMap[pageId]
+      const recordMap = findRecordMapForBlock(pageId)
       if (!recordMap) {
-        throw new Error(`Error loading page "${pageId}"`)
+        return map
       }
 
       const block = getBlockValue(recordMap.block[pageId])
+      if (!block) return map
+
       if (
-        !(getPageProperty<boolean | null>('Public', block!, recordMap) ?? true)
+        !(getPageProperty<boolean | null>('Public', block, recordMap) ?? true)
       ) {
         return map
       }
@@ -77,8 +127,6 @@ async function getAllPagesImpl(
       })!
 
       if (map[canonicalPageId]) {
-        // you can have multiple pages in different collections that have the same id
-        // TODO: we may want to error if neither entry is a collection page
         console.warn('error duplicate canonical page id', {
           canonicalPageId,
           pageId,
