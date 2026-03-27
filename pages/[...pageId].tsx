@@ -36,7 +36,7 @@ export const getStaticProps: GetStaticProps<PageProps, Params> = async (
       : DEFAULT_REVALIDATE
 
     // Sanitize block properties to prevent react-notion-x SSR crashes
-    // from malformed URLs in Notion data (e.g. empty quoted strings).
+    // from malformed URLs in Notion data (e.g. URLs wrapped in quotes).
     if (props.recordMap?.block) {
       for (const blockData of Object.values(props.recordMap.block)) {
         const block = (blockData as any)?.value
@@ -44,11 +44,14 @@ export const getStaticProps: GetStaticProps<PageProps, Params> = async (
         for (const [key, val] of Object.entries(block.properties)) {
           if (Array.isArray(val) && Array.isArray(val[0])) {
             const str = val[0][0]
-            if (
-              typeof str === 'string' &&
-              (str === "''" || str === '""')
-            ) {
-              block.properties[key] = [['']]
+            if (typeof str === 'string') {
+              // Strip wrapping single or double quotes (e.g. "'https://...'" stored in Notion)
+              if (
+                (str.startsWith("'") && str.endsWith("'")) ||
+                (str.startsWith('"') && str.endsWith('"'))
+              ) {
+                block.properties[key] = [[str.slice(1, -1)]]
+              }
             }
           }
         }
