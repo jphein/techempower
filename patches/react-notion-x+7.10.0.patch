@@ -1,8 +1,53 @@
 diff --git a/node_modules/react-notion-x/build/index.js b/node_modules/react-notion-x/build/index.js
-index cbcb3b3..a1bf0cd 100644
+index cbcb3b3..97730ad 100644
 --- a/node_modules/react-notion-x/build/index.js
 +++ b/node_modules/react-notion-x/build/index.js
-@@ -2826,7 +2826,7 @@ function Block(props) {
+@@ -827,9 +827,11 @@ function Asset({
+     return null;
+   }
+   if (block.space_id) {
+-    const url = new URL(source);
+-    url.searchParams.set("spaceId", block.space_id);
+-    source = url.toString();
++    try {
++      const url = new URL(source);
++      url.searchParams.set("spaceId", block.space_id);
++      source = url.toString();
++    } catch (e) {}
+   }
+   let content = null;
+   if (block.type === "tweet") {
+@@ -2466,9 +2468,11 @@ function Audio({
+     return null;
+   }
+   if (block.space_id) {
+-    const url = new URL(source);
+-    url.searchParams.set("spaceId", block.space_id);
+-    source = url.toString();
++    try {
++      const url = new URL(source);
++      url.searchParams.set("spaceId", block.space_id);
++      source = url.toString();
++    } catch (e) {}
+   }
+   return /* @__PURE__ */ jsx25("div", { className: cs("notion-audio", className), children: /* @__PURE__ */ jsx25("audio", { controls: true, preload: "none", src: source }) });
+ }
+@@ -2497,9 +2501,11 @@ function File({
+     return null;
+   }
+   if (block.space_id) {
+-    const url = new URL(source);
+-    url.searchParams.set("spaceId", block.space_id);
+-    source = url.toString();
++    try {
++      const url = new URL(source);
++      url.searchParams.set("spaceId", block.space_id);
++      source = url.toString();
++    } catch (e) {}
+   }
+   return /* @__PURE__ */ jsx27("div", { className: cs("notion-file", className), children: /* @__PURE__ */ jsxs11(
+     components.Link,
+@@ -2826,7 +2832,7 @@ function Block(props) {
                          className: cs(
                            "notion-page",
                            hasPageCover ? "notion-page-has-cover" : "notion-page-no-cover",
@@ -11,7 +56,7 @@ index cbcb3b3..a1bf0cd 100644
                            isPageIconUrl ? "notion-page-has-image-icon" : "notion-page-has-text-icon",
                            "notion-full-page",
                            page_full_width && "notion-full-width",
-@@ -2834,7 +2834,7 @@ function Block(props) {
+@@ -2834,7 +2840,7 @@ function Block(props) {
                            bodyClassName
                          ),
                          children: [
@@ -20,3 +65,22 @@ index cbcb3b3..a1bf0cd 100644
                              PageIcon,
                              {
                                block,
+diff --git a/node_modules/react-notion-x/build/third-party/collection.js b/node_modules/react-notion-x/build/third-party/collection.js
+index 97e229d..a7befcd 100644
+--- a/node_modules/react-notion-x/build/third-party/collection.js
++++ b/node_modules/react-notion-x/build/third-party/collection.js
+@@ -1881,9 +1881,11 @@ function Asset({
+     return null;
+   }
+   if (block.space_id) {
+-    const url = new URL(source);
+-    url.searchParams.set("spaceId", block.space_id);
+-    source = url.toString();
++    try {
++      const url = new URL(source);
++      url.searchParams.set("spaceId", block.space_id);
++      source = url.toString();
++    } catch (e) {}
+   }
+   let content = null;
+   if (block.type === "tweet") {
