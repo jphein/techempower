@@ -35,6 +35,26 @@ export const getStaticProps: GetStaticProps<PageProps, Params> = async (
       ? RESOURCES_REVALIDATE
       : DEFAULT_REVALIDATE
 
+    // Sanitize block properties to prevent react-notion-x SSR crashes
+    // from malformed URLs in Notion data (e.g. empty quoted strings).
+    if (props.recordMap?.block) {
+      for (const blockData of Object.values(props.recordMap.block)) {
+        const block = (blockData as any)?.value
+        if (!block?.properties) continue
+        for (const [key, val] of Object.entries(block.properties)) {
+          if (Array.isArray(val) && Array.isArray(val[0])) {
+            const str = val[0][0]
+            if (
+              typeof str === 'string' &&
+              (str === "''" || str === '""')
+            ) {
+              block.properties[key] = [['']]
+            }
+          }
+        }
+      }
+    }
+
     return { props, revalidate }
   } catch (err) {
     console.error('page error', domain, rawPageId, err)
