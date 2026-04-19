@@ -9,6 +9,10 @@
     "binding": "ASSETS",
     "directory": ".open-next/assets"
   },
+  "routes": [
+    { "pattern": "techempower.org", "custom_domain": true },
+    { "pattern": "www.techempower.org", "custom_domain": true }
+  ],
   "observability": {
     "enabled": true
   },
