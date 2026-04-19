@@ -4,20 +4,52 @@ const startTime = Date.now()
 const startISO = new Date().toISOString()
 
 const adjectives = [
-  'Annealed', 'Bolted', 'Carbonized', 'Dense', 'Electric',
-  'Flux', 'Galvanized', 'Hardened', 'Ignited', 'Joined',
-  'Keen', 'Laminated', 'Molten', 'Nitrided', 'Oxidized',
-  'Pressed', 'Quenched', 'Riveted', 'Sintered', 'Tempered'
+  'Annealed',
+  'Bolted',
+  'Carbonized',
+  'Dense',
+  'Electric',
+  'Flux',
+  'Galvanized',
+  'Hardened',
+  'Ignited',
+  'Joined',
+  'Keen',
+  'Laminated',
+  'Molten',
+  'Nitrided',
+  'Oxidized',
+  'Pressed',
+  'Quenched',
+  'Riveted',
+  'Sintered',
+  'Tempered'
 ]
 const nouns = [
-  'Anvil', 'Bellows', 'Crucible', 'Die', 'Engine',
-  'Furnace', 'Gear', 'Hammer', 'Ingot', 'Jig',
-  'Kiln', 'Lathe', 'Mandrel', 'Nozzle', 'Oven',
-  'Piston', 'Quench', 'Rivet', 'Spark', 'Tongs'
+  'Anvil',
+  'Bellows',
+  'Crucible',
+  'Die',
+  'Engine',
+  'Furnace',
+  'Gear',
+  'Hammer',
+  'Ingot',
+  'Jig',
+  'Kiln',
+  'Lathe',
+  'Mandrel',
+  'Nozzle',
+  'Oven',
+  'Piston',
+  'Quench',
+  'Rivet',
+  'Spark',
+  'Tongs'
 ]
 
 function generateName(hash: string): string {
-  const seed = parseInt(hash, 16) || 0
+  const seed = Number.parseInt(hash, 16) || 0
   const adj = adjectives[seed % adjectives.length]
   const noun = nouns[(seed >> 8) % nouns.length]
   return `${adj} ${noun} · ${hash}`
@@ -39,7 +71,8 @@ function gitInfo() {
 }
 
 function detectPlatform(): string {
-  if (process.env.WORKERS_CI_COMMIT_SHA || process.env.CF_PAGES) return 'cloudflare'
+  if (process.env.WORKERS_CI_COMMIT_SHA || process.env.CF_PAGES)
+    return 'cloudflare'
   if (process.env.VERCEL) return 'vercel'
   return 'local'
 }
@@ -61,6 +94,9 @@ export default function handler(_req: NextApiRequest, res: NextApiResponse) {
     realm: 'forge',
     platform: detectPlatform(),
     repo: 'https://github.com/jphein/techempower',
-    commit_url: git.hash !== 'dev' ? `https://github.com/jphein/techempower/commit/${git.hash}` : ''
+    commit_url:
+      git.hash !== 'dev'
+        ? `https://github.com/jphein/techempower/commit/${git.hash}`
+        : ''
   })
 }
