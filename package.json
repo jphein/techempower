@@ -17,6 +17,9 @@
     "build": "next build",
     "start": "next start",
     "deploy": "vercel deploy",
+    "cf:build": "opennextjs-cloudflare build",
+    "cf:preview": "opennextjs-cloudflare preview",
+    "cf:deploy": "opennextjs-cloudflare deploy",
     "deps:upgrade": "[ -z $GITHUB_ACTIONS ] && pnpm up -L notion-client notion-types notion-utils react-notion-x || echo 'Skipping deps:update on CI'",
     "deps:link": "[ -z $GITHUB_ACTIONS ] && run-s deps:link:* || echo 'Skipping deps:update on CI'",
     "deps:unlink": "[ -z $GITHUB_ACTIONS ] && pnpm add notion-client notion-types notion-utils react-notion-x || echo 'Skipping deps:update on CI'",
@@ -58,6 +61,7 @@
   },
   "devDependencies": {
     "@fisch0920/config": "^1.4.0",
+    "@opennextjs/cloudflare": "^1.19.1",
     "@types/node": "^25.5.0",
     "@types/prismjs": "^1.26.5",
     "@types/react": "^19.2.14",
@@ -68,12 +72,19 @@
     "npm-run-all2": "^8.0.4",
     "patch-package": "^8.0.1",
     "prettier": "^3.8.1",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "wrangler": "^4.83.0"
   },
   "overrides": {
     "cacheable-request": {
       "keyv": "npm:@keyvhq/core@~1.6.6"
     }
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "workerd"
+    ]
   },
   "prettier": "@fisch0920/config/prettier",
   "simple-git-hooks": {

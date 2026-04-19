@@ -35,6 +35,29 @@ export default {
   //   return config
   // },
 
-  // See https://react-tweet.vercel.app/next#troubleshooting
-  transpilePackages: ['react-tweet']
+  // Transpile all runtime deps so Next 16's Turbopack doesn't externalize them.
+  // OpenNext/Cloudflare Workers has no node_modules at runtime — transpiling inlines them.
+  transpilePackages: [
+    '@fisch0920/use-dark-mode',
+    '@keyvhq/core',
+    '@keyvhq/redis',
+    'classnames',
+    'expiry-map',
+    'fathom-client',
+    'katex',
+    'ky',
+    'notion-client',
+    'notion-types',
+    'notion-utils',
+    'nprogress',
+    'p-map',
+    'p-memoize',
+    'posthog-js',
+    'prismjs',
+    'react-body-classname',
+    'react-notion-x',
+    'react-tweet',
+    'react-use',
+    'rss'
+  ]
 }

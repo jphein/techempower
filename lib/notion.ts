@@ -14,7 +14,6 @@ import {
 } from './config'
 import { getTweetsMap } from './get-tweets'
 import { notion } from './notion-api'
-import { getPreviewImageMap } from './preview-images'
 
 /** Parse category values from a Notion block's properties */
 const getBlockCategories = (
@@ -135,6 +134,9 @@ export async function getPage(
   }
 
   if (isPreviewImageSupportEnabled) {
+    // Lazy import so `lqip-modern` / `sharp` are only loaded when the feature is enabled.
+    // Cloudflare Workers can't run sharp (native binding), so the flag stays false there.
+    const { getPreviewImageMap } = await import('./preview-images')
     const previewImageMap = await getPreviewImageMap(recordMap)
     ;(recordMap as any).preview_images = previewImageMap
   }
