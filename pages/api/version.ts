@@ -1,52 +1,53 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { execFileSync } from 'child_process';
-import os from 'os';
+import type { NextApiRequest, NextApiResponse } from 'next'
 
-const startTime = Date.now();
-const startISO = new Date().toISOString();
+const startTime = Date.now()
+const startISO = new Date().toISOString()
 
-// Realm-sigil word lists (forge realm)
 const adjectives = [
-  "Annealed", "Bolted", "Carbonized", "Dense", "Electric",
-  "Flux", "Galvanized", "Hardened", "Ignited", "Joined",
-  "Keen", "Laminated", "Molten", "Nitrided", "Oxidized",
-  "Pressed", "Quenched", "Riveted", "Sintered", "Tempered"
-];
+  'Annealed', 'Bolted', 'Carbonized', 'Dense', 'Electric',
+  'Flux', 'Galvanized', 'Hardened', 'Ignited', 'Joined',
+  'Keen', 'Laminated', 'Molten', 'Nitrided', 'Oxidized',
+  'Pressed', 'Quenched', 'Riveted', 'Sintered', 'Tempered'
+]
 const nouns = [
-  "Anvil", "Bellows", "Crucible", "Die", "Engine",
-  "Furnace", "Gear", "Hammer", "Ingot", "Jig",
-  "Kiln", "Lathe", "Mandrel", "Nozzle", "Oven",
-  "Piston", "Quench", "Rivet", "Spark", "Tongs"
-];
+  'Anvil', 'Bellows', 'Crucible', 'Die', 'Engine',
+  'Furnace', 'Gear', 'Hammer', 'Ingot', 'Jig',
+  'Kiln', 'Lathe', 'Mandrel', 'Nozzle', 'Oven',
+  'Piston', 'Quench', 'Rivet', 'Spark', 'Tongs'
+]
 
 function generateName(hash: string): string {
-  const seed = parseInt(hash, 16) || 0;
-  const adj = adjectives[seed % adjectives.length];
-  const noun = nouns[(seed >> 8) % nouns.length];
-  return `${adj} ${noun} · ${hash}`;
+  const seed = parseInt(hash, 16) || 0
+  const adj = adjectives[seed % adjectives.length]
+  const noun = nouns[(seed >> 8) % nouns.length]
+  return `${adj} ${noun} · ${hash}`
 }
 
 function gitInfo() {
-  // Vercel provides these env vars at build time (frozen into the serverless bundle)
-  const sha = process.env.VERCEL_GIT_COMMIT_SHA;
-  const ref = process.env.VERCEL_GIT_COMMIT_REF;
+  const sha =
+    process.env.WORKERS_CI_COMMIT_SHA ||
+    process.env.CF_PAGES_COMMIT_SHA ||
+    process.env.VERCEL_GIT_COMMIT_SHA
+  const ref =
+    process.env.WORKERS_CI_COMMIT_REF ||
+    process.env.CF_PAGES_BRANCH ||
+    process.env.VERCEL_GIT_COMMIT_REF
   if (sha) {
-    return { hash: sha.slice(0, 7), branch: ref || 'unknown', dirty: false };
+    return { hash: sha.slice(0, 7), branch: ref || 'unknown', dirty: false }
   }
-  // Fallback: try git (works locally, not on Vercel)
-  const info = { hash: 'dev', branch: 'unknown', dirty: false };
-  try {
-    info.hash = execFileSync('git', ['rev-parse', '--short', 'HEAD'], { encoding: 'utf8' }).trim() || 'dev';
-    info.branch = execFileSync('git', ['rev-parse', '--abbrev-ref', 'HEAD'], { encoding: 'utf8' }).trim() || 'unknown';
-    try { execFileSync('git', ['diff', '--quiet']); } catch { info.dirty = true; }
-  } catch {}
-  return info;
+  return { hash: 'dev', branch: 'unknown', dirty: false }
 }
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  const git = gitInfo();
-  res.setHeader('Cache-Control', 'no-cache');
-  res.setHeader('Access-Control-Allow-Origin', '*');
+function detectPlatform(): string {
+  if (process.env.WORKERS_CI_COMMIT_SHA || process.env.CF_PAGES) return 'cloudflare'
+  if (process.env.VERCEL) return 'vercel'
+  return 'local'
+}
+
+export default function handler(_req: NextApiRequest, res: NextApiResponse) {
+  const git = gitInfo()
+  res.setHeader('Cache-Control', 'no-cache')
+  res.setHeader('Access-Control-Allow-Origin', '*')
   res.status(200).json({
     name: 'techempower',
     description: 'Tech empower platform',
@@ -58,11 +59,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     started: startISO,
     uptime: Math.floor((Date.now() - startTime) / 1000),
     realm: 'forge',
-    runtime: `node${process.version}`,
-    os: `${process.platform}/${process.arch}`,
-    host: os.hostname(),
-    pid: process.pid,
+    platform: detectPlatform(),
     repo: 'https://github.com/jphein/techempower',
-    commit_url: git.hash !== 'dev' ? `https://github.com/jphein/techempower/commit/${git.hash}` : '',
-  });
+    commit_url: git.hash !== 'dev' ? `https://github.com/jphein/techempower/commit/${git.hash}` : ''
+  })
 }

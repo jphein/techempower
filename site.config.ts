@@ -26,8 +26,8 @@ export default siteConfig({
   defaultPageCover: null,
   defaultPageCoverPosition: 0.5,
 
-  // LQIP preview images
-  isPreviewImageSupportEnabled: true,
+  // LQIP preview images — disabled on Cloudflare Workers (requires `sharp` native binary)
+  isPreviewImageSupportEnabled: false,
 
   // no Redis on Cloudflare Pages
   isRedisEnabled: false,
