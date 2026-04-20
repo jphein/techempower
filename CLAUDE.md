@@ -13,7 +13,7 @@ A Next.js site that renders content from Notion as a CMS, using react-notion-x. 
 
 - **Framework:** Next.js (Pages Router, SSR), React 19
 - **CMS:** Notion via react-notion-x
-- **Hosting:** Vercel (auto-deploy on push to `master`)
+- **Hosting:** Cloudflare Workers via OpenNext (auto-deploy on push to `master`)
 - **Styling:** CSS Modules + global CSS custom properties (warm earth-tone design system)
 - **Fonts:** Fraunces (display), DM Sans (body)
 - **Package manager:** pnpm (Node >= 20)
@@ -26,7 +26,9 @@ pnpm install          # install deps (runs patch-package postinstall)
 pnpm dev              # dev server at localhost:3000
 pnpm build            # production build
 pnpm start            # serve production build
-npx vercel --prod --yes   # manual deploy to Vercel
+pnpm cf:build         # build OpenNext Cloudflare worker bundle
+pnpm cf:preview       # preview worker locally via miniflare
+pnpm cf:deploy        # manual deploy to Cloudflare Workers
 ```
 
 ## Key Files
