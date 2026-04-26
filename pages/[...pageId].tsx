@@ -11,6 +11,20 @@ import { type PageProps, type Params } from '@/lib/types'
 const RESOURCES_REVALIDATE = 43_200
 const DEFAULT_REVALIDATE = 3600
 
+// Hard cap on Notion resolution time. notion-client retries 429/5xx internally
+// via `got`, which can blow the Worker CPU budget on a single slow upstream.
+const NOTION_TIMEOUT_MS = 8000
+
+// Cache 4xx/timeout failures for an hour instead of retrying every minute,
+// to avoid hammering Notion on permanently broken pages.
+const ERROR_REVALIDATE = 3600
+
+// Vulnerability scanner targets observed in production logs (env files,
+// VCS metadata, common CMS attack surfaces). Matched paths short-circuit
+// to a 404 here, before Notion is touched and the renderer is invoked.
+const SCANNER_PATTERN =
+  /(?:^|\/)(?:\.env[a-z.-]*|\.git|\.aws|\.ssh|\.svn|\.hg|\.htaccess|\.htpasswd|\.DS_Store|wp-admin|wp-includes|wp-content|wp-login|phpmyadmin|administrator|cgi-bin|vendor|laravel|symfony)(?:\/|$)|\.(?:php|asp|aspx|jsp|cgi|sh|bak|sql|env)$/i
+
 export const getStaticPaths: GetStaticPaths = async () => {
   return { paths: [], fallback: 'blocking' }
 }
@@ -21,15 +35,27 @@ export const getStaticProps: GetStaticProps<PageProps, Params> = async (
   const segments = context.params?.pageId as string[] | undefined
   const rawPageId = segments ? segments.join('/') : undefined
 
+  if (rawPageId && SCANNER_PATTERN.test(`/${rawPageId}`)) {
+    return { notFound: true, revalidate: ERROR_REVALIDATE }
+  }
+
   try {
     const isResources = rawPageId === 'resources'
-    const props = await resolveNotionPage(
-      domain,
-      rawPageId,
-      isResources
-        ? { collectionLoadLimit: 20, enableGalleryCovers: true }
-        : undefined
-    )
+    const props = await Promise.race([
+      resolveNotionPage(
+        domain,
+        rawPageId,
+        isResources
+          ? { collectionLoadLimit: 20, enableGalleryCovers: true }
+          : undefined
+      ),
+      new Promise<never>((_, reject) =>
+        setTimeout(
+          () => reject(new Error(`notion timeout after ${NOTION_TIMEOUT_MS}ms`)),
+          NOTION_TIMEOUT_MS
+        )
+      )
+    ])
 
     const revalidate = isResourcesPage(props.pageId)
       ? RESOURCES_REVALIDATE
@@ -61,7 +87,7 @@ export const getStaticProps: GetStaticProps<PageProps, Params> = async (
     return { props, revalidate }
   } catch (err) {
     console.error('page error', domain, rawPageId, err)
-    return { notFound: true, revalidate: 60 }
+    return { notFound: true, revalidate: ERROR_REVALIDATE }
   }
 }
 
