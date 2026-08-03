@@ -19,7 +19,7 @@ jobs:
           # WORKERS_CI_* env vars anyway, so no authenticated git ops run after
           # checkout — don't persist the auth token into .git/config.
           persist-credentials: false
-      - uses: pnpm/action-setup@v6
+      - uses: pnpm/action-setup@v6.0.9
       - uses: actions/setup-node@v6
         with:
           node-version: 22
