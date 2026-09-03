@@ -33,13 +33,34 @@ with one "Relink Media" pointed at the folder root.
 - **`show/assets/youtube/`** — channel avatar and banner PNGs, in case an end card wants them.
 - **`show/assets/resolve-scripts/Add_Ep1_Intro_Logo.py`** — the Resolve script JP used to build the Ep1 intro.
 
-## Two references the Ep2 project makes that are NOT in this folder
+## Episode 1 (done and published — here for reference and for the Ep2 logo intro)
+
+- **`eps1/ep1-final-youtube.mp4`** — the published 1080p Ep1 (15:25). The style reference for Ep2/Ep3.
+- **`eps1/ep1-final-720p-slack.mp4`** — small 720p copy of the same.
+- **`eps1/Ep1 MASTER (logo intro).mov.split/`** — the 5.2 GB DNxHR master, which the Ep2 project pulls in
+  for the logo intro. Box caps files at 2 GB, so it is in three parts. Download the folder, then run
+  `JOIN-windows.bat` (or `JOIN-mac-linux.sh`) to rebuild `Ep1 MASTER (logo intro).mov` one level up;
+  `SHA256SUM.txt` verifies the result. Or just relink that media pool item to `ep1-final-youtube.mp4`.
+- **`show/ep1/`** — Ep1 script, fact-check, `edit-list.md` (the flub cuts and overlay timings JP used),
+  whisper `transcript/` (srt/txt/tsv/json), `youtube-publish.md` (title, description, chapters), the two
+  chart images, and `render/` (JP's ffmpeg build, only useful as a record of what the Ep1 cut did).
+- **`show/assets/resolve-backups/`** — Resolve timeline backups from the Ep1 edit (Jun 17 – Jul 3).
+
+## Upcoming episodes and series context
+
+- **`show/ep4/`, `show/ep5/`, `show/ep6/`** — scripts, fact-checks and briefs for the episodes still to be
+  cut. Same `[POST: …]` cue convention as Ep2/Ep3.
+- **`show/PIPELINE.md`** — how an episode is produced end to end; **`show/SEASON-OPS.md`** — the season calendar.
+- **`show/assets/outreach/`** — press release (EN/ES), launch posts, media list, and the print poster/flyer
+  PDFs, in case thumbnails or end cards want the same look.
+
+## References the Ep2 project makes that are NOT in this folder
 
 1. `Jeff Levelate 7-6-26.output.wav` — the Ep2 levelled audio. The project points at
    `Z:\02 - PAID PROJECTS - KEEP\Jeff -\Media\7-6-26\Media\Audio\` on your side; it was never on JP's drive.
-2. `Ep1 MASTER (logo intro).mov` — pulled into the Ep2 media pool for the logo intro. Ep1 is done, and
-   at 5.2 GB it is over Box's 2 GB per-file limit. Relink to your copy, or rebuild the intro from
-   `show/assets/logo/` + the jingle.
+2. Ep1's own Resolve project (`Jeff - 6-15-26 v1.drp`), the Ep1 studio originals (`originals_h264/`) and the
+   Ep1 audio WAV live only on the portable drive and will be added when it is next plugged in. The 128 GB of
+   DNxHR transcodes for Ep1 are not coming to Box; you have those.
 
 ## Program cards to build
 
