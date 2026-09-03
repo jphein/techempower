@@ -1,0 +1,77 @@
+# Wait, I Qualify?! — Editor handoff, Episodes 2 & 3
+
+Shared via Box: `Jeff - ep2 ep3 handoff` (JP's TechEmpower Box, 2026-09-03).
+The folder mirrors the portable drive `F:\` layout so DaVinci Resolve relinks
+with one "Relink Media" pointed at the folder root.
+
+| Episode | Recorded | Resolve project | Raw media |
+|---------|----------|-----------------|-----------|
+| Ep2 "Getting Connected" (internet + phone affordability) | Mon Jul 6, 2026 | `Jeff -/Project/Jeff 7-6-26 v1.drp` | `Jeff -/Media/7-6-26/` |
+| Ep3 "Food" (grocery money + no-paperwork help) | Mon Jul 27, 2026 | `Jeff -/Project/Jeff 7-27-26 v1.drp` | `Jeff -/Media/7-27-26/` |
+
+## What's in the folder
+
+- **`Jeff -/Project/`** — the two Resolve `.drp` project exports (edit only, no media inside).
+- **`Jeff -/Media/7-6-26/`** — Ep2 studio camera files `Jeff_WC_7-6-26_0..5.mp4` and the chart jpg.
+  The Ep2 timeline uses `_5.mp4`; the others are the earlier takes.
+- **`Jeff -/Media/7-27-26/`** — Ep3 studio camera files `Jeff_WC_7-27-26_0..2.mp4`, the levelled
+  audio (`7-27-26 level.output.wav`, used on the timeline) plus the raw `level.wav`, and
+  `Rough Export.mov` (JP's Ep3 rough cut, reference only).
+- **`Jeff -/Xport/Jeff 7-6-26 _draft 1 .mov`** — JP's Ep2 draft export, reference only.
+- **`show/ep2/`, `show/ep3/`** — scripts and research:
+  - `epN-teleprompter-studio.txt` — exactly what was on the prompter at the shoot (best source for captions).
+  - `epN-teleprompter.txt` — the full script with every `[POST: …]` cue: program cards, screencasts, intro/outro.
+  - `fact-check-full-report.json` — every phone number and URL, verified against primary sources. Use these
+    spellings/numbers on the cards, not what you hear in the audio.
+  - `readme.md`, `weekof-recheck-*.md` — production notes and the week-of fact recheck.
+  - `host-cards.html`, `teleprompter.html` — rehearsal artifacts, ignore.
+- **`show/assets/logo/`** — `techempower-sun.png` (intro logo mark), `techempower-candela.png`,
+  and `ep1-overlays/`: the series title card, lower thirds for Jeff and Shawna, end card, resources
+  card. Reuse these so Ep2/Ep3 match Ep1.
+- **`show/assets/jingles/`** — six jingle candidates, WAV + MP3. **Ep1 used `jingle_01_warm-piano`**;
+  Ep2's project also has `jingle_03_hopeful-arp` in its media pool. Keep `jingle_01` unless JP says otherwise.
+- **`show/assets/youtube/`** — channel avatar and banner PNGs, in case an end card wants them.
+- **`show/assets/resolve-scripts/Add_Ep1_Intro_Logo.py`** — the Resolve script JP used to build the Ep1 intro.
+
+## Two references the Ep2 project makes that are NOT in this folder
+
+1. `Jeff Levelate 7-6-26.output.wav` — the Ep2 levelled audio. The project points at
+   `Z:\02 - PAID PROJECTS - KEEP\Jeff -\Media\7-6-26\Media\Audio\` on your side; it was never on JP's drive.
+2. `Ep1 MASTER (logo intro).mov` — pulled into the Ep2 media pool for the logo intro. Ep1 is done, and
+   at 5.2 GB it is over Box's 2 GB per-file limit. Relink to your copy, or rebuild the intro from
+   `show/assets/logo/` + the jingle.
+
+## Program cards to build
+
+Every card below is a `[POST: PROGRAM CARD …]` cue in the full script; the fact-check JSON has the
+verified source for each number.
+
+### Ep2 "Getting Connected"
+- California LifeLine free phone plans — apply at assurancewireless.com / safelinkwireless.com; full provider list: californialifeline.com
+- Xfinity Internet Essentials $14.95 / AT&T Access $30 or less / NevCoFiber Community Assist $15 — "check your address"
+- CASF Line Extension Program — state grant to extend the line to unserved homes; LifeLine/CARE income lines; ask your provider to apply for you
+- Nevada County Library — free hotspot lending, 24/7 WiFi, free tech help — 530-265-7050
+- T-Mobile Project 10Million (K-12 student households) — free hotspot + 200 GB a year, up to 5 years — t-mobile.com/project-10-million
+- Computers for Classrooms (ships in CA) / human-I-T
+- Senior Planet hotline / California Connect (caconnect.org) / TechEmpower Discord
+- Outro end card: TECHEMPOWER.ORG / TECHEMPOWER.ORG/QUALIFY (2-minute check) / 211 / FINDHELP.ORG
+
+Ep2 also has `[POST: SCREENCAST …]` cues (assurancewireless.com sign-up, californialifeline.com provider list,
+Xfinity Internet Essentials page, nevcofiber.com coverage check, library catalog hotspot hold,
+computersforclassrooms.org store, human-I-T shop). Capture these at edit time; durations are in the cues.
+
+### Ep3 "Food"
+- CalFresh — BenefitsCal.com / statewide 1-877-847-3663 / county offices: 950 Maidu Ave, Suite 120, Nevada City + 10075 Levon Ave, Truckee (Joseph Center) / local 530-265-1340 / or dial 2-1-1
+- WIC — Grass Valley 530-265-1454 / Truckee 530-582-7814 / myfamily.wic.ca.gov
+- Interfaith Food Ministry — 440 Henderson St, Grass Valley / 530-273-8132 / Mon-Wed-Fri 10 to 1 (first hour by reservation) + Saturdays
+- Food Bank of Nevada County — 530-272-3796 / foodbankofnc.org — mobile distribution days + sites
+- Community Roots FREE summer meals (any kid 18 & under, no sign-up) — Lunch at the Library: Grass Valley + Madelyn Helling libraries + Memorial Park pool, weekdays 12-1 (thru Aug 7) / weekly meal bags Thu 10-1: Nevada Union HS + Oak Tree Preschool / communityrootsnc.org
+- SUN Bucks (Summer EBT) — $120 per school-age child for the summer / most kids auto-enrolled, check your mail / not enrolled? apply at your child's school by Aug 31 / helpline 1-877-328-9677 / cdss.ca.gov/sun-bucks
+- Meals on Wheels — Gold Country Senior Services 530-446-6853 (west county) / Sierra Senior Services 530-550-7600 (Truckee) — Senior lunch: Sierra Gold Community Senior Center, 231 Colfax Ave, Grass Valley, Mon/Tue/Thu at noon — 530-273-4961
+- Outro end card: TECHEMPOWER.ORG / 211 / FINDHELP.ORG
+
+## Series invariants (please keep)
+
+- Closing resources every episode: 211, findhelp.org, techempower.org, Discord.
+- TechEmpower does **not** teach classes at Nevada County Media; its help channels are the website + Discord only.
+- Never overstate reach or eligibility on a card; if a number in the audio disagrees with the fact-check JSON, the JSON wins. Flag it to JP.
