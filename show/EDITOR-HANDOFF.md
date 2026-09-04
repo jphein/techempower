@@ -45,6 +45,10 @@ with one "Relink Media" pointed at the folder root.
   whisper `transcript/` (srt/txt/tsv/json), `youtube-publish.md` (title, description, chapters), the two
   chart images, and `render/` (JP's ffmpeg build, only useful as a record of what the Ep1 cut did).
 - **`show/assets/resolve-backups/`** — Resolve timeline backups from the Ep1 edit (Jun 17 – Jul 3).
+- **`Jeff -/Project/Jeff - 6-15-26 v1.drp`** — the Ep1 Resolve project itself.
+- **`Jeff -/originals_h264/`** — the three Ep1 studio H.264 originals from Jun 15 (the DNxHR transcodes
+  you made from them are not on Box; you have those).
+- **`Jeff -/Media/6-15-26/Audio - Jeff 6-15-26.wav`** — the Ep1 audio.
 
 ## Upcoming episodes and series context
 
@@ -54,13 +58,11 @@ with one "Relink Media" pointed at the folder root.
 - **`show/assets/outreach/`** — press release (EN/ES), launch posts, media list, and the print poster/flyer
   PDFs, in case thumbnails or end cards want the same look.
 
-## References the Ep2 project makes that are NOT in this folder
+## Not in this folder
 
-1. `Jeff Levelate 7-6-26.output.wav` — the Ep2 levelled audio. The project points at
-   `Z:\02 - PAID PROJECTS - KEEP\Jeff -\Media\7-6-26\Media\Audio\` on your side; it was never on JP's drive.
-2. Ep1's own Resolve project (`Jeff - 6-15-26 v1.drp`), the Ep1 studio originals (`originals_h264/`) and the
-   Ep1 audio WAV live only on the portable drive and will be added when it is next plugged in. The 128 GB of
-   DNxHR transcodes for Ep1 are not coming to Box; you have those.
+- `Jeff Levelate 7-6-26.output.wav` — the Ep2 levelled audio. The Ep2 project points at
+  `Z:\02 - PAID PROJECTS - KEEP\Jeff -\Media\7-6-26\Media\Audio\` on your side; it was never on JP's drive.
+- The 128 GB of Ep1 DNxHR transcodes (`Jeff -/Media/6-15-26/DNxHR/`). You have those.
 
 ## Program cards to build
 
