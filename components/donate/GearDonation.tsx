@@ -136,10 +136,11 @@ export function GearDonation() {
         </h2>
         <p className={styles.lede}>
           If it plugs in, charges up, or ever did &mdash; we want it. Working or
-          dead, ancient or brand new, one phone or a barn full. Working gear
-          gets wiped, refurbished, and handed to a family that needs it.
-          Everything else is recycled responsibly through a California-approved
-          e-waste recycler. Nothing goes to the landfill.
+          dead, ancient or brand new, one phone or a barn full. We&rsquo;re a
+          repair-and-reuse shop, not a recycler: working gear gets wiped,
+          refurbished, and handed to a family that needs it; broken gear gets
+          fixed, or becomes the parts that fix the next one. Only what&rsquo;s
+          truly left over gets recycled, properly. Nothing goes to the landfill.
         </p>
         <div className={styles.actions}>
           <a
@@ -189,7 +190,7 @@ export function GearDonation() {
         </li>
         <li>
           <strong>You get a written receipt </strong>for your taxes, and we get
-          to work.
+          to work repairing.
         </li>
       </ol>
       <div className={styles.actions}>
@@ -309,8 +310,8 @@ export function GearDonation() {
         <p>
           Electronics pile up in the back room: untested, unwiped, and illegal
           to toss if there&rsquo;s a battery inside. We&rsquo;ll pick them up on
-          a regular run, test and wipe the ones you can sell, and responsibly
-          recycle the rest &mdash; free. Email{' '}
+          a regular run, test and wipe the ones you can sell, and repair or
+          reuse the rest &mdash; free. Email{' '}
           <a href={`mailto:${EMAIL}`}>{EMAIL}</a> to set up a pickup schedule.
         </p>
       </div>

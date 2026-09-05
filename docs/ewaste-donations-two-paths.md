@@ -13,6 +13,16 @@ county's contractor.
 
 ---
 
+## Framing (JP, 2026-09-05): repair and reuse, not recycling
+
+TechEMPOWER's program is a **repair-and-reuse shop**. Everything is accepted
+for repair, refurbishment, or parts. The site copy says so and never calls us
+a recycler. That is both the mission and the legally advantageous posture (see
+next section): what we take for reuse is a donated product, not waste. The
+recycler relationship exists only for the residue that genuinely cannot be
+repaired or harvested — and that residue leaves via a partner's fundraiser
+day or the county HHW site, not via a TechEMPOWER "recycling" stream.
+
 ## The one distinction everything hinges on
 
 **Reuse is not waste. Recycling is.**
@@ -63,6 +73,35 @@ handler of record for the waste stream.
      ([County transfer stations page](https://www.nevadacountyca.gov/3412/Transfer-Stations),
      [WM HHW hours](https://localsites.wm.com/a4480000006oNvgAAE/Nevada+City+McCourtney+Road+Household+Hazardous+Waste+Facility),
      [County battery-recycling notice](https://www.nevadacountyca.gov/m/newsflash/Home/Detail/8516))
+
+### Special recycling days — who actually runs them near us
+
+JP's call (2026-09-05): we host collection days; a CalRecycle-approved
+collector brings the truck and holds the paperwork. Confirmed candidates,
+closest first. Ask every one of them the same five questions: **(1)** do you
+file the DTSC NOI and hold the handler ID for the event; **(2)** do you take
+battery-embedded devices and loose lithium (most event recyclers say _remove
+batteries first_ — see SRCC below — so our lithium stream needs its own answer);
+**(3)** per-pound rate to the host on CEW (screens) vs. everything else; **(4)**
+minimum load / minimum notice (30 days is the DTSC floor for an advertised
+event); **(5)** may we pull reusable units off the pile before weigh-in
+(this is the whole point — the day feeds the repair shop first, the truck
+second).
+
+| Partner                                           | What we know                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | Contact                                                                                                                                                         |
+| ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Sacramento Regional Conservation Corps (SRCC)** | A Local Conservation Corps — i.e. exactly the CalRecycle-registered collector type the LCC guide is written for. Runs drive-through e-waste days for churches, districts and nonprofits (Bayside Church Roseville, Sac Sewer District, Sac Valley Conservancy). Host paid on donated weight. Refuses CDs/DVDs/tapes, mercury devices, solar panels, large appliances; **"batteries MUST be removed from all electronics except cell phones."** Closest to us; ask if they'll come to Grass Valley or meet at a Placer site. | (916) 386-8394 · info@saccorps.org (no e-waste desk listed; ask for the Recycling program). Bayside event organizer who worked with them: Dave, (916) 261-0702. |
+| **Waste Not Recyclers** (San Leandro)             | CalRecycle CEW ID 114282, BAN-compliant. Statewide collection events; supplies staff, setup/teardown, $2M liability + $1M umbrella COI, does the pre-event agency registration. "Profit sharing fundraisers for non-profit organizations." Takes computers, TVs, microwaves, small appliances; no refrigeration, no paint/chemicals.                                                                                                                                                                                        | (415) 261-3311 · Ihaveaquestion@Wastenotrecyclers.com                                                                                                           |
+| **E-Waste Recovery Systems (ERS)**                | Free recycling events across Northern California; drive-through drop-offs in West Sacramento and Rancho Cordova.                                                                                                                                                                                                                                                                                                                                                                                                            | ewaste411.com                                                                                                                                                   |
+| **Tri Valley Recycling** (Stockton)               | Free pickup with 3+ qualifying items, Sacramento metro — a pickup partner for bulk loads rather than an event host.                                                                                                                                                                                                                                                                                                                                                                                                         | trivalleyrecycling.com                                                                                                                                          |
+| **Electronic Recycling Association**              | National nonprofit fundraiser program: bins, staff, removal, per-pound rebate, no cost to host. Check they actually serve the Sierra foothills before relying on them.                                                                                                                                                                                                                                                                                                                                                      | electronicreusingassociation.us                                                                                                                                 |
+
+**How a day should run for a repair-and-reuse shop:** advertise 30+ days out
+(partner files the NOI); intake table up front where we triage — working or
+fixable units go to our van, everything else rolls to the partner's truck;
+separate taped-terminal bins for lithium if the partner accepts it, otherwise a
+county-HHW handout; receipts on the spot (acknowledgment template, no values);
+weigh-in ticket from the partner is our fundraising record.
 
 ### What still applies even on Path 1
 
