@@ -1,0 +1,416 @@
+/* GearDonation — the "give gear" half of /donate. The money half is the
+   Notion page itself (JP edits it in Notion); these React pieces wrap it:
+   a teaser chip above the Notion title and this full section below the body.
+   Width matches --notion-max-width (720px) so it reads as one page. Text
+   colors stay on the --te-bark scale so dark mode inverts them correctly. */
+
+/* ── Teaser chip (above the Notion title) ─────────────────────────── */
+
+.teaserWrap {
+  width: 100%;
+  max-width: 720px;
+  margin: 1.5rem auto 0;
+  padding: 0 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.teaser {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 1.1rem 0.6rem 0.85rem;
+  border-radius: 100px;
+  background: var(--te-teal-50);
+  border: 1px solid var(--te-teal-100);
+  color: var(--te-bark-800);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  line-height: 1.3;
+  transition:
+    transform 150ms ease,
+    box-shadow 200ms ease,
+    border-color 200ms ease;
+}
+
+.teaser:hover {
+  transform: translateY(-1px);
+  border-color: var(--te-teal-500);
+  box-shadow: 0 4px 14px rgba(13, 148, 136, 0.15);
+}
+
+.teaser:focus-visible {
+  outline: 3px solid var(--te-teal-500);
+  outline-offset: 2px;
+}
+
+.teaserIcon {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.teaserArrow {
+  color: var(--te-teal-700);
+}
+
+/* ── Section shell ─────────────────────────────────────────────────── */
+
+.section {
+  width: 100%;
+  max-width: 720px;
+  margin: 1rem auto 4rem;
+  padding: 0 1rem;
+  scroll-margin-top: 5rem;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 0 2.5rem;
+  color: var(--te-bark-500);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--te-bark-200);
+}
+
+/* ── Hero card ─────────────────────────────────────────────────────── */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  padding: 2rem 1.5rem;
+  background: linear-gradient(
+    135deg,
+    var(--te-teal-50) 0%,
+    var(--te-warm-50) 100%
+  );
+  border: 1px solid var(--te-teal-100);
+  margin-bottom: 2rem;
+}
+
+.heroIcons {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 1.6rem;
+  line-height: 1;
+  margin-bottom: 1rem;
+}
+
+.heading {
+  font-family: var(--te-font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--te-bark-900);
+  margin: 0 0 0.75rem;
+}
+
+.lede {
+  font-size: 1.08rem;
+  line-height: 1.65;
+  color: var(--te-bark-700);
+  margin: 0 0 1.25rem;
+}
+
+/* ── Typography ────────────────────────────────────────────────────── */
+
+.sub {
+  font-family: var(--te-font-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--te-bark-900);
+  margin: 2.25rem 0 0.85rem;
+}
+
+.body {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--te-bark-700);
+  margin: 0 0 1rem;
+}
+
+.body a,
+.note a,
+.callout a,
+.fine a {
+  color: var(--te-teal-700);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.list {
+  margin: 0 0 1rem;
+  padding-left: 1.25rem;
+  color: var(--te-bark-700);
+  line-height: 1.7;
+}
+
+.list li {
+  margin-bottom: 0.4rem;
+}
+
+.note {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--te-bark-500);
+  margin: 0.5rem 0 0;
+}
+
+/* ── Buttons ───────────────────────────────────────────────────────── */
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.75rem;
+  margin: 0.5rem 0 0;
+}
+
+.btnPrimary,
+.btnSecondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  padding: 0.9rem 1.75rem;
+  border-radius: 100px;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background 200ms ease,
+    transform 150ms ease,
+    box-shadow 200ms ease;
+}
+
+.btnPrimary {
+  background: var(--te-teal-600);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(13, 148, 136, 0.18);
+}
+
+.btnPrimary:hover {
+  background: var(--te-teal-700);
+  transform: translateY(-1px);
+}
+
+.btnPrimary:focus-visible {
+  outline: 3px solid var(--te-teal-500);
+  outline-offset: 2px;
+}
+
+.btnSecondary {
+  background: var(--te-white);
+  color: var(--te-bark-800);
+  border: 1px solid var(--te-bark-200);
+}
+
+.btnSecondary:hover {
+  background: var(--te-cream-dark);
+  transform: translateY(-1px);
+}
+
+.btnSecondary:focus-visible {
+  outline: 3px solid var(--te-teal-500);
+  outline-offset: 2px;
+}
+
+/* ── "What we take" grid ───────────────────────────────────────────── */
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  margin: 0 0 0.75rem;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding: 0.9rem 1rem;
+  border-radius: 12px;
+  background: var(--te-white);
+  border: 1px solid var(--te-bark-200);
+  transition:
+    border-color 200ms ease,
+    transform 150ms ease;
+}
+
+.item:hover {
+  border-color: var(--te-teal-500);
+  transform: translateY(-1px);
+}
+
+.itemIcon {
+  font-size: 1.4rem;
+  line-height: 1.2;
+  flex-shrink: 0;
+}
+
+.itemTitle {
+  display: block;
+  font-weight: 700;
+  color: var(--te-bark-900);
+  margin-bottom: 0.15rem;
+}
+
+.itemText {
+  display: block;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--te-bark-600);
+}
+
+/* ── Steps ─────────────────────────────────────────────────────────── */
+
+.steps {
+  counter-reset: step;
+  list-style: none;
+  margin: 0 0 1.25rem;
+  padding: 0;
+}
+
+.steps li {
+  counter-increment: step;
+  position: relative;
+  padding-left: 2.75rem;
+  margin-bottom: 0.9rem;
+  line-height: 1.6;
+  color: var(--te-bark-700);
+}
+
+.steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0.05rem;
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 50%;
+  background: var(--te-teal-600);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Callouts ──────────────────────────────────────────────────────── */
+
+.callout {
+  border-radius: 14px;
+  padding: 1.25rem 1.25rem 0.9rem;
+  margin: 1.5rem 0;
+  border: 1px solid;
+  line-height: 1.65;
+  color: var(--te-bark-700);
+}
+
+.callout p,
+.callout ul {
+  margin: 0 0 0.6rem;
+}
+
+.callout ul {
+  padding-left: 1.2rem;
+}
+
+.calloutTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--te-bark-900);
+  margin: 0 0 0.6rem;
+}
+
+.calloutSafety {
+  background: var(--te-amber-50);
+  border-color: var(--te-amber-100);
+}
+
+.calloutInfo {
+  background: var(--te-warm-50);
+  border-color: var(--te-warm-200);
+}
+
+/* ── Fine print ────────────────────────────────────────────────────── */
+
+.fine {
+  margin-top: 2.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--te-bark-200);
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--te-bark-500);
+}
+
+/* ── Responsive ────────────────────────────────────────────────────── */
+
+@media (min-width: 560px) {
+  .actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .hero {
+    padding: 2.5rem 2.25rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .heading {
+    font-size: 2.4rem;
+  }
+
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+:global(.dark-mode) .hero {
+  background: linear-gradient(
+    135deg,
+    var(--te-teal-50) 0%,
+    var(--te-cream) 100%
+  );
+}
+
+:global(.dark-mode) .btnPrimary,
+:global(.dark-mode) .teaser:hover {
+  box-shadow: none;
+}
+
+/* --te-amber-50 / --te-warm-* are not remapped under .dark-mode, so the
+   callouts would stay light while their text flips light. Tint instead. */
+:global(.dark-mode) .calloutSafety {
+  background: rgba(217, 119, 6, 0.12);
+  border-color: rgba(217, 119, 6, 0.4);
+}
+
+:global(.dark-mode) .calloutInfo {
+  background: var(--te-cream-dark);
+  border-color: var(--te-bark-200);
+}

@@ -28,6 +28,7 @@ import { findSpanishBlockIds } from '@/lib/extract-spanish-blocks'
 import { mapImageUrl } from '@/lib/map-image-url'
 import { getCanonicalPageUrl, mapPageUrl } from '@/lib/map-page-url'
 import {
+  DONATE_PAGE,
   getRelatedGuides,
   GUIDE_BY_ID,
   isGuidePage,
@@ -37,6 +38,7 @@ import { searchNotion } from '@/lib/search-notion'
 import { useDarkMode } from '@/lib/use-dark-mode'
 
 import { Breadcrumb, buildGuideBreadcrumb } from './Breadcrumb'
+import { GearDonation, GearTeaser } from './donate/GearDonation'
 import { GitHubShareButton } from './GitHubShareButton'
 import { Loading } from './Loading'
 import { Page404 } from './Page404'
@@ -242,6 +244,9 @@ export function NotionPage({
     block?.type === 'page' && block?.parent_table === 'collection'
   const isGuide = isGuidePage(pageId)
   const isResources = isResourcesPage(pageId)
+  // /donate is a hybrid: Notion body = "give money" (edited in Notion);
+  // React wraps it with the "give gear" teaser + section.
+  const isDonate = pageId?.replaceAll('-', '') === DONATE_PAGE
   const guideMeta = pageId
     ? GUIDE_BY_ID.get(pageId.replaceAll('-', ''))
     : undefined
@@ -400,11 +405,14 @@ export function NotionPage({
 
       {isResources && <ResourcesToolbar />}
 
+      {isDonate && <GearTeaser />}
+
       <NotionRenderer
         bodyClassName={cs(
           styles.notion,
           pageId === site.rootNotionPageId && 'index-page',
-          isResources && 'resources-page'
+          isResources && 'resources-page',
+          isDonate && 'donate-page'
         )}
         darkMode={isDarkMode}
         components={notionRendererComponents}
@@ -428,6 +436,8 @@ export function NotionPage({
       {isGuide && relatedGuides.length > 0 && (
         <RelatedGuides guides={relatedGuides} />
       )}
+
+      {isDonate && <GearDonation />}
 
       <GitHubShareButton />
     </>

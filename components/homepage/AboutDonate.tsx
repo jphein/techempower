@@ -18,7 +18,18 @@ export function AboutDonate() {
           use programs like Lifeline, CalFresh, and EV rebates &mdash; help
           that&rsquo;s already out there, just hard to find. We don&rsquo;t take
           a cent from the programs we list. Your tax-deductible donation keeps
-          every guide free for everyone.
+          every guide free for everyone. Got old electronics, batteries, or an
+          EV instead of cash?{' '}
+          <Link
+            href='/donate#gear'
+            onClick={() =>
+              trackEvent('gear_donate_intent', {
+                location: 'homepage_about_section'
+              })
+            }
+          >
+            We take those too.
+          </Link>
         </p>
 
         <div className={styles.actions}>

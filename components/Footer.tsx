@@ -38,6 +38,9 @@ export function FooterImpl() {
           <Link href='/donate' className={styles.link}>
             Donate
           </Link>
+          <Link href='/donate#gear' className={styles.link}>
+            Donate electronics
+          </Link>
           <Link href='/non-discrimination-policy' className={styles.link}>
             Non-Discrimination Policy
           </Link>
