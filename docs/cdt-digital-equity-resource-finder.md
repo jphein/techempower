@@ -1,6 +1,6 @@
 # CDT Digital Equity Resource Finder — listing TechEMPOWER
 
-_Status 2026-09-05: **not yet listed.** CDT (Office of Broadband and Digital
+_Status 2026-09-05: **submitted by JP 2026-09-05; awaiting CDT review.** CDT (Office of Broadband and Digital
 Literacy) emailed twice — Anh Q. Nguyen 2026-08-14, Luke Ivazian 2026-08-28 —
 after JP signed up for the Digital Inclusion Partnership Resource, asking us to
 add the org. Both emails are starred in jp@techempower.org._
