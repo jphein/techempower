@@ -87,8 +87,12 @@ export function Breadcrumb({ items }: BreadcrumbProps) {
 /**
  * Build a breadcrumb items array for a guide page.
  *
- * Returns: [Home (/), Guides (/), Current Title (no link)]
+ * Returns: [Home (/), Guides (/guides), Current Title (no link)]
  */
 export function buildGuideBreadcrumb(title: string): BreadcrumbItem[] {
-  return [{ label: 'Home', href: '/' }, { label: 'Guides' }, { label: title }]
+  return [
+    { label: 'Home', href: '/' },
+    { label: 'Guides', href: '/guides' },
+    { label: title }
+  ]
 }

@@ -34,7 +34,7 @@ export function Page404({ site }: types.PageProps) {
           </ul>
 
           <p>
-            Still stuck? Call <strong>2-1-1</strong> from any phone for free
+            Still stuck? Call <strong>2-1-1 </strong>from any phone for free
             help finding food, housing, healthcare, and other local resources.
           </p>
         </main>

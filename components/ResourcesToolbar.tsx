@@ -57,6 +57,7 @@ export function ResourcesToolbar() {
 
   // Extract available categories + per-category counts from cards on mount.
   React.useEffect(() => {
+    hideEmptyProperties()
     setCategoryCounts(scanCategoryCounts())
     setTotalCount(countVisibleCards())
   }, [])
@@ -77,7 +78,7 @@ export function ResourcesToolbar() {
 
     // Filter: show/hide cards
     for (const card of cards) {
-      const allText = card.textContent?.toLowerCase() || ''
+      const allText = cardSearchText(card).toLowerCase()
 
       const matchesSearch = !lowerQuery || allText.includes(lowerQuery)
 
@@ -121,6 +122,7 @@ export function ResourcesToolbar() {
   // Re-scan categories when the view changes (tabs switch = DOM mutation)
   React.useEffect(() => {
     const observer = new MutationObserver(() => {
+      hideEmptyProperties()
       const next = scanCategoryCounts()
       setCategoryCounts((prev) => (sameCounts(prev, next) ? prev : next))
       setTotalCount(countVisibleCards())
@@ -299,6 +301,45 @@ function scanCategoryCounts(): Record<string, number> {
     }
   }
   return counts
+}
+
+// Issue #126 (B3): ~107 rows carry the literal string "No content" in their
+// Value property (an old automation wrote it), and react-notion-x renders it
+// as a card line. Hide those — and genuinely empty properties — client-side.
+// We set inline display rather than remove the node: React owns these
+// elements, and removing them would break its next reconcile of the grid.
+const EMPTY_PROPERTY_RE = /^(?:no content)?$/i
+const EMPTY_PROPERTY_ATTR = 'data-te-empty'
+
+function hideEmptyProperties(): void {
+  const props = document.querySelectorAll<HTMLElement>(
+    `.resources-page .notion-collection-card-property:not([${EMPTY_PROPERTY_ATTR}])`
+  )
+  for (const prop of props) {
+    // The title property is never empty and never hidden.
+    if (prop.querySelector('.notion-page-title')) continue
+    const text = prop.textContent?.trim() ?? ''
+    if (EMPTY_PROPERTY_RE.test(text)) {
+      prop.setAttribute(EMPTY_PROPERTY_ATTR, '')
+      prop.style.display = 'none'
+    }
+  }
+}
+
+/**
+ * Text the search box matches against: every visible property of the card.
+ * Hidden "No content" lines stay out, so searching "content" doesn't light
+ * up a hundred cards. Falls back to the whole card text if react-notion-x
+ * ever stops rendering per-property wrappers.
+ */
+function cardSearchText(card: HTMLElement): string {
+  const props = [
+    ...card.querySelectorAll<HTMLElement>(
+      `.notion-collection-card-property:not([${EMPTY_PROPERTY_ATTR}])`
+    )
+  ]
+  if (props.length === 0) return card.textContent ?? ''
+  return props.map((p) => p.textContent ?? '').join(' ')
 }
 
 function countVisibleCards(): number {

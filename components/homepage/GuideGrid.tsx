@@ -2,7 +2,9 @@ import Link from 'next/link'
 
 import styles from './GuideGrid.module.css'
 
-const guides = [
+// Homepage copy for the eight guides (friendlier than the GUIDE_METADATA
+// titles used for breadcrumbs). /guides renders the same list via GuideCards.
+export const GUIDE_CARDS = [
   {
     slug: 'how-to-use-techempower',
     emoji: '\u2600\uFE0F',
@@ -55,6 +57,31 @@ const guides = [
   }
 ] as const
 
+/** The bare card list — shared by the homepage section and /guides. */
+export function GuideCards() {
+  return (
+    <ul className={styles.grid}>
+      {GUIDE_CARDS.map((guide) => (
+        <li key={guide.slug}>
+          <Link
+            href={`/guides/${guide.slug}`}
+            className={styles.card}
+            aria-label={`${guide.title} — ${guide.summary}`}
+          >
+            <span className={styles.cardEmoji} aria-hidden='true'>
+              {guide.emoji}
+            </span>
+            <div className={styles.cardBody}>
+              <h3 className={styles.cardTitle}>{guide.title}</h3>
+              <p className={styles.cardSummary}>{guide.summary}</p>
+            </div>
+          </Link>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
 export function GuideGrid() {
   return (
     <section
@@ -72,25 +99,7 @@ export function GuideGrid() {
           stuck.
         </p>
 
-        <ul className={styles.grid}>
-          {guides.map((guide) => (
-            <li key={guide.slug}>
-              <Link
-                href={`/guides/${guide.slug}`}
-                className={styles.card}
-                aria-label={`${guide.title} — ${guide.summary}`}
-              >
-                <span className={styles.cardEmoji} aria-hidden='true'>
-                  {guide.emoji}
-                </span>
-                <div className={styles.cardBody}>
-                  <h3 className={styles.cardTitle}>{guide.title}</h3>
-                  <p className={styles.cardSummary}>{guide.summary}</p>
-                </div>
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <GuideCards />
       </div>
     </section>
   )

@@ -28,6 +28,7 @@ import { findSpanishBlockIds } from '@/lib/extract-spanish-blocks'
 import { mapImageUrl } from '@/lib/map-image-url'
 import { getCanonicalPageUrl, mapPageUrl } from '@/lib/map-page-url'
 import {
+  ABOUT_PAGE,
   DONATE_PAGE,
   getRelatedGuides,
   GUIDE_BY_ID,
@@ -37,6 +38,7 @@ import {
 import { searchNotion } from '@/lib/search-notion'
 import { useDarkMode } from '@/lib/use-dark-mode'
 
+import { AboutOrgFacts } from './about/AboutOrgFacts'
 import { Breadcrumb, buildGuideBreadcrumb } from './Breadcrumb'
 import { GearDonation, GearTeaser } from './donate/GearDonation'
 import { GitHubShareButton } from './GitHubShareButton'
@@ -247,6 +249,9 @@ export function NotionPage({
   // /donate is a hybrid: Notion body = "give money" (edited in Notion);
   // React wraps it with the "give gear" teaser + section.
   const isDonate = pageId?.replaceAll('-', '') === DONATE_PAGE
+  // /about is the same shape: Notion body = founder story; React adds the
+  // organization facts + contact anchor below it.
+  const isAbout = pageId?.replaceAll('-', '') === ABOUT_PAGE
   const guideMeta = pageId
     ? GUIDE_BY_ID.get(pageId.replaceAll('-', ''))
     : undefined
@@ -438,6 +443,8 @@ export function NotionPage({
       )}
 
       {isDonate && <GearDonation />}
+
+      {isAbout && <AboutOrgFacts />}
 
       <GitHubShareButton />
     </>
