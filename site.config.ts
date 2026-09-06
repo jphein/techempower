@@ -82,6 +82,9 @@ export default siteConfig({
     '/lease-ev-discounts-jan-2025-ride-and-drive-clean':
       '18aa4ee69520811ba9c8e479e0540ad7',
     '/github-student-developer-pack': '309a4ee69520817aaa23ebc00eebbe32',
+    // Renamed 2026-09-05 from the Canva-template stub to a real article.
+    '/a-to-z-master-template-mountain-bounty-farm':
+      '94cf131c4e1b41e9812e8558fc4b1a1f',
 
     // Sub-pages of resources (not rows in the Resources DB, so not in the
     // slug lockfile). Linked from the SGIP and Free Fiber resource pages;

@@ -200,7 +200,13 @@ export async function getPage(
   // --- Fix stale collection view filters for Category (enum_contains) ---
   // Notion's collection query index can be stale, so we re-run filters
   // client-side against the actual block data and patch collection_query.
-  if (options?.enableGalleryCovers) {
+  // Runs for every page, not just /resources: guide pages embed *linked*
+  // views of the Resources collection whose filter lives in
+  // `format.property_filters` (not `query2.filter`), and Notion's query for a
+  // linked view returns the whole collection — /guides/ev-incentives shipped
+  // all 256 cards (2 MB) instead of the ~15 "Car" ones (issue #126, C4).
+  const patchedCollections = new Set<string>()
+  {
     const collectionQuery = (recordMap as any).collection_query
     if (collectionQuery) {
       // Build the allBlocks map ONCE for the whole record map, not per
@@ -244,12 +250,31 @@ export async function getPage(
             (viewData as any)?.value?.value ?? (viewData as any)?.value
           if (!view) continue
 
-          const query2 = view.query2
-          if (!query2?.filter) continue
+          const query2 = view.query2 ?? {}
 
-          const topFilter = query2.filter
-          const outerFilters: any[] = topFilter.filters
-          if (!outerFilters?.length) continue
+          // Normalize the two places Notion stores a view filter into the
+          // grouped shape blockMatchesFilter expects:
+          //   query2.filter            — { operator, filters: [group|leaf…] }
+          //   format.property_filters  — [{ id, filter: leaf }…]  (linked views)
+          // A leaf (has `.property`) at the top level is wrapped in its own
+          // AND group so flat filters like the "Seniors" view also apply.
+          let topFilter: any = query2.filter
+          if (
+            !topFilter?.filters?.length &&
+            Array.isArray(view.format?.property_filters) &&
+            view.format.property_filters.length > 0
+          ) {
+            topFilter = {
+              operator: 'and',
+              filters: view.format.property_filters
+                .map((p: any) => p?.filter)
+                .filter(Boolean)
+            }
+          }
+          if (!topFilter?.filters?.length) continue
+          const outerFilters: any[] = topFilter.filters.map((f: any) =>
+            f?.property ? { operator: 'and', filters: [f] } : f
+          )
 
           // Check if this view has enum_contains or is_not_empty filters on Category
           const hasCategoryFilter = outerFilters.some((group: any) => {
@@ -311,7 +336,7 @@ export async function getPage(
           })
 
           // Apply sort if defined
-          const sorts: any[] = query2.sort || []
+          const sorts: any[] = query2.sort ?? []
           if (sorts.length > 0) {
             matchedIds.sort((a, b) => {
               for (const sortDef of sorts) {
@@ -340,6 +365,7 @@ export async function getPage(
 
           // Patch the collection_query results
           if (collectionQuery[collectionId]?.[viewId]) {
+            patchedCollections.add(collectionId)
             const target = collectionQuery[collectionId][viewId]
             if (target.collection_group_results) {
               target.collection_group_results.blockIds = matchedIds
@@ -348,6 +374,36 @@ export async function getPage(
             }
           }
         }
+      }
+    }
+  }
+
+  // Drop collection rows no view on this page shows. After the filter pass a
+  // guide's linked gallery lists ~15 blockIds, but the recordMap still carries
+  // all 256 row blocks (that's the 2 MB). /resources is excluded: its views are
+  // the whole catalog and its search/filter toolbar greps every card.
+  if (!options?.enableGalleryCovers && patchedCollections.size > 0) {
+    const collectionQuery = (recordMap as any).collection_query ?? {}
+    const shown = new Map<string, Set<string>>()
+    for (const collectionId of patchedCollections) {
+      const ids = new Set<string>()
+      for (const q of Object.values(collectionQuery[collectionId] ?? {})) {
+        const r: any = (q as any)?.collection_group_results ?? q
+        for (const id of r?.blockIds ?? []) ids.add(id)
+        for (const g of r?.groupResults ?? [])
+          for (const id of g?.blockIds ?? []) ids.add(id)
+      }
+      shown.set(collectionId, ids)
+    }
+    for (const [blockId, blockData] of Object.entries(
+      recordMap.block as Record<string, any>
+    )) {
+      const block =
+        (blockData as any)?.value?.value ?? (blockData as any)?.value
+      if (block?.parent_table !== 'collection') continue
+      const ids = shown.get(block.parent_id)
+      if (ids && !ids.has(blockId) && blockId !== pageId) {
+        delete (recordMap.block as Record<string, any>)[blockId]
       }
     }
   }
