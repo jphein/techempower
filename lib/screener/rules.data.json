@@ -2261,7 +2261,7 @@
     },
     "noteParams": {
       "cccc-covers": {
-        "amountMin": 40,
+        "amountMin": 50,
         "amountMax": 500
       }
     },
@@ -2270,11 +2270,11 @@
       "es": "Children's Community Chest (fondos de emergencia para niños)"
     },
     "value": {
-      "en": "A last-resort emergency grant of $40–$500 for a child (0–18) in Nevada or Sierra County — for rent, utilities, car repairs, medical bills, counseling, sports, or summer camp. A public or nonprofit agency has to request it for your family.",
-      "es": "Una subvención de emergencia de último recurso de $40–$500 para un niño (0–18) en el condado de Nevada o Sierra — para renta, servicios, reparaciones del auto, facturas médicas, consejería, deportes o campamento de verano. Una agencia pública o sin fines de lucro debe solicitarla en nombre de su familia."
+      "en": "A last-resort emergency grant of $50–$500 for a child (0–18) in Nevada or Sierra County — for rent, utilities, car repairs, medical bills, counseling, sports, or summer camp. A public or nonprofit agency has to request it for your family.",
+      "es": "Una subvención de emergencia de último recurso de $50–$500 para un niño (0–18) en el condado de Nevada o Sierra — para renta, servicios, reparaciones del auto, facturas médicas, consejería, deportes o campamento de verano. Una agencia pública o sin fines de lucro debe solicitarla en nombre de su familia."
     },
     "apply": {
-      "url": "https://www.sncs.org/resources.html",
+      "url": "https://www.sncs.org/giving",
       "phone": {
         "en": "Sierra Nevada Children's Services (530) 272-8866",
         "es": "Sierra Nevada Children's Services (530) 272-8866"
@@ -2286,16 +2286,28 @@
     },
     "provenance": [
       {
-        "claim": "Children's Community Chest: last-resort emergency fund for children 0-18 in Nevada and Sierra Counties, CA; awards $40-$500 for rent, utilities, car repairs, medical bills, counseling, sports, or summer camp; requests must be submitted by a public or nonprofit agency (not the family directly) to cccrequests@sncs.org with documentation; run by Sierra Nevada Children's Services, (530) 272-8866.",
-        "source": "https://www.sncs.org/resources.html",
-        "verifiedAt": "2026-05-30",
-        "via": "wave-2 batch-C draft (nebula) — the $40–$500 award range + 0–18 age are DB row [065]-sourced (techempower.org/resources, Verified 2026-05-30); DB-sourced-pending-re-pin to a primary (sncs.org bot-walls live fetchers). adversarial verification 2026-07-04 (oracle) corroborated program existence, the agency-referral rule, the cccrequests@sncs.org address, and the phone via the 2025-08-31 Wayback snapshot (companion row) — amount/age NOT independently re-pinned"
+        "claim": "Children's Community Chest (live sncs.org/giving, verbatim 2026-09-05): 'This program offers discretionary funds to families with an urgent need when there are no other community resources in Nevada and Sierra Counties available. Awarded funds can range from $50.00 to $500.00 and we strive for same day turnaround, if possible. A need may relate to health, transportation, enrichment, or items that directly benefit the physical or emotional needs of the child. In addition, the Fund may support a child's participation in an activity such as sports or dance.' Page carries a 'Refer a Family' button (agency referral form) and the SNCS phone (530) 272-8866 in the site footer.",
+        "source": "https://www.sncs.org/giving",
+        "verifiedAt": "2026-09-05",
+        "via": "freshness re-verify 2026-09-05 (nebula, browser-UA curl) — sncs.org was rebuilt on Wix in 2026: the old /resources.html now returns a Wix 400 and the old /PDFs/... URLs 404, so the program moved to /giving (apply.url updated). AMOUNT CHANGED $40→$50 minimum per this live page; NOTE the org's own Guidelines PDF (ModDate 2025-02-25, companion row) still says '$40.00 to 500.00' — the live page is the more recent org statement and is what the card shows. 0–18 age is NOT on this page (corroborated only by the 211 companion row); rent/utilities/car-repair/medical/counseling/camp specifics come from the Wayback + 211 companion rows and the PDF's documentation examples ('utility bill, store quote, notice to vacate')"
       },
       {
-        "claim": "2025-08-31 Wayback snapshot of sncs.org/resources.html confirms the Children's Community Chest: a last-resort emergency fund administered by Sierra Nevada Children's Services; requests must be submitted by a public or nonprofit agency (not the family) to cccrequests@sncs.org with documentation; phone (530) 272-8866.",
+        "claim": "2025-08-31 Wayback snapshot of the pre-redesign sncs.org/resources.html (verbatim): 'A variety of hardships are funded, such as: emergency rental assistance, transportation needs, utility payment to avoid shut-off, car repairs, medical related costs, counseling services and summer camps. This is truly a funding of last-resort. Requests for Children's Community Chest must be submitted by local public and nonprofit agencies and may be emailed to cccrequests@sncs.org.' Phone (530) 272-8866 on the same page.",
         "source": "https://web.archive.org/web/20250831072118/https://www.sncs.org/resources.html",
-        "verifiedAt": "2026-07-04",
-        "via": "wave-2 batch-C — Wayback Machine snapshot independently confirms program existence, the agency-referral rule, cccrequests@sncs.org, and (530) 272-8866 (live sncs.org bot-walls every fetcher); adversarial verification 2026-07-04 (oracle)"
+        "verifiedAt": "2026-09-05",
+        "via": "wave-2 batch-C — Wayback Machine snapshot independently confirms program existence, the agency-referral rule, cccrequests@sncs.org, and (530) 272-8866; adversarial verification 2026-07-04 (oracle); snapshot re-fetched and re-read 2026-09-05 (nebula) — still serves, text unchanged; no dollar range or age appears in this snapshot"
+      },
+      {
+        "claim": "SNCS 'Children's Community Chest Program Guidelines' + 'Request for Funds' form (org-authored PDF, ModDate 2025-02-25, published by 211 Connecting Point as 'Children's Community Chest Application 2026'): 'Email application to cccrequests@sncs.org or fax to 530 272-1354, include supporting documentation'; 'A Request for Funds form will be completed by the referring individual/organization'; 'A parent/guardian may not self-certify a financial need'; 'Documentation supporting the request is needed, i.e. utility bill, store quote, notice to vacate'; 'Children's Community Chest allocations may range from $40.00 to 500.00'; 'Community Chest is a fund of last resort'; at least three other sources must have been contacted first.",
+        "source": "https://webapp.icarol.com/secure/Resources/Attachments/2265_66409567_ef7a6bd6749842e2bc03303c7a266380.pdf",
+        "verifiedAt": "2026-09-05",
+        "via": "freshness re-verify 2026-09-05 (nebula, pdftotext) — the org's own guidelines document, reached via the 211 listing attachment because sncs.org's /PDFs/Forms/Community_Chest_Application.pdf now 404s; confirms the no-self-certify rule, the request email, last-resort + documentation requirements. Its $40 floor CONFLICTS with the live /giving page's $50 — PDF is dated 2025-02, live page is current; carried here so the discrepancy is visible"
+      },
+      {
+        "claim": "211 Connecting Point (iCarol) listing 'CHILDREN'S COMMUNITY CHEST - SNCS' (verbatim): 'emergency funding to meet the needs of children ages 0-18 in Nevada and Sierra County families when no other community support is available. Funds are intended for urgent situations and must be requested by a public or nonprofit agency. Covered areas include Nevada County and the Sierra County portions of the Tahoe-Truckee region. Support may include: Emergency rental assistance; Transportation or car repair costs; Utility payments to prevent shut-off; Medical or counseling expenses; Summer camp enrollment.' Program phone 530-272-8866; requests emailed to cccrequests@sncs.org; program web page listed as https://www.sncs.org/giving.",
+        "source": "https://www.icarol.info/ResourceView2.aspx?org=2265&agencynum=66409567",
+        "verifiedAt": "2026-09-05",
+        "via": "freshness re-verify 2026-09-05 (nebula, curl; Cloudflare-obfuscated emails decoded) — 211 listing quoting the org; the ONLY current source for the 0–18 age range (ageAnyMax 17 retained on this basis) and it independently points at /giving as the program page. Corroboration only — the org's own page + PDF are the primary rows"
       }
     ]
   },
@@ -3376,10 +3388,10 @@
       "es": "Viaje médico gratis (no de emergencia) cuando no puede pagar para llegar a la atención — tarjetas de gasolina, boletos de autobús y tren, o vuelos comerciales (más un acompañante cuando sea médicamente necesario). Para pacientes con ingresos iguales o menores al 300% de la guía federal de pobreza."
     },
     "apply": {
-      "url": "https://www.mercymedical.org/request-assistance",
+      "url": "https://www.mercymedical.org/patients",
       "phone": {
-        "en": "Request help at mercymedical.org/request-assistance",
-        "es": "Solicite ayuda en mercymedical.org/request-assistance"
+        "en": "Mercy Medical Angels (800) 296-3797, or start a request at mercymedical.org/patients",
+        "es": "Mercy Medical Angels (800) 296-3797, o inicie una solicitud en mercymedical.org/patients"
       },
       "local": {
         "en": "Apply 7-45 days before your appointment (3-4 weeks ahead is ideal). You, a social worker, or a case manager can submit the request. Gas cards and air travel are nationwide; ground-network service is strongest in the Mid-Atlantic.",
@@ -3388,16 +3400,22 @@
     },
     "provenance": [
       {
-        "claim": "Mercy Medical Angels is a national 501(c)(3) arranging FREE non-emergency medical travel for patients who can't afford it: gas cards for driving yourself, bus and Amtrak tickets, coach commercial airline tickets (plus one escort when medically necessary), and volunteer-pilot flights. Qualify generally at household income at or below 300% of the Federal Poverty Guidelines; medically necessary U.S. trip (ground 50+ miles one-way or 100+/month; air 200+ miles); able to travel without medical supervision. Apply at least 7 days but no more than 45 days before the appointment (3-4 weeks ideal).",
-        "source": "https://www.mercymedical.org/request-assistance",
-        "verifiedAt": "2026-05-30",
-        "via": "wave-2 ready-set draft (nebula) — income (300% FPG) + distance rules + apply-window from DB row [202] (Verified 2026-05-30); the live request-assistance page is a JS portal (numbers not in static body) + wave-2 final adversarial verification 2026-07-04 (oracle) — REQUIRED EDIT: proxyReasonKey suppresses the computed income cell so the unpinnable 300% cap is NOT rendered as a number (cal-grants/heehra pattern)"
+        "claim": "Mercy Medical Angels patient eligibility page (verbatim 2026-09-05): 'You may qualify for free medical transportation if: You're traveling for medically necessary care or clinical trials; You cannot afford the cost of travel on your own; You're able to travel without medical supervision (with or without a caregiver); You're traveling 50+ miles one way or totaling 100 or miles per month (ground) or 200+ miles (air); Your appointment is scheduled within the next 45 days; You are based in the U.S. and traveling to a U.S. facility.' FAQ on the same page: 'Financial need (your household income is at or below 300% of the Federal Poverty Guidelines based on household size)' and 'Advance notice (minimum of 7-10 days before your appointment, up to 45 days in advance)'. Services are gas cards, bus and train tickets, commercial airline tickets (passenger pays airline taxes/fees) and volunteer-pilot flights; 'One caregiver may be eligible to travel with the patient, depending on availability and medical need.'",
+        "source": "https://www.mercymedical.org/patients/eligibility",
+        "verifiedAt": "2026-09-05",
+        "via": "freshness re-verify 2026-09-05 (nebula, browser-UA curl; site rebuilt on Webflow, numbers now in static HTML) — 300% FPG + 50/100/200-mile rules + 45-day window + no-medical-supervision all CONFIRMED UNCHANGED; the old /request-assistance URL now 301s to a FAQ item, so apply.url moved to /patients (patient hub with the 'Start Your Travel Request' button → travel.mercymedical.org/request). Caveat carried: 'starting July 1, 2026, patients will not be required to submit financials for Angel Flight Mid-Atlantic trip requests' — Mid-Atlantic pilot flights only, so the 300% test still governs the gas-card/commercial-air services a Nevada County patient can reach. proxyReasonKey retained so the 300% cap is not rendered as a computed dollar figure (cal-grants/heehra pattern)"
       },
       {
-        "claim": "Service-area nuance: Mercy Medical Angels home page (verbatim, 2026-07-04): '...commercial tickets, ground transportation, or even gas cards nationwide...' with volunteer-pilot flight missions concentrated in the Mid-Atlantic. For a Nevada County (CA) patient the reachable services are gas cards + commercial air (national); the Mid-Atlantic ground/pilot network is regional. Encoded jurisdiction 'federal' with the regional caveat carried in the note.",
-        "source": "https://www.mercymedical.org/request-assistance",
-        "verifiedAt": "2026-07-04",
-        "via": "wave-2 ready-set draft (nebula, browser-UA curl) — 'nationwide' gas cards/air + Mid-Atlantic ground focus verbatim from the home-page hero; cited to the durable /request-assistance program page because the bare origin fails the no-bare-origin validator (silversneakers pattern); CA-served note retained + wave-2 final adversarial verification 2026-07-04 (oracle)"
+        "claim": "Service-area nuance, Mercy Medical Angels patient page (verbatim 2026-09-05): 'We Find the Best Travel Option: Volunteer pilot flights in the Mid-Atlantic, or commercial airfare, ground transportation, or gas cards nationwide.' Home page hero (same day): 'From angel flights in the Mid-Atlantic region to commercial tickets, ground transportation, or even gas cards nationwide.' Ground page: 'Gas cards can be used at any gas station nationwide'; rideshare 'Available in Virginia (Virginia Beach, Norfolk, Chesapeake, Portsmouth, and Suffolk)' only. For a Nevada County (CA) patient the reachable services are gas cards, bus/train and commercial air (national); the pilot network is regional. Encoded jurisdiction 'federal' with the regional caveat carried in the note.",
+        "source": "https://www.mercymedical.org/patients",
+        "verifiedAt": "2026-09-05",
+        "via": "wave-2 ready-set draft (nebula) + adversarial verification 2026-07-04 (oracle); re-verified 2026-09-05 (nebula, browser-UA curl) — 'nationwide' wording unchanged, now cited to the /patients page where it appears verbatim (the bare origin fails the no-bare-origin validator; silversneakers pattern)"
+      },
+      {
+        "claim": "Apply window + phone, Mercy Medical Angels 'How it works' FAQ (verbatim 2026-09-05): 'we can only accept requests with a minimum of 7 days before your appointment and a maximum of 45 days before your appointment. Ideal timing is 3-4 weeks in advance'; 'If your appointment is urgent (within 7-10 days), please call us directly at 800-296-3797 during business hours.' Professionals page: 'you can request transportation for patients who qualify' (social workers / case managers may submit).",
+        "source": "https://www.mercymedical.org/patients/how-it-works",
+        "verifiedAt": "2026-09-05",
+        "via": "freshness re-verify 2026-09-05 (nebula, browser-UA curl) — pins the 7–45-day window and the 3–4-week ideal already on the card, plus the (800) 296-3797 phone newly added to apply.phone; the professionals eligibility page separately says 'at least 10 days' for referrer-submitted requests — the card keeps the patient-facing 7-day floor"
       }
     ]
   },
