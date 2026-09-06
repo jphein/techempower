@@ -81,7 +81,14 @@ export default siteConfig({
       '363a4ee6952081dc9cb8e400146a05b7',
     '/lease-ev-discounts-jan-2025-ride-and-drive-clean':
       '18aa4ee69520811ba9c8e479e0540ad7',
-    '/github-student-developer-pack': '309a4ee69520817aaa23ebc00eebbe32'
+    '/github-student-developer-pack': '309a4ee69520817aaa23ebc00eebbe32',
+
+    // Sub-pages of resources (not rows in the Resources DB, so not in the
+    // slug lockfile). Linked from the SGIP and Free Fiber resource pages;
+    // both 404'd until mapped here (2026-09-05 site review, B8).
+    '/sgip-providers-directory': 'a2e32559420f4366b425a257958d94b8',
+    '/the-california-line-extension-program-lep--a-summary':
+      'ccd83578e3994ac7a67e6b51ca7982c7'
   },
 
   // custom navigation
