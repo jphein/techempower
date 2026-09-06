@@ -1,12 +1,7 @@
 import Link from 'next/link'
 
-import resourceSlugLockfile from '@/lib/data/resource-slug-lockfile.json'
-
 import styles from './Hero.module.css'
-
-// Total count of distinct resource pages, computed from the canonical slug
-// lockfile so it stays in sync with /resources without manual edits.
-const RESOURCE_COUNT = Object.keys(resourceSlugLockfile).length
+import { RESOURCE_COUNT_LABEL } from './resourceCount'
 
 export function Hero() {
   return (
@@ -18,7 +13,7 @@ export function Hero() {
 
         <h1 id='hero-heading' className={styles.heading}>
           Free help with{' '}
-          <span className={styles.accent}>internet, phones,</span> food, and
+          <span className={styles.accent}>internet, phones, </span>food, and
           more
         </h1>
 
@@ -36,7 +31,7 @@ export function Hero() {
             </span>
           </Link>
           <Link href='/resources' className={styles.ctaSecondary}>
-            Browse all {RESOURCE_COUNT} programs
+            Browse {RESOURCE_COUNT_LABEL} programs
           </Link>
         </div>
       </div>

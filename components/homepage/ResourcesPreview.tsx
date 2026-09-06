@@ -1,13 +1,7 @@
 import Link from 'next/link'
 
-import resourceSlugLockfile from '@/lib/data/resource-slug-lockfile.json'
-
+import { RESOURCE_COUNT_LABEL } from './resourceCount'
 import styles from './ResourcesPreview.module.css'
-
-// Total count of distinct resource pages (computed from the canonical slug
-// lockfile at build time). Bump grows automatically as new resources are
-// added and the lockfile is regenerated.
-const RESOURCE_COUNT = Object.keys(resourceSlugLockfile).length
 
 export function ResourcesPreview() {
   return (
@@ -21,7 +15,7 @@ export function ResourcesPreview() {
           Search all free programs
         </h2>
         <p className={styles.subtitle}>
-          All <strong>{RESOURCE_COUNT}</strong> free programs, searchable and
+          <strong>{RESOURCE_COUNT_LABEL} free programs</strong>, searchable and
           filterable — by topic, who qualifies, and where you live. Every
           listing is hand-checked against the program&rsquo;s official source.
         </p>
