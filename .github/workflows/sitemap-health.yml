@@ -1,0 +1,94 @@
+name: Sitemap health
+
+# Weekly crawl of every URL in the live sitemap (issue #126, A1c). Any URL
+# that is still non-200 after one cache-busted retry lands in a GitHub issue
+# titled "Sitemap health: N non-200 URLs". An existing open issue with that
+# title prefix is updated instead of duplicated, and closed once the crawl
+# comes back clean.
+#
+# Mondays 13:00 UTC = 06:00 America/Los_Angeles in summer (05:00 in winter).
+
+on:
+  schedule:
+    - cron: '0 13 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: sitemap-health
+  cancel-in-progress: false
+
+jobs:
+  crawl:
+    name: Crawl live sitemap
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # Only scripts/crawl-sitemap.sh is needed; no git ops after checkout.
+          persist-credentials: false
+          sparse-checkout: scripts
+
+      - name: Crawl sitemap (retry non-200s once, cache-busted)
+        id: crawl
+        run: |
+          bash scripts/crawl-sitemap.sh \
+            --base https://techempower.org \
+            --sleep 0.3 \
+            --bust "health-${{ github.run_id }}" \
+            --out "$RUNNER_TEMP/failures.txt"
+          count=$(grep -c . "$RUNNER_TEMP/failures.txt" || true)
+          echo "count=${count:-0}" >> "$GITHUB_OUTPUT"
+
+      - name: Open, update or close the tracking issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          COUNT: ${{ steps.crawl.outputs.count }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          prefix="Sitemap health:"
+          # gh's --search matches loosely; filter on the exact title prefix.
+          existing=$(gh issue list --state open --limit 50 \
+            --search "\"$prefix\" in:title" --json number,title \
+            --jq "[.[] | select(.title | startswith(\"$prefix\"))][0].number // empty")
+          today=$(date -u +%Y-%m-%d)
+
+          if [ "${COUNT:-0}" -eq 0 ]; then
+            echo "sitemap healthy: every URL returned 200"
+            if [ -n "$existing" ]; then
+              gh issue close "$existing" \
+                --comment "Weekly crawl on $today: every sitemap URL returned 200 after retry. Closing. ($RUN_URL)"
+            fi
+            exit 0
+          fi
+
+          title="$prefix $COUNT non-200 URLs"
+          body="$RUNNER_TEMP/body.md"
+          {
+            echo "Weekly sitemap crawl on **$today** found **$COUNT** URL(s) still non-200 after one cache-busted retry (\`?warm=…\`)."
+            echo
+            echo "| status | URL |"
+            echo "| --- | --- |"
+            while read -r code url; do
+              [ -n "$url" ] && echo "| \`$code\` | $url |"
+            done < "$RUNNER_TEMP/failures.txt"
+            echo
+            echo "A \`404\` here is either a real missing page (fix the link / lockfile — \`scripts/build-slug-lockfile.mjs\`) or a Notion outage that outlasted the retry; a \`500\` is a render crash — check the Worker logs for the URL. Poisoned-404 background: issue #126 (A1)."
+            echo
+            echo "Run: $RUN_URL — re-run with **workflow_dispatch** after fixing. This issue is updated in place by the workflow and auto-closed when the crawl is clean."
+          } > "$body"
+
+          if [ -n "$existing" ]; then
+            gh issue edit "$existing" --title "$title" --body-file "$body"
+            gh issue comment "$existing" --body "Re-crawled $today: still $COUNT non-200 URL(s). Body updated. ($RUN_URL)"
+            echo "updated issue #$existing"
+          else
+            gh issue create --title "$title" --body-file "$body"
+          fi
