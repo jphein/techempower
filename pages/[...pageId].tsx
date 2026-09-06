@@ -1,4 +1,5 @@
 import { type GetStaticPaths, type GetStaticProps } from 'next'
+import { getBlockValue } from 'notion-utils'
 
 import { NotionPage } from '@/components/NotionPage'
 import { domain } from '@/lib/config'
@@ -84,8 +85,32 @@ export const getStaticProps: GetStaticProps<PageProps, Params> = async (
     // contain quote-wrapped values — skipping the other 95% of blocks
     // (text/callout/divider/etc.) cuts this loop's cost ~20x on /resources.
     if (props.recordMap?.block) {
+      const unquote = (str: unknown) =>
+        typeof str === 'string' &&
+        str.length > 1 &&
+        ((str.startsWith("'") && str.endsWith("'")) ||
+          (str.startsWith('"') && str.endsWith('"')))
+          ? str.slice(1, -1)
+          : str
       for (const blockData of Object.values(props.recordMap.block)) {
-        const block = (blockData as any)?.value
+        // Newer Notion responses double-wrap blocks (`{ value: { value, role } }`);
+        // reading `.value` directly yields an object with no `type`, which is
+        // why this sanitizer silently matched nothing until 2026-09-05.
+        const block = getBlockValue(blockData as any) as any
+        // Image blocks pasted from the web sometimes arrive with the URL
+        // wrapped in literal quotes (`'https://…'`). react-notion-x feeds
+        // that straight into `new URL()` and the whole page 500s (2026-09-05
+        // audit: grants.gov, Pollination Project, Spark Good, KFC Foundation).
+        if (block?.type === 'image') {
+          const src = block.properties?.source?.[0]?.[0]
+          if (typeof src === 'string') {
+            block.properties.source[0][0] = unquote(src)
+          }
+          if (typeof block.format?.display_source === 'string') {
+            block.format.display_source = unquote(block.format.display_source)
+          }
+          continue
+        }
         if (block?.type !== 'page' || !block.properties) continue
         for (const [key, val] of Object.entries(block.properties)) {
           if (Array.isArray(val) && Array.isArray(val[0])) {
