@@ -8,7 +8,7 @@ import styles from './Header.module.css'
 
 const NAV_LINKS = [
   { href: '/qualify', label: 'Check Eligibility' },
-  { href: '/', label: 'Guides' },
+  { href: '/guides', label: 'Guides' },
   { href: '/resources', label: 'Resources' },
   { href: '/show', label: 'Show' },
   { href: '/about', label: 'About' }
@@ -17,6 +17,14 @@ const NAV_LINKS = [
 export function Header() {
   const router = useRouter()
   const [menuOpen, setMenuOpen] = React.useState(false)
+
+  // Active when the path is the link or a child of it (/guides/* lights up
+  // "Guides"); hash and query are ignored so /about#contact still matches.
+  const currentPath = router.asPath.split(/[?#]/)[0] ?? ''
+  const isActive = (href: string) =>
+    router.pathname === href ||
+    currentPath === href ||
+    currentPath.startsWith(`${href}/`)
 
   // Close mobile menu on route change
   React.useEffect(() => {
@@ -56,10 +64,7 @@ export function Header() {
               key={href}
               href={href}
               className={`${styles.navLink} ${
-                router.pathname === href ||
-                (href !== '/' && router.asPath.startsWith(href))
-                  ? styles.navLinkActive
-                  : ''
+                isActive(href) ? styles.navLinkActive : ''
               }`}
             >
               {label}
@@ -122,10 +127,7 @@ export function Header() {
               key={href}
               href={href}
               className={`${styles.mobileNavLink} ${
-                router.pathname === href ||
-                (href !== '/' && router.asPath.startsWith(href))
-                  ? styles.mobileNavLinkActive
-                  : ''
+                isActive(href) ? styles.mobileNavLinkActive : ''
               }`}
             >
               {label}

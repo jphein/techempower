@@ -23,7 +23,7 @@ export function FooterImpl() {
         </div>
 
         <nav className={styles.links} aria-label='Footer navigation'>
-          <Link href='/' className={styles.link}>
+          <Link href='/guides' className={styles.link}>
             Guides
           </Link>
           <Link href='/resources' className={styles.link}>

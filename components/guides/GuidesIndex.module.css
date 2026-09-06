@@ -1,0 +1,142 @@
+/* /guides index. The header echoes the homepage hero (cream ground, teal/amber
+   rule, display face) at a smaller scale; the grid reuses GuideGrid's card
+   styles. Text stays on the --te-bark scale so dark mode inverts cleanly. */
+
+.hero {
+  position: relative;
+  padding: 3.25rem 1.25rem 2.75rem;
+  text-align: center;
+  background:
+    radial-gradient(
+      ellipse 80% 60% at 50% 0%,
+      rgba(13, 148, 136, 0.08) 0%,
+      transparent 70%
+    ),
+    var(--te-cream);
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    var(--te-teal-500),
+    var(--te-amber-500),
+    var(--te-teal-500)
+  );
+}
+
+.heroInner {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.eyebrow {
+  display: inline-block;
+  margin: 0 0 1rem;
+  padding: 0.3rem 0.85rem;
+  border-radius: 100px;
+  background: var(--te-teal-50);
+  border: 1px solid var(--te-teal-100);
+  color: var(--te-teal-700);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.heading {
+  font-family: var(--te-font-display);
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--te-bark-900);
+  margin: 0 0 1rem;
+}
+
+.lede {
+  font-size: 1.08rem;
+  line-height: 1.65;
+  color: var(--te-bark-600);
+  margin: 0 auto;
+  max-width: 560px;
+}
+
+.section {
+  padding: 2.5rem 1.25rem 3rem;
+  background: var(--te-white);
+}
+
+.inner {
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.more {
+  margin: 2rem auto 0;
+  max-width: 560px;
+  text-align: center;
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: var(--te-bark-600);
+}
+
+.more a {
+  color: var(--te-teal-700);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.more a:focus-visible {
+  outline: 3px solid var(--te-teal-500);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media (min-width: 480px) {
+  .hero {
+    padding: 4rem 1.5rem 3.25rem;
+  }
+
+  .heading {
+    font-size: 2.75rem;
+  }
+
+  .section {
+    padding: 3rem 1.5rem 3.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .hero {
+    padding: 4.5rem 2rem 3.75rem;
+  }
+
+  .heading {
+    font-size: 3rem;
+  }
+
+  .lede {
+    font-size: 1.2rem;
+  }
+
+  .section {
+    padding: 3.5rem 2rem 4rem;
+  }
+}
+
+:global(.dark-mode) .hero {
+  background:
+    radial-gradient(
+      ellipse 80% 60% at 50% 0%,
+      rgba(13, 148, 136, 0.15) 0%,
+      transparent 70%
+    ),
+    var(--te-cream);
+}
