@@ -298,6 +298,12 @@
     grid-template-columns: 1fr 1fr;
   }
 
+  /* Five items in two columns: let an odd last card take the full row
+     instead of leaving a hole. */
+  .grid li:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+
   .actions {
     flex-direction: row;
     flex-wrap: wrap;
