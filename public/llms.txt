@@ -1,0 +1,36 @@
+# TechEMPOWER.org
+
+> TechEMPOWER.org is a 501(c)(3) nonprofit in Grass Valley, California (EIN 92-2581940) that publishes free, plain-language guides to public benefit and low-cost technology programs — Lifeline phone service, low-cost home internet, CalFresh/EBT, EV rebates — plus a 2-minute anonymous benefits screener, a hand-checked directory of free programs, and a repair-and-reuse electronics program. It serves everyone and focuses on Nevada County, California. Content is written for people with limited time, money, or reading comfort; there is no sign-up and nothing is sold.
+
+Every guide states who qualifies, the exact steps, and a phone number to call if stuck. Program numbers in the screener carry a source and a verification date. Several guides offer a Spanish toggle; the screener is fully bilingual (EN/ES).
+
+## Guides
+
+- [Start here: how to use TechEMPOWER.org](https://techempower.org/guides/how-to-use-techempower): A short tour of the site and how to find what you need.
+- [Free and low-cost internet](https://techempower.org/guides/free-internet): Home internet for $0–15 a month through ISP low-income plans; who qualifies and how to sign up.
+- [Free smartphone and cell service](https://techempower.org/guides/free-cell-service): A free phone and free monthly service through the federal Lifeline program.
+- [Check your EBT balance](https://techempower.org/guides/ebt-balance): See your CalFresh/EBT balance and recent purchases online, by phone, or with the free Propel app.
+- [Best places to spend EBT](https://techempower.org/guides/ebt-spending): Local farms, grocery stores, and delivery services that accept CalFresh.
+- [EV and hybrid car rebates](https://techempower.org/guides/ev-incentives): Federal, state, and utility incentives for a new or used electric car, and how they stack.
+- [A safer way to handle passwords](https://techempower.org/guides/password-manager): Setting up a free password manager so you remember one password instead of thirty.
+- [findhelp.org](https://techempower.org/guides/findhelp): Using the national findhelp.org tool to find food, housing, and other services by ZIP code.
+
+## Tools
+
+- [Do I qualify? (2-minute check)](https://techempower.org/qualify): Anonymous benefits screener; answers stay on the device. Covers CalFresh, WIC, PG&E bill discounts, free phone service, and more. English and Spanish.
+- [Resource directory](https://techempower.org/resources): Searchable directory of free and low-cost programs, each checked against its official source; filter by topic.
+
+## Media
+
+- [Wait, I Qualify?! (video series)](https://techempower.org/show): Episodes made with Nevada County Media, one benefit per episode, with the people who run the program.
+
+## About and support
+
+- [About](https://techempower.org/about): Founder story, organization facts, transparency links, and contact.
+- [Donate](https://techempower.org/donate): Tax-deductible donations; the same page describes the repair-and-reuse electronics program (working or broken gear, batteries, e-bikes, EVs).
+- [Submit a resource](https://techempower.org/submit): Suggest a free program for the directory.
+
+## Optional
+
+- [Sitemap](https://techempower.org/sitemap.xml)
+- [Contact](https://techempower.org/about#contact): hi@techempower.org
