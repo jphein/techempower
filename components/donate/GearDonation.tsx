@@ -318,7 +318,7 @@ export function GearDonation() {
 
       <p className={styles.fine}>
         Know a family who needs a computer, a phone, or help getting online?
-        Point them to our <Link href='/'>free guides</Link>, the{' '}
+        Point them to our <Link href='/guides'>free guides</Link>, the{' '}
         <Link href='/qualify'>2-minute benefits check</Link>, or the{' '}
         <Link href='/resources'>resource directory</Link>. Thank you for keeping
         this work going.
