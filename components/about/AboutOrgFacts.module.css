@@ -1,0 +1,328 @@
+/* AboutOrgFacts — the organization half of /about, rendered below the Notion
+   founder story. Width matches --notion-max-width (720px) so it reads as one
+   page (same shell as donate/GearDonation.module.css). Text colors stay on
+   the --te-bark scale so dark mode inverts them correctly. */
+
+.section {
+  width: 100%;
+  max-width: 720px;
+  margin: 1rem auto 4rem;
+  padding: 0 1rem;
+  scroll-margin-top: 5rem;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 0 2rem;
+  color: var(--te-bark-500);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--te-bark-200);
+}
+
+.heading {
+  font-family: var(--te-font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--te-bark-900);
+  margin: 0 0 0.75rem;
+}
+
+.lede {
+  font-size: 1.08rem;
+  line-height: 1.65;
+  color: var(--te-bark-700);
+  margin: 0 0 1.5rem;
+}
+
+/* ── Fact strip ────────────────────────────────────────────────────── */
+
+.facts {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  margin: 0 0 0.5rem;
+}
+
+.fact {
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  background: var(--te-teal-50);
+  border: 1px solid var(--te-teal-100);
+}
+
+.fact dt {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--te-teal-700);
+  margin: 0 0 0.2rem;
+}
+
+.fact dd {
+  margin: 0;
+  font-weight: 600;
+  color: var(--te-bark-900);
+  line-height: 1.4;
+}
+
+/* ── Typography ────────────────────────────────────────────────────── */
+
+.sub {
+  font-family: var(--te-font-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--te-bark-900);
+  margin: 2.25rem 0 0.85rem;
+}
+
+.body {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--te-bark-700);
+  margin: 0 0 0.75rem;
+}
+
+.body strong {
+  color: var(--te-bark-900);
+}
+
+.list {
+  margin: 0;
+  padding-left: 1.25rem;
+  color: var(--te-bark-700);
+  line-height: 1.7;
+}
+
+.list li {
+  margin-bottom: 0.4rem;
+}
+
+.list a,
+.contact a {
+  color: var(--te-teal-700);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.list a:focus-visible,
+.contact a:focus-visible {
+  outline: 3px solid var(--te-teal-500);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ── "What we do" grid ─────────────────────────────────────────────── */
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  height: 100%;
+  padding: 0.9rem 1rem;
+  border-radius: 12px;
+  background: var(--te-white);
+  border: 1px solid var(--te-bark-200);
+  text-decoration: none;
+  color: inherit;
+  transition:
+    border-color 200ms ease,
+    transform 150ms ease;
+}
+
+.item:hover {
+  border-color: var(--te-teal-500);
+  transform: translateY(-1px);
+}
+
+.item:focus-visible {
+  outline: 3px solid var(--te-teal-500);
+  outline-offset: 2px;
+}
+
+.itemIcon {
+  font-size: 1.4rem;
+  line-height: 1.2;
+  flex-shrink: 0;
+}
+
+.itemTitle {
+  display: block;
+  font-weight: 700;
+  color: var(--te-bark-900);
+  margin-bottom: 0.15rem;
+}
+
+.itemText {
+  display: block;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--te-bark-600);
+}
+
+/* ── Contact ───────────────────────────────────────────────────────── */
+
+.contact {
+  margin: 2.25rem 0 0;
+  padding: 1.25rem 1.25rem 1rem;
+  border-radius: 14px;
+  background: var(--te-warm-50);
+  border: 1px solid var(--te-warm-200);
+  scroll-margin-top: 5rem;
+}
+
+.contactHeading {
+  font-family: var(--te-font-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--te-bark-900);
+  margin: 0 0 0.85rem;
+}
+
+.contactList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--te-bark-700);
+  line-height: 1.6;
+}
+
+.contactList li {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.1rem 1rem;
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--te-bark-200);
+}
+
+.contactList li:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.contactLabel {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--te-bark-500);
+}
+
+/* ── CTAs ──────────────────────────────────────────────────────────── */
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.75rem;
+  margin: 2rem 0 0;
+}
+
+.btnPrimary,
+.btnSecondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  padding: 0.9rem 1.75rem;
+  border-radius: 100px;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background 200ms ease,
+    transform 150ms ease,
+    box-shadow 200ms ease;
+}
+
+.btnPrimary {
+  background: var(--te-teal-600);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(13, 148, 136, 0.18);
+}
+
+.btnPrimary:hover {
+  background: var(--te-teal-700);
+  transform: translateY(-1px);
+}
+
+.btnSecondary {
+  background: var(--te-white);
+  color: var(--te-bark-800);
+  border: 1px solid var(--te-bark-200);
+}
+
+.btnSecondary:hover {
+  background: var(--te-cream-dark);
+  transform: translateY(-1px);
+}
+
+.btnPrimary:focus-visible,
+.btnSecondary:focus-visible {
+  outline: 3px solid var(--te-teal-500);
+  outline-offset: 2px;
+}
+
+/* ── Responsive ────────────────────────────────────────────────────── */
+
+@media (min-width: 560px) {
+  .facts {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .contactList li {
+    grid-template-columns: 9rem 1fr;
+    align-items: baseline;
+  }
+}
+
+@media (min-width: 768px) {
+  .heading {
+    font-size: 2.4rem;
+  }
+}
+
+/* ── Dark mode ─────────────────────────────────────────────────────── */
+
+:global(.dark-mode) .btnPrimary {
+  box-shadow: none;
+}
+
+/* --te-warm-* is not remapped under .dark-mode; tint instead. */
+:global(.dark-mode) .contact {
+  background: var(--te-cream-dark);
+  border-color: var(--te-bark-200);
+}
