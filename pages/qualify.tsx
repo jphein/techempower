@@ -1,4 +1,3 @@
-import Head from 'next/head'
 import * as React from 'react'
 
 import type {
@@ -10,7 +9,7 @@ import type {
 import styles from '@/components/screener/screener.module.css'
 import { ScreenerForm } from '@/components/screener/ScreenerForm'
 import { ScreenerResults } from '@/components/screener/ScreenerResults'
-import * as config from '@/lib/config'
+import { StaticPageHead } from '@/components/StaticPageHead'
 import { evaluate } from '@/lib/screener/evaluate'
 import rulesData from '@/lib/screener/rules.data.json'
 import { t } from '@/lib/screener/strings'
@@ -92,29 +91,14 @@ export default function QualifyPage() {
 
   return (
     <>
-      <Head>
-        <meta charSet='utf-8' />
-        <meta
-          name='viewport'
-          content='width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover'
-        />
-
-        <meta name='robots' content='index,follow' />
-        <meta property='og:type' content='website' />
-        <meta property='og:site_name' content={config.name} />
-        <meta property='twitter:domain' content={config.domain} />
-
-        <meta name='description' content={description} />
-        <meta property='og:description' content={description} />
-        <meta name='twitter:description' content={description} />
-
-        <meta name='twitter:card' content='summary' />
-        <meta property='og:title' content={title} />
-        <meta name='twitter:title' content={title} />
-        <title>{title}</title>
-
+      <StaticPageHead
+        title={title}
+        description={description}
+        path='/qualify'
+        socialTitle='Do I qualify? A 2-minute benefits check'
+      >
         {result && <style>{PRINT_CHROME_CSS}</style>}
-      </Head>
+      </StaticPageHead>
 
       <section
         className={

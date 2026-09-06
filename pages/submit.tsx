@@ -1,5 +1,4 @@
-import Head from 'next/head'
-
+import { StaticPageHead } from '@/components/StaticPageHead'
 import { SubmitResourceForm } from '@/components/SubmitResourceForm'
 import * as config from '@/lib/config'
 
@@ -10,23 +9,15 @@ export default function SubmitPage() {
 
   return (
     <>
-      <Head>
-        <meta charSet='utf-8' />
-        <meta
-          name='viewport'
-          content='width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover'
-        />
-        {/* This is an intake form, not editorial content — no need for
-            search engines to index a submission page. */}
-        <meta name='robots' content='noindex, nofollow' />
-        <meta name='description' content={description} />
-        <meta property='og:title' content={title} />
-        <meta property='og:description' content={description} />
-        <meta property='og:site_name' content={config.name} />
-        <meta name='twitter:title' content={title} />
-        <meta name='twitter:description' content={description} />
-        <title>{title}</title>
-      </Head>
+      {/* This is an intake form, not editorial content — no need for
+          search engines to index a submission page. */}
+      <StaticPageHead
+        title={title}
+        description={description}
+        path='/submit'
+        socialTitle='Submit a resource'
+        noindex
+      />
 
       <SubmitResourceForm />
     </>
