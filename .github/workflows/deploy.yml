@@ -50,6 +50,15 @@ jobs:
         # populate R2 immediately. Net effect: the first real visitor after a
         # deploy gets a warm cached page, never a cold render. Best-effort —
         # never fails the deploy.
+        #
+        # Then (issue #126, A1b) crawl EVERY sitemap URL via
+        # scripts/crawl-sitemap.sh: a stale ISR entry only re-renders when
+        # something requests it, and long-tail resource pages have no other
+        # visitors, so this crawl is what actually heals a poisoned 404. Any
+        # non-200 is re-hit once with ?warm=<run id> after the background
+        # revalidation has had a moment; the summary lands in the job summary.
+        # ~300 URLs at 0.3 s spacing ≈ 5–7 min, sequential so Notion never
+        # sees a 429 storm.
         continue-on-error: true
         run: |
           base="https://techempower.org"
@@ -62,3 +71,7 @@ jobs:
             echo "warm $p -> $code"
             sleep 1
           done
+          bash scripts/crawl-sitemap.sh \
+            --base "$base" \
+            --sleep 0.3 \
+            --bust "${{ github.run_id }}"

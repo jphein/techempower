@@ -358,3 +358,122 @@ export async function getPage(
 export async function search(params: SearchParams): Promise<SearchResults> {
   return notion.search(params)
 }
+
+// ---------------------------------------------------------------------------
+// Timeout + error classification for the page render path (issue #126, A1/A3)
+// ---------------------------------------------------------------------------
+
+/**
+ * Thrown by {@link withNotionTimeout} when Notion does not answer in time.
+ * Kept as its own class so `pages/[...pageId].tsx` can tell "Notion was slow"
+ * (transient — never cache a 404 for it) apart from "Notion says this page
+ * does not exist" (a genuine miss).
+ */
+export class NotionTimeoutError extends Error {
+  readonly timeoutMs: number
+
+  constructor(timeoutMs: number) {
+    super(`notion timeout after ${timeoutMs}ms`)
+    this.name = 'NotionTimeoutError'
+    this.timeoutMs = timeoutMs
+  }
+}
+
+/**
+ * Race `promise` against a hard deadline. notion-client retries 429/5xx
+ * internally, so a single slow upstream can otherwise eat the whole Worker
+ * request budget. The timer is cleared when the race settles so a fast
+ * resolution does not leave a dangling timeout behind.
+ */
+export function withNotionTimeout<T>(
+  promise: Promise<T>,
+  timeoutMs: number
+): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined
+  const deadline = new Promise<never>((_, reject) => {
+    timer = setTimeout(
+      () => reject(new NotionTimeoutError(timeoutMs)),
+      timeoutMs
+    )
+  })
+  return Promise.race([promise, deadline]).finally(() => {
+    if (timer) clearTimeout(timer)
+  })
+}
+
+// HTTP statuses that mean "try again later", not "this page is gone".
+const TRANSIENT_HTTP_STATUS = new Set([408, 425, 429, 500, 502, 503, 504])
+
+// Node / undici network-level error codes.
+const TRANSIENT_ERROR_CODES = new Set([
+  'ECONNRESET',
+  'ECONNREFUSED',
+  'ETIMEDOUT',
+  'EAI_AGAIN',
+  'ENOTFOUND',
+  'EPIPE',
+  'UND_ERR_CONNECT_TIMEOUT',
+  'UND_ERR_HEADERS_TIMEOUT',
+  'UND_ERR_BODY_TIMEOUT',
+  'UND_ERR_SOCKET',
+  'ABORT_ERR'
+])
+
+const TRANSIENT_MESSAGE_PATTERN =
+  /timeout|timed out|fetch failed|network|socket hang up|premature close|ECONN|<no response>/i
+
+/**
+ * Classify an error from the Notion fetch path.
+ *
+ * Returns `true` when the failure says nothing about whether the page exists
+ * — our own timeout, a network-level failure (ofetch `FetchError` with no
+ * response, undici codes), or an upstream 429/5xx. Returns `false` for
+ * definitive answers: any other HTTP 4xx, notion-client's own
+ * `Notion page not found "…"` / `invalid notion pageId "…"`, and anything we
+ * can't recognise (unknown ⇒ treat as a real miss, which is the pre-#126
+ * behaviour, only with a much shorter cache).
+ *
+ * ofetch's `FetchError` exposes `status`/`statusCode` as getters that are
+ * `undefined` when there was no response at all, and carries the underlying
+ * `TypeError: fetch failed` as `cause` — both shapes are handled.
+ */
+export function isTransientNotionError(err: unknown): boolean {
+  if (!err || typeof err !== 'object') return false
+  if (err instanceof NotionTimeoutError) return true
+
+  const e = err as {
+    name?: unknown
+    message?: unknown
+    code?: unknown
+    status?: unknown
+    statusCode?: unknown
+    response?: { status?: unknown }
+    cause?: unknown
+  }
+
+  const status =
+    typeof e.status === 'number'
+      ? e.status
+      : typeof e.statusCode === 'number'
+        ? e.statusCode
+        : typeof e.response?.status === 'number'
+          ? e.response.status
+          : undefined
+  if (status !== undefined) {
+    // An HTTP answer is definitive unless it is one of the retry-later codes.
+    return TRANSIENT_HTTP_STATUS.has(status)
+  }
+
+  if (e.name === 'AbortError' || e.name === 'TimeoutError') return true
+  if (typeof e.code === 'string' && TRANSIENT_ERROR_CODES.has(e.code)) {
+    return true
+  }
+  if (
+    typeof e.message === 'string' &&
+    TRANSIENT_MESSAGE_PATTERN.test(e.message)
+  ) {
+    return true
+  }
+  if (e.cause && e.cause !== err) return isTransientNotionError(e.cause)
+  return false
+}

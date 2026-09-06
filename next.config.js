@@ -157,6 +157,29 @@ export default {
     SIGIL_PLATFORM: process.env.GITHUB_ACTIONS ? 'cloudflare' : 'local'
   },
 
+  // Permanent redirects (issue #126, A5). Redirects run before page routing,
+  // so `pages/[...pageId].tsx` / lib/resolve-notion-page.ts never see these
+  // slugs — neither is in the slug lockfile or pageUrlOverrides, and the
+  // sitemap excludes them (pages/sitemap.xml.tsx).
+  async redirects() {
+    return [
+      {
+        // The raw Notion root page: a 2.4 MB duplicate of the React homepage
+        // (and it links to the dead /resources-submissions-queue).
+        source: '/welcome-to-techempowerorg',
+        destination: '/',
+        permanent: true
+      },
+      {
+        // Notion content links to /contact; the org-facts block on /about
+        // carries id="contact".
+        source: '/contact',
+        destination: '/about#contact',
+        permanent: true
+      }
+    ]
+  },
+
   // sigil.techempower.org serves the version endpoint directly (the
   // hostname is routed to this worker in wrangler.jsonc).
   async rewrites() {

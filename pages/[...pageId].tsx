@@ -3,6 +3,7 @@ import { getBlockValue } from 'notion-utils'
 
 import { NotionPage } from '@/components/NotionPage'
 import { domain } from '@/lib/config'
+import { isTransientNotionError, withNotionTimeout } from '@/lib/notion'
 import { isResourcesPage } from '@/lib/page-ids'
 import { resolveNotionPage } from '@/lib/resolve-notion-page'
 import { trimRecordMap } from '@/lib/trim-record-map'
@@ -15,13 +16,56 @@ import { type PageProps, type Params } from '@/lib/types'
 const RESOURCES_REVALIDATE = 86_400
 const DEFAULT_REVALIDATE = 3600
 
-// Hard cap on Notion resolution time. notion-client retries 429/5xx internally
-// via `got`, which can blow the Worker CPU budget on a single slow upstream.
-const NOTION_TIMEOUT_MS = 8000
+// Hard caps on Notion resolution time. notion-client retries 429/5xx
+// internally via ofetch, which can otherwise eat the whole request budget on a
+// single slow upstream.
+//
+// /resources keeps its original 8 s: it is the heaviest page and is served
+// almost exclusively from the R2 ISR cache (24 h revalidate + deploy warm-up),
+// so a slow cold render there is better cut short than allowed to pile up.
+//
+// Everything else gets 14 s (issue #126, A3): the biggest resource detail page
+// (/free-technology-resources-for-nonprofits, a 100-item list) genuinely needs
+// more than 8 s from Notion on a cold hit. Budget check: the Worker CPU limit
+// is 30 s (wrangler.jsonc `limits.cpu_ms`) and waiting on Notion is I/O, not
+// CPU; the background revalidation path runs inside `waitUntil`, whose budget
+// is 30 s after the response — so 14 s of wait plus a ~2 s render fits both.
+const RESOURCES_NOTION_TIMEOUT_MS = 8000
+const NOTION_TIMEOUT_MS = 14_000
 
-// Cache 4xx/timeout failures for an hour instead of retrying every minute,
-// to avoid hammering Notion on permanently broken pages.
-const ERROR_REVALIDATE = 3600
+// ## How `revalidate` becomes a Cache-Control header (Next 16, pages router)
+//
+// Next emits `s-maxage=<revalidate>, stale-while-revalidate=<expireTime -
+// revalidate>` (next/dist/server/lib/cache-control.js), and `expireTime`
+// defaults to CACHE_ONE_YEAR_SECONDS (31 536 000). So `revalidate: 3600`
+// becomes `s-maxage=3600, stale-while-revalidate=31532400`: any downstream
+// cache may keep serving the stale body for a YEAR while it revalidates.
+//
+// The R2 ISR entry behaves the same way: after <revalidate> seconds it is
+// merely *stale*, and the next hit still gets the stale body while OpenNext's
+// memory queue re-renders in the background. A page that nobody visits
+// therefore never refreshes — the first visitor after any gap always sees the
+// old body, and for a long-tail resource page that visitor is Googlebot.
+// That is how one Notion blip turned into 53/294 sitemap URLs serving a
+// cached 404 (2026-09-05 audit, issue #126 A1): the old code answered EVERY
+// failure, transient or not, with `notFound: true, revalidate: 3600`.
+//
+// Policy now:
+//   * Transient upstream failure (timeout, network error, Notion 429/5xx) →
+//     THROW. Verified in next/dist/server/response-cache/index.js
+//     `handleRevalidate()`: a thrown error is never written to the
+//     incremental cache. With no previous entry Next answers 500 with
+//     `private, no-cache, no-store` (renderErrorImpl); with a previous good
+//     entry Next keeps serving it and retries in 3–30 s. A blip can therefore
+//     never replace a good page, and never produce a cached 404.
+//   * Genuine miss (slug resolves to nothing; Notion says the page is gone) →
+//     `notFound`, revalidate 300 s. It IS a real 404, but if the content shows
+//     up (new Notion row, lockfile refresh) it self-heals within five minutes
+//     instead of a year.
+//   * Scanner probe (`/.env`, `/wp-admin`, …) → `notFound`, revalidate 24 h.
+//     No Notion call is made and the answer cannot change, so cache it hard.
+const NOT_FOUND_REVALIDATE = 300
+const SCANNER_REVALIDATE = 86_400
 
 // Vulnerability scanner targets observed in production logs (env files,
 // VCS metadata, common CMS attack surfaces). Matched paths short-circuit
@@ -40,12 +84,12 @@ export const getStaticProps: GetStaticProps<PageProps, Params> = async (
   const rawPageId = segments ? segments.join('/') : undefined
 
   if (rawPageId && SCANNER_PATTERN.test(`/${rawPageId}`)) {
-    return { notFound: true, revalidate: ERROR_REVALIDATE }
+    return { notFound: true, revalidate: SCANNER_REVALIDATE }
   }
 
   try {
     const isResources = rawPageId === 'resources'
-    const props = await Promise.race([
+    const props = await withNotionTimeout(
       resolveNotionPage(
         domain,
         rawPageId,
@@ -53,14 +97,8 @@ export const getStaticProps: GetStaticProps<PageProps, Params> = async (
           ? { collectionLoadLimit: 20, enableGalleryCovers: true }
           : undefined
       ),
-      new Promise<never>((_, reject) =>
-        setTimeout(
-          () =>
-            reject(new Error(`notion timeout after ${NOTION_TIMEOUT_MS}ms`)),
-          NOTION_TIMEOUT_MS
-        )
-      )
-    ])
+      isResources ? RESOURCES_NOTION_TIMEOUT_MS : NOTION_TIMEOUT_MS
+    )
 
     // Genuine miss: resolveNotionPage *resolves* (rather than throwing) with
     // an error payload when a slug can't be mapped to a Notion page. Returning
@@ -71,8 +109,11 @@ export const getStaticProps: GetStaticProps<PageProps, Params> = async (
     // produces a genuine 404 on OpenNext/Workers. Every error this resolution
     // path emits (resolveNotionPage + pageAcl) is a 404, but gate on the
     // status code explicitly so a future non-404 error isn't masked as a miss.
+    // resolveNotionPage only reaches this payload after getSiteMap() and
+    // resolveCollectionSlug() both completed without throwing, so it is a
+    // real miss, not a blip — short cache, see the policy block above.
     if (props.error?.statusCode === 404) {
-      return { notFound: true, revalidate: ERROR_REVALIDATE }
+      return { notFound: true, revalidate: NOT_FOUND_REVALIDATE }
     }
 
     const revalidate = isResourcesPage(props.pageId)
@@ -137,8 +178,20 @@ export const getStaticProps: GetStaticProps<PageProps, Params> = async (
 
     return { props, revalidate }
   } catch (err) {
-    console.error('page error', domain, rawPageId, err)
-    return { notFound: true, revalidate: ERROR_REVALIDATE }
+    if (isTransientNotionError(err)) {
+      // Re-throw: Next serves an uncached 500 (or keeps the previous good
+      // entry) instead of caching a 404 that would outlive the blip by a year.
+      console.error(
+        'page error (transient, not cached)',
+        domain,
+        rawPageId,
+        err
+      )
+      throw err
+    }
+    // Definitive failure from Notion (page deleted / never existed / 4xx).
+    console.error('page error (not found)', domain, rawPageId, err)
+    return { notFound: true, revalidate: NOT_FOUND_REVALIDATE }
   }
 }
 

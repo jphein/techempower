@@ -1,6 +1,7 @@
 import type { GetServerSideProps } from 'next'
 
 import { host, pageUrlOverrides } from '@/lib/config'
+import { buildSitemapPaths } from '@/lib/sitemap-paths'
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   if (req.method !== 'GET' && req.method !== 'HEAD') {
@@ -14,7 +15,9 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     }
   }
 
-  const paths = Object.keys(pageUrlOverrides)
+  // Notion overrides ∪ React pages, minus noindex/redirected paths
+  // (lib/sitemap-paths.ts; issue #126, C2).
+  const paths = buildSitemapPaths(Object.keys(pageUrlOverrides))
 
   // cache for up to 8 hours
   res.setHeader(
@@ -37,6 +40,9 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   }
 }
 
+// No <lastmod>: the only cheap source would be `last_edited_time` from a
+// Notion recordMap, and this sitemap is built from the static override table
+// without fetching any page. A wrong lastmod is worse than none.
 const createSitemap = (paths: string[]) =>
   `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
